@@ -1,0 +1,19 @@
+.recruit-info-container{
+    float:left;
+    width:150px;
+    height:210px;
+    border-style: solid;
+    border-color: #A64E00;
+    margin:20px;
+    padding: 3px;
+}
+
+.recruit-img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.recruit-button{
+    width:100%;
+}

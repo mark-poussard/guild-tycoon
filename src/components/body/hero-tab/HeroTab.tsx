@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as fbEmitter from 'fbemitter';
 import Hero from 'model/Hero';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
@@ -23,6 +24,8 @@ const hero1: Hero = {
 }
 
 export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabState>{
+    storeSubscribe: fbEmitter.EventSubscription;
+
     constructor(props: IHeroTabProps) {
         super(props);
         this.state = { heroes: GameModelStore.getState().heroes, isRoomLeft: this.computeIsRoomLeft() };
@@ -31,7 +34,6 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     render() {
         return (
             <div>
-                <HeroInfo hero={hero1} />
                 {this.renderHeroes()}
                 {this.renderHeroRecruit()}
             </div>
@@ -39,12 +41,16 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     componentDidMount() {
-        GameModelStore.addListener(() => {
+        this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
                 heroes: GameModelStore.getState().heroes,
                 isRoomLeft: this.computeIsRoomLeft()
             });
         });
+    }
+
+    componentWillUnmount() {
+        this.storeSubscribe.remove();
     }
 
     computeIsRoomLeft = () => {
@@ -56,6 +62,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         for (let i = 0; i < this.state.heroes.length; i++) {
             result.push(<HeroInfo key={`HEROINFO_${i}`} hero={this.state.heroes[i]} />);
         }
+        return result;
     }
 
     renderHeroRecruit = () => {

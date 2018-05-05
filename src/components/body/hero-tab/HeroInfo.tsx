@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Hero from 'model/Hero';
-import RankStar from 'components/body/hero-tab/RankStar';
+import RankStar from 'components/generic/hero-info/RankStar';
 import QuestInfo from 'components/body/hero-tab/QuestInfo';
 import './HeroInfo.css';
 
@@ -26,20 +26,12 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
                     <div className="icon"><img src={this.props.hero.imgUrl} /></div>
                 </div>
                 <div className="divider">
-                    <span className="rank">{this.generateRank()}</span>
+                    <span className="rank">{RankStar.generateRank(this.props.hero)}</span>
                 </div>
                 <div className="divider">
                     <QuestInfo hero={this.props.hero} />
                 </div>
             </div>
         );
-    }
-
-    generateRank = () => {
-        const result: JSX.Element[] = [];
-        for (let i = 0; i < this.props.hero.rank; i++) {
-            result.push(<RankStar key={`RANKSTAR_${i}`} />);
-        }
-        return result;
     }
 }

@@ -5,7 +5,8 @@ import Menu from 'components/menu/Menu';
 import Content from 'components/body/Content';
 
 export enum TabType {
-    HEROES = 'heroes'
+    HEROES = 'heroes',
+    RECRUIT = 'recruit'
 }
 
 interface IAppState {

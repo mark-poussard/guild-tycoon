@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Hero from 'model/Hero';
 
 interface IRankStarProps {
 
@@ -19,5 +20,13 @@ export default class RankStar extends React.Component<IRankStarProps, IRankStarS
                 <img src="img/star.png" />
             </span>
         );
+    }
+
+    static generateRank = (hero : Hero) => {
+        const result: JSX.Element[] = [];
+        for (let i = 0; i < hero.rank; i++) {
+            result.push(<RankStar key={`RANKSTAR_${i}`} />);
+        }
+        return result;
     }
 }

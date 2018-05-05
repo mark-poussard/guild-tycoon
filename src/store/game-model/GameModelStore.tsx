@@ -1,6 +1,6 @@
 import { ReduceStore } from 'flux/utils';
 import GameModelState from './GameModelState';
-import GameModelPayload, { AddResourcePayload, AssignQuestPayload } from './GameModelPayload';
+import GameModelPayload, { AddResourcePayload, AssignQuestPayload, RecruitHeroPayload } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
 import Hero from 'model/Hero';
@@ -11,7 +11,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     }
 
     getInitialState() {
-        return { gold: 0, fame: 0, exp: 0, heroes: [], guildSize: 5 } as GameModelState;
+        return { gold: 500, fame: 40, exp: 0, heroes: [], guildSize: 5 } as GameModelState;
     }
 
     reduce(state: GameModelState, action: GameModelPayload) {
@@ -40,6 +40,13 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 payload = action.payload as AssignQuestPayload;
                 if (newState.heroes.length > payload.heroId) {
                     newState.heroes[payload.heroId].quest = payload.quest;
+                }
+                return newState;
+
+            case GameModelActionTypes.RECRUIT_HERO:
+                payload = action.payload as RecruitHeroPayload;
+                if(newState.heroes.length < newState.guildSize){
+                    newState.heroes.push(payload.hero);
                 }
                 return newState;
 
