@@ -1,0 +1,12 @@
+.start-quest-button{
+    width:80%;
+    background:#FF7800;
+    border-color: #A64E00;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.start-quest-button:hover{
+    background:#FFB573;
+    cursor: pointer;
+}
