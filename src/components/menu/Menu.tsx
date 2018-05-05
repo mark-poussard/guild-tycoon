@@ -2,10 +2,9 @@ import * as React from 'react';
 import MenuButton from 'components/menu/MenuButton';
 import './Menu.css';
 import HeroTab from 'components/body/hero-tab/HeroTab';
-import { TabType } from 'App';
+import NavigationHandler, { TabType } from 'store/navigation/NavigationStore';
 
 interface IMenuProps {
-    onTabChange: (tab: TabType) => void;
 }
 
 interface IMenuState {
@@ -28,7 +27,7 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
 
     onMenuClick = (tab: TabType) => {
         return () => {
-            this.props.onTabChange(tab);
+            NavigationHandler.navigateTo(tab);
         }
     }
 }

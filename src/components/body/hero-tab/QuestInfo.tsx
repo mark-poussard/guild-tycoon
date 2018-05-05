@@ -1,11 +1,14 @@
 import * as React from 'react';
+import * as FbEmitter from 'fbemitter';
 import Hero from 'model/Hero';
 import Quest from 'model/Quest';
 import QuestProgress from 'components/body/hero-tab/QuestProgress';
 import QuestButton from 'components/body/hero-tab/QuestButton';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
+import QuestStore from 'store/quest/QuestStore';
 import './QuestInfo.css';
+import GameModelStore from 'store/game-model/GameModelStore';
 
 interface IQuestInfoProps {
     hero: Hero;
@@ -13,13 +16,16 @@ interface IQuestInfoProps {
 
 interface IQuestInfoState {
     autoQuest: boolean;
-    quest: Quest;
+    isInProgress: boolean;
 }
 
 export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestInfoState>{
+    questEndedListener: FbEmitter.EventSubscription;
+    questStartedListener: FbEmitter.EventSubscription;
+    gameModelListener: FbEmitter.EventSubscription;
     constructor(props: IQuestInfoProps) {
         super(props);
-        this.state = { autoQuest: this.props.hero.autoQuest, quest: this.props.hero.quest }
+        this.state = { autoQuest: this.props.hero.autoQuest, isInProgress: QuestStore.isQuestInProgress(this.props.hero.id) };
     }
 
     render() {
@@ -32,14 +38,14 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderQuest = () => {
-        if (this.state.quest != null) {
+        if (this.state.isInProgress) {
             return (
-                <QuestProgress quest={this.state.quest} questEnded={this.questEnded} />
+                <QuestProgress heroId={this.props.hero.id} />
             );
         }
         else {
             return (
-                <QuestButton startQuest={this.startQuest} />
+                <QuestButton heroId={this.props.hero.id} />
             );
         }
     }
@@ -54,42 +60,56 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
         }
     }
 
+    componentDidMount() {
+        this.questEndedListener = QuestStore.registerQuestEndedListener((heroId) => {
+            if(heroId == this.props.hero.id){
+                this.setState({ isInProgress: false });
+            }
+        });
+        this.questStartedListener = QuestStore.registerQuestStartedListener((heroId) => {
+            if(heroId == this.props.hero.id){
+            this.setState({ isInProgress: true });
+            }
+        });
+        this.gameModelListener = GameModelStore.addListener(() => {
+            const heroes = GameModelStore.getState().heroes;
+            const autoQuest = heroes.get(this.props.hero.id).autoQuest;
+            this.setState({ autoQuest: autoQuest });
+        });
+    }
+
+    componentWillUnmount() {
+        if (this.questEndedListener) {
+            this.questEndedListener.remove();
+        }
+        if (this.questStartedListener) {
+            this.questStartedListener.remove();
+        }
+        if (this.gameModelListener) {
+            this.gameModelListener.remove();
+        }
+    }
+
     startAutoQuest = () => {
-        this.setState({ autoQuest: true });
-        if (this.state.quest == null) {
-            this.startQuest();
+        GameModelDispatcher.dispatch({
+            type: GameModelActionTypes.SET_AUTO_QUEST,
+            payload: {
+                heroId: this.props.hero.id,
+                autoQuest: true
+            }
+        });
+        if (!this.state.isInProgress) {
+            QuestStore.startQuest(this.props.hero.id);
         }
     }
 
     stopAutoQuest = () => {
-        this.setState({ autoQuest: false });
-    }
-
-    startQuest = () => {
-        const quest: Quest = {
-            startTime: new Date(),
-            duration: 6000,
-            reward: {
-                gold: 10,
-                exp: 2,
-                fame: 1
+        GameModelDispatcher.dispatch({
+            type: GameModelActionTypes.SET_AUTO_QUEST,
+            payload: {
+                heroId: this.props.hero.id,
+                autoQuest: false
             }
-        }
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: this.props.hero.id, quest: quest } });
-        this.setState({ quest: quest });
-    }
-
-    questEnded = (quest: Quest) => {
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: quest.reward.exp } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: quest.reward.fame } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: quest.reward.gold } });
-        if (this.state.autoQuest) {
-            this.startQuest();
-        }
-        else {
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: this.props.hero.id, quest: null } });
-            this.props.hero.quest = null;
-            this.setState({ quest: null });
-        }
+        });
     }
 }

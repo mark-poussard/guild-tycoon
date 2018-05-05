@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './HeroRecruitButton.css';
-import { TabType } from 'App';
+import './HeroInfo.css'
+import NavigationStore, { TabType } from 'store/navigation/NavigationStore';
 
 interface IHeroRecruitButtonProps {
 
@@ -17,13 +18,13 @@ export default class HeroRecruitButton extends React.Component<IHeroRecruitButto
 
     render() {
         return (
-            <div className="hero-recruit-button">
-                <input type="image" src="img/add.png" onClick={this.goToRecruit}/>
+            <div className="hero-info-container">
+                <input className="hero-recruit-button" type="image" src="img/add.png" onClick={this.goToRecruit} />
             </div>
         );
     }
 
     goToRecruit = () => {
-        AppInstance.navigateTo(TabType.RECRUIT);
+        NavigationStore.navigateTo(TabType.RECRUIT);
     }
 }

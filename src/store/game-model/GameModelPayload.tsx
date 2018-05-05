@@ -19,3 +19,8 @@ export interface AssignQuestPayload {
 export interface RecruitHeroPayload {
     hero: Hero;
 }
+
+export interface SetAutoQuestPayload {
+    heroId: string;
+    autoQuest: boolean;
+}

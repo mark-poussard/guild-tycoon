@@ -1,6 +1,6 @@
 import { ReduceStore } from 'flux/utils';
 import GameModelState from './GameModelState';
-import GameModelPayload, { AddResourcePayload, AssignQuestPayload, RecruitHeroPayload } from './GameModelPayload';
+import GameModelPayload, { AddResourcePayload, AssignQuestPayload, RecruitHeroPayload, SetAutoQuestPayload } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
 import Hero from 'model/Hero';
@@ -12,7 +12,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     }
 
     getInitialState() {
-        return { gold: 500, fame: 40, exp: 0, heroes: new IndexedArray<string,Hero>(x => x.id), guildSize: 5 } as GameModelState;
+        return { gold: 500, fame: 40, exp: 0, heroes: new IndexedArray<string, Hero>(x => x.id), guildSize: 5 } as GameModelState;
     }
 
     reduce(state: GameModelState, action: GameModelPayload) {
@@ -46,9 +46,14 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
-                if(newState.heroes.size() < newState.guildSize){
+                if (newState.heroes.size() < newState.guildSize) {
                     newState.heroes.add(payload.hero);
                 }
+                return newState;
+
+            case GameModelActionTypes.SET_AUTO_QUEST:
+                payload = action.payload as SetAutoQuestPayload;
+                newState.heroes.get(payload.heroId).autoQuest = payload.autoQuest;
                 return newState;
 
             default:

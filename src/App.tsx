@@ -3,11 +3,7 @@ import Header from 'components/header/Header';
 import GuildVisu from 'components/guild-visu/GuildVisu';
 import Menu from 'components/menu/Menu';
 import Content from 'components/body/Content';
-
-export enum TabType {
-    HEROES = 'heroes',
-    RECRUIT = 'recruit'
-}
+import NavigationHandler, {TabType} from 'store/navigation/NavigationStore';
 
 interface IAppState {
     tabType: TabType;
@@ -25,10 +21,14 @@ export default class App extends React.Component<{}, IAppState>{
             <div>
                 <Header />
                 <GuildVisu />
-                <Menu onTabChange={this.navigateTo} />
+                <Menu />
                 <Content currentTab={this.state.tabType} />
             </div>
         );
+    }
+
+    componentDidMount(){
+        NavigationHandler.listener = this.navigateTo;
     }
 
     navigateTo = (newTab: TabType) => {

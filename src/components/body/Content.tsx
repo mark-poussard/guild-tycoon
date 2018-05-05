@@ -2,7 +2,7 @@ import * as React from 'react';
 import HeroTab from 'components/body/hero-tab/HeroTab';
 import RecruitmentTab from 'components/body/recruitment-tab/RecruitmentTab';
 import './Content.css';
-import { TabType } from 'App';
+import { TabType } from 'store/navigation/NavigationStore';
 
 interface IContentProps {
     currentTab: TabType;

@@ -1,23 +1,24 @@
 import * as React from 'react';
+import * as FbEmitter from 'fbemitter';
 import Quest from 'model/Quest';
+import QuestStore from 'store/quest/QuestStore';
 import './QuestProgress.css';
 
 interface IQuestProgressProps {
-    quest: Quest;
-    questEnded: (quest: Quest) => void;
+    heroId: string;
 }
 
 interface IQuestProgressState {
     progress: number;
-    ended: boolean;
 }
 
 export default class QuestProgress extends React.Component<IQuestProgressProps, IQuestProgressState>{
+    questProgressListener: FbEmitter.EventSubscription;
     intervalId: number;
 
     constructor(props: IQuestProgressProps) {
         super(props);
-        this.state = { progress: 0, ended: false };
+        this.state = { progress: QuestStore.getQuestProgress(this.props.heroId) };
     }
 
     render() {
@@ -28,40 +29,15 @@ export default class QuestProgress extends React.Component<IQuestProgressProps, 
         );
     }
 
-    componentDidUpdate(prevProps: IQuestProgressProps) {
-        if (this.state.progress >= 100 && !this.state.ended) {
-            this.props.questEnded(this.props.quest);
-            this.setState({ ended: true });
-        }
-        if (prevProps.quest != this.props.quest) {
-            this.setState({ progress: 0, ended: false });
-        }
-    }
-
     componentDidMount() {
-        this.intervalId = window.setInterval(() => {
-            this.computeProgress();
-        }
-            , 500);
+        this.questProgressListener = QuestStore.registerQuestProgressListener((progress: number, heroId: string) => {
+            if (heroId == this.props.heroId) {
+                this.setState({ progress: progress });
+            }
+        });
     }
 
     componentWillUnmount() {
-        if (this.intervalId != null) {
-            clearInterval(this.intervalId);
-        }
-    }
-
-    computeProgress = () => {
-        if (!this.state.ended) {
-            const currentDuration: number = new Date().getTime() - this.props.quest.startTime.getTime();
-            let progress;
-            if (this.props.quest.duration > 0) {
-                progress = (currentDuration / this.props.quest.duration) * 100;
-            }
-            else {
-                progress = 100;
-            }
-            this.setState({ progress: progress });
-        }
+        this.questProgressListener.remove();
     }
 }
