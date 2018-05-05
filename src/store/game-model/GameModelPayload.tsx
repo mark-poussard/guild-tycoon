@@ -12,7 +12,7 @@ export interface AddResourcePayload {
 }
 
 export interface AssignQuestPayload {
-    heroId: number;
+    heroId: string;
     quest: Quest;
 }
 

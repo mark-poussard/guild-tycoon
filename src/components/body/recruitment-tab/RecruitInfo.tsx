@@ -48,7 +48,8 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
     isRecruitTooExpensive = () => {
         const currentGold = GameModelStore.getState().gold;
         const currentFame = GameModelStore.getState().fame;
-        return this.props.recruit.fame > currentFame && this.props.recruit.gold > currentGold;
+        const isNoMoreGuildRoom = GameModelStore.getState().heroes.size() >= GameModelStore.getState().guildSize;
+        return (this.props.recruit.fame > currentFame && this.props.recruit.gold > currentGold) || isNoMoreGuildRoom;
     }
 
     componentDidMount() {

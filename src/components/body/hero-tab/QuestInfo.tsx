@@ -75,7 +75,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
                 fame: 1
             }
         }
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: 0, quest: quest } });
+        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: this.props.hero.id, quest: quest } });
         this.setState({ quest: quest });
     }
 
@@ -87,7 +87,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             this.startQuest();
         }
         else {
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: 0, quest: null } });
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: this.props.hero.id, quest: null } });
             this.props.hero.quest = null;
             this.setState({ quest: null });
         }

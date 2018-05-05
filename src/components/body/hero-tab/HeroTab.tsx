@@ -4,17 +4,19 @@ import Hero from 'model/Hero';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
+import IndexedArray from 'business/collection/IndexedArray';
 
 interface IHeroTabProps {
 
 }
 
 interface IHeroTabState {
-    heroes: Hero[];
+    heroes: IndexedArray<string,Hero>;
     isRoomLeft: boolean;
 }
 
 const hero1: Hero = {
+    id:"1",
     name: 'Marcel',
     rank: 3,
     level: 65,
@@ -54,13 +56,14 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     computeIsRoomLeft = () => {
-        return GameModelStore.getState().guildSize > GameModelStore.getState().heroes.length;
+        return GameModelStore.getState().guildSize > GameModelStore.getState().heroes.size();
     }
 
     renderHeroes = () => {
         const result: JSX.Element[] = [];
-        for (let i = 0; i < this.state.heroes.length; i++) {
-            result.push(<HeroInfo key={`HEROINFO_${i}`} hero={this.state.heroes[i]} />);
+        const heroesArray = this.state.heroes.asArray();
+        for (let i = 0; i < heroesArray.length; i++) {
+            result.push(<HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} />);
         }
         return result;
     }

@@ -8,6 +8,7 @@
     padding:3px;
     background-color: #FF9A40;
     float: left;
+    border-radius: 4px;
 }
 
 .hero-info-container .icon{

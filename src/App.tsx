@@ -14,6 +14,7 @@ interface IAppState {
 }
 
 export default class App extends React.Component<{}, IAppState>{
+
     constructor(props: {}) {
         super(props);
         this.state = { tabType: TabType.HEROES };
@@ -24,13 +25,13 @@ export default class App extends React.Component<{}, IAppState>{
             <div>
                 <Header />
                 <GuildVisu />
-                <Menu onTabChange={this.onTabChange} />
+                <Menu onTabChange={this.navigateTo} />
                 <Content currentTab={this.state.tabType} />
             </div>
         );
     }
 
-    onTabChange = (newTab: TabType) => {
+    navigateTo = (newTab: TabType) => {
         this.setState({ tabType: newTab });
     }
 }

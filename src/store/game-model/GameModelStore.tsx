@@ -4,6 +4,7 @@ import GameModelPayload, { AddResourcePayload, AssignQuestPayload, RecruitHeroPa
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
 import Hero from 'model/Hero';
+import IndexedArray from 'business/collection/IndexedArray';
 
 class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     constructor() {
@@ -11,7 +12,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     }
 
     getInitialState() {
-        return { gold: 500, fame: 40, exp: 0, heroes: [], guildSize: 5 } as GameModelState;
+        return { gold: 500, fame: 40, exp: 0, heroes: new IndexedArray<string,Hero>(x => x.id), guildSize: 5 } as GameModelState;
     }
 
     reduce(state: GameModelState, action: GameModelPayload) {
@@ -38,15 +39,15 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.ASSIGN_QUEST:
                 payload = action.payload as AssignQuestPayload;
-                if (newState.heroes.length > payload.heroId) {
-                    newState.heroes[payload.heroId].quest = payload.quest;
+                if (newState.heroes.contains(payload.heroId)) {
+                    newState.heroes.get(payload.heroId).quest = payload.quest;
                 }
                 return newState;
 
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
-                if(newState.heroes.length < newState.guildSize){
-                    newState.heroes.push(payload.hero);
+                if(newState.heroes.size() < newState.guildSize){
+                    newState.heroes.add(payload.hero);
                 }
                 return newState;
 
