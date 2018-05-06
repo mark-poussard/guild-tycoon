@@ -13,7 +13,8 @@ import RankStar from 'components/generic/hero-info/RankStar';
 
 interface ISelectHeroOverlayProps {
     dungeon: Dungeon;
-    doDungeonSelection: (dungeon: Dungeon) => void;
+    callback: (heroes: Set<string>) => void;
+    doDungeonSelection: (dungeon: Dungeon, callback: Function) => void;
 }
 
 interface ISelectHeroOverlayState {
@@ -36,7 +37,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
             <div className="blackout" onClick={this.closeOverlay}>
                 <div className="overlay" onClick={this.dontCloseOverlay}>
                     <input className="cross" type="image" src="img/cross.png" onClick={this.closeOverlay} />
-                    <h2>{`Please select ${this.props.dungeon.partySize} hero to challenge this dungeon.`}</h2>
+                    {this.renderOverlayTitle()}
                     {this.printHeroRequirementTxt()}
                     <div className="hero-container">
                         {this.renderHeroes()}
@@ -47,12 +48,22 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
         );
     }
 
+    renderOverlayTitle = () => {
+        let heroTxt = 'hero';
+        if(this.props.dungeon.partySize > 1){
+            heroTxt = 'heroes'
+        }
+        return (
+            <h2>{`Please select ${this.props.dungeon.partySize} ${heroTxt} to challenge this dungeon.`}</h2>
+        );
+    }
+
     renderHeroes = () => {
         const heroArray = this.state.heroes.asArray();
         const result: JSX.Element[] = [];
         for (let i = 0; i < heroArray.length; i++) {
             result.push(
-                <HeroInfo hero={heroArray[i]} >
+                <HeroInfo key={`HEROINFO_${i}`} hero={heroArray[i]} >
                     <HeroSelectButton
                         hero={heroArray[i]}
                         selectedHeroes={this.state.selectedHeroes}
@@ -104,7 +115,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
     }
 
     closeOverlay = () => {
-        this.props.doDungeonSelection(null);
+        this.props.doDungeonSelection(null, null);
     }
 
     dontCloseOverlay = (e: any) => {
@@ -117,6 +128,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
         this.state.selectedHeroes.forEach((heroId: string) => {
             QuestStore.startQuest(heroId, quest);
         });
+        this.props.callback(this.state.selectedHeroes);
         this.closeOverlay();
     }
 

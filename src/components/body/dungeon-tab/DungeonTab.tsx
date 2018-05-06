@@ -9,12 +9,13 @@ interface IDungeonTabProps {
 
 interface IDungeonTabState {
     selectedDungeon: Dungeon;
+    questCallback: (heroes: Set<string>) => void;
 }
 
 export default class DungeonTab extends React.Component<IDungeonTabProps, IDungeonTabState>{
     constructor(props: IDungeonTabProps) {
         super(props);
-        this.state = { selectedDungeon: null };
+        this.state = { selectedDungeon: null, questCallback: null };
     }
 
     render() {
@@ -29,7 +30,7 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     renderDungeons = () => {
         const result: JSX.Element[] = [];
         for (let i = 0; i < dungeons.length; i++) {
-            result.push(<DungeonInfo dungeon={dungeons[i]} doDungeonSelection={this.doDungeonSelection} />);
+            result.push(<DungeonInfo key={`DUNGEONINFO_${i}`} dungeon={dungeons[i]} doDungeonSelection={this.doDungeonSelection} />);
         }
         return result;
     }
@@ -37,14 +38,14 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     renderOverlay = () => {
         if (this.state.selectedDungeon) {
             return (
-                <SelectHeroOverlay dungeon={this.state.selectedDungeon} doDungeonSelection={this.doDungeonSelection} />
+                <SelectHeroOverlay dungeon={this.state.selectedDungeon} callback={this.state.questCallback} doDungeonSelection={this.doDungeonSelection} />
             );
         }
         return null;
     }
 
-    doDungeonSelection = (dungeon: Dungeon) => {
-        this.setState({ selectedDungeon: dungeon });
+    doDungeonSelection = (dungeon: Dungeon, callback: (heroes: Set<string>) => void) => {
+        this.setState({ selectedDungeon: dungeon, questCallback: callback });
     }
 }
 
@@ -58,7 +59,7 @@ const dungeons: Dungeon[] = [
             gold: 200,
             exp: 20,
             fame: 5,
-            claimed : false
+            claimed: false
         },
         recRank: 1,
         recLvl: 10,
@@ -72,7 +73,7 @@ const dungeons: Dungeon[] = [
             gold: 500,
             exp: 40,
             fame: 10,
-            claimed : false
+            claimed: false
         },
         recRank: 1,
         recLvl: 30,

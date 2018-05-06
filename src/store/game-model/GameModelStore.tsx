@@ -74,10 +74,17 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 return newState;
 
             case GameModelActionTypes.SET_AUTO_QUEST:
-                payload = action.payload as SetAutoQuestPayload;
-                newState.heroes.get(payload.heroId).autoQuest = payload.autoQuest;
-                this.eventEmitter.emit(GameModelActionTypes.SET_AUTO_QUEST, newState);
-                return newState;
+                {
+                    payload = action.payload as SetAutoQuestPayload;
+                    const hero = newState.heroes.get(payload.heroId)
+                    if (payload.autoQuest && hero.quest.power > 0) {
+                        //Don't allow setting autoquest during dungeon quest
+                        return newState;
+                    }
+                    hero.autoQuest = payload.autoQuest;
+                    this.eventEmitter.emit(GameModelActionTypes.SET_AUTO_QUEST, newState);
+                    return newState;
+                }
 
             case GameModelActionTypes.COMPLETE_QUEST:
                 newState.statistics.questCompleted += 1;
