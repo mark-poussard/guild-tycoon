@@ -1,20 +1,21 @@
 export enum TabType {
     HEROES = 'heroes',
-    RECRUIT = 'recruit'
+    RECRUIT = 'recruit',
+    DUNGEON = 'dungeon',
 }
 
-type Listener = (tab : TabType) => void;
+type Listener = (tab: TabType) => void;
 
-class NavigationStore{
-    listener : Listener;
+class NavigationStore {
+    listener: Listener;
 
-    constructor(){
+    constructor() {
     }
 
-    navigateTo = (tab : TabType) => {
+    navigateTo = (tab: TabType) => {
         this.listener(tab);
     }
-    
+
 }
 
 export default new NavigationStore();

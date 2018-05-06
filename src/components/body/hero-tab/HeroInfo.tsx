@@ -28,16 +28,18 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
         return (
             <div className="hero-info-container">
                 <div className="divider">
-                    <span className="txt name">{this.props.hero.name}</span>
-                    <span className="txt lvl">{`lvl: ${this.props.hero.level}`}</span>
-                    {this.renderLevelUp()}
+                    {this.renderHeroName()}
+                    <div className="lvl">
+                        <span className="txt">{`lvl: ${this.props.hero.level}`}</span>
+                        {this.renderLevelUp()}
+                    </div>
                     <div className="icon"><img src={this.props.hero.imgUrl} /></div>
                 </div>
                 <div className="divider">
-                    <span className="rank">{RankStar.generateRank(this.props.hero)}</span>
+                    <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
                 </div>
                 <div className="divider">
-                    <QuestInfo hero={this.props.hero} />
+                    {this.props.children}
                 </div>
             </div>
         );
@@ -51,6 +53,14 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
 
     componentWillUnmount() {
         this.storeSubscribe.remove();
+    }
+
+    renderHeroName = () => {
+        let txtSize = '';
+        if (this.props.hero.name.length > 6) {
+            txtSize = 'small';
+        }
+        return <span className={`txt ${txtSize}`}>{this.props.hero.name}</span>
     }
 
     renderLevelUp = () => {

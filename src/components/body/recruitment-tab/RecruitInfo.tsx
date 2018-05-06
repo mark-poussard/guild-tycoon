@@ -5,7 +5,7 @@ import RankStar from 'components/generic/hero-info/RankStar';
 import GameModelStore from 'store/game-model/GameModelStore';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import './RecruitInfo.css';
-import 'components/header/Resource.css'
+import Resource, { ResourceType } from 'components/generic/resource/Resource';
 
 interface IRecruitInfoProps {
     recruit: Recruit;
@@ -31,7 +31,7 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
                         {this.props.recruit.hero.name}
                     </div>
                     <div>
-                        {RankStar.generateRank(this.props.recruit.hero)}
+                        {RankStar.generateRank(this.props.recruit.hero.rank)}
                     </div>
                     <img className="recruit-img" src={this.props.recruit.hero.imgUrl} />
                     {this.renderGoldCost()}
@@ -45,10 +45,7 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
     renderGoldCost = () => {
         if (this.props.recruit.gold > 0) {
             return (
-                <div className="resource-container">
-                    <img src="img/gold.png" />
-                    <span className="resource-value remove-txt">{`-${this.props.recruit.gold}`}</span>
-                </div>
+                <Resource type={ResourceType.GOLD} value={this.props.recruit.gold} modifier remove />
             );
         }
         else {
@@ -59,10 +56,7 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
     renderFameWon = () => {
         if (this.props.recruit.fameWon > 0) {
             return (
-                <div className="resource-container">
-                    <img src="img/fame.png" />
-                    <span className="resource-value add-txt">{`+${this.props.recruit.fameWon}`}</span>
-                </div>
+                <Resource type={ResourceType.FAME} value={this.props.recruit.fameWon} modifier />
             );
         }
         else {

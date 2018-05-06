@@ -5,18 +5,19 @@ import HeroInfo from 'components/body/hero-tab/HeroInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
 import IndexedArray from 'business/collection/IndexedArray';
+import QuestInfo from 'components/body/hero-tab/QuestInfo';
 
 interface IHeroTabProps {
 
 }
 
 interface IHeroTabState {
-    heroes: IndexedArray<string,Hero>;
+    heroes: IndexedArray<string, Hero>;
     isRoomLeft: boolean;
 }
 
 const hero1: Hero = {
-    id:"1",
+    id: "1",
     name: 'Marcel',
     rank: 3,
     level: 65,
@@ -63,7 +64,11 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         const result: JSX.Element[] = [];
         const heroesArray = this.state.heroes.asArray();
         for (let i = 0; i < heroesArray.length; i++) {
-            result.push(<HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} />);
+            result.push(
+                <HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} >
+                    <QuestInfo hero={heroesArray[i]} />
+                </HeroInfo>
+            );
         }
         return result;
     }

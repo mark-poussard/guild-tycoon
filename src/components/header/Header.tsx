@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
-import Resource from 'components/header/Resource';
+import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import './Header.css';
 import GameModelStore from 'store/game-model/GameModelStore';
 
@@ -41,9 +41,9 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState>{
     render() {
         return (
             <div className="header">
-                <Resource value={this.state.gold} iconUrl="img/gold.png" />
-                <Resource value={this.state.xp} iconUrl="img/xp.png" />
-                <Resource value={this.state.fame} iconUrl="img/fame.png" />
+                <Resource value={this.state.gold} type={ResourceType.GOLD} inline />
+                <Resource value={this.state.xp} type={ResourceType.EXP} inline />
+                <Resource value={this.state.fame} type={ResourceType.FAME} inline />
             </div>
         );
     }

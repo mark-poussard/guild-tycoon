@@ -20,9 +20,9 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
     getInitialState() {
         return {
-            gold: 0,
-            fame: 0,
-            exp: 0,
+            gold: 1000,
+            fame: 100,
+            exp: 1000,
             heroes: new IndexedArray<string, Hero>(x => x.id),
             guildSize: 5,
             statistics: {

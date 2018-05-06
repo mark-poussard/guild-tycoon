@@ -22,9 +22,9 @@ export default class RankStar extends React.Component<IRankStarProps, IRankStarS
         );
     }
 
-    static generateRank = (hero : Hero) => {
+    static generateRank = (rank: number) => {
         const result: JSX.Element[] = [];
-        for (let i = 0; i < hero.rank; i++) {
+        for (let i = 0; i < rank; i++) {
             result.push(<RankStar key={`RANKSTAR_${i}`} />);
         }
         return result;

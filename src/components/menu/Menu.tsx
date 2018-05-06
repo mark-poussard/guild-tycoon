@@ -21,6 +21,7 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
             <div className="menu-container">
                 <MenuButton txt="Heroes" onClick={this.onMenuClick(TabType.HEROES)} />
                 <MenuButton txt="Recruit" onClick={this.onMenuClick(TabType.RECRUIT)} />
+                <MenuButton txt="Dungeon" onClick={this.onMenuClick(TabType.DUNGEON)} />
             </div>
         );
     }

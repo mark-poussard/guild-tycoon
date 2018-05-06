@@ -26,9 +26,9 @@ class QuestStore {
         this.questGenerator = new QuestGenerator();
     }
 
-    startQuest = (heroId: string) => {
+    startQuest = (heroId: string, quest?: Quest) => {
         if (!this.threadsMap.has(heroId)) {
-            const quest = this.generateQuest(heroId);
+            quest = quest || this.generateQuest(heroId);
             this.questsMap.set(heroId, quest);
             GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: heroId, quest: quest } });
             const intervalId = window.setInterval(this.questHandler(heroId), 200);
@@ -58,7 +58,7 @@ class QuestStore {
     }
 
     generateQuest = (heroId: string): Quest => {
-        return this.questGenerator.generateQuest(heroId);
+        return this.questGenerator.generateAutoQuest(heroId);
     }
 
     questHandler = (heroId: string) => {
@@ -86,6 +86,10 @@ class QuestStore {
                     this.threadsMap.delete(heroId);
                     this.questsMap.delete(heroId);
                     this.eventEmitter.emit(QuestEvents.ENDED, heroId);
+                    GameModelDispatcher.dispatch({
+                        type: GameModelActionTypes.ASSIGN_QUEST,
+                        payload: { heroId: heroId, quest: null }
+                    });
                 }
             }
             this.eventEmitter.emit(QuestEvents.PROGRESS, progress, heroId);
@@ -93,8 +97,30 @@ class QuestStore {
     }
 
     updateResourceAfterQuest = (quest: Quest) => {
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: quest.reward.exp } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: quest.reward.gold } });
+        if (!quest.reward.claimed && this.computeQuestSuccess(quest)) {
+            quest.reward.claimed = true;
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: quest.reward.exp } });
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: quest.reward.gold } });
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: quest.reward.fame } });
+        }
+    }
+
+    computeQuestSuccess = (quest: Quest) => {
+        if (quest.power == 0) {
+            return true;
+        }
+        const chPower = quest.challengingPower;
+        const reqPower = quest.power;
+        // Linear success chance between 80% to 120% of the reqPower
+        // <80% -> 0% chance success | >120% -> 100% chance success
+        const successPrct = (5 * chPower) / (2 * reqPower) - 2;
+        const roll = Math.random();
+        if (roll <= successPrct) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     computeProgress = (quest: Quest) => {

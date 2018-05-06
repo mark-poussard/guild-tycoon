@@ -18,12 +18,18 @@
     top: 0px;
 }
 
-.hero-info-container .name{
-    margin-right: 15px;
-}
-
 .hero-info-container .txt{
     vertical-align: middle;
+}
+
+.hero-info-container .txt.small{
+    font-size: small;
+}
+
+.hero-info-container .lvl{
+    position: absolute;
+    right: 40px;
+    top: 3px;
 }
 
 .hero-info-container .level-up{
