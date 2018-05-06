@@ -9,14 +9,26 @@
     background-color: #FF9A40;
     float: left;
     border-radius: 4px;
+    position:relative;
 }
 
 .hero-info-container .icon{
-    float: right;
+    position: absolute;
+    right: 0px;
+    top: 0px;
 }
 
 .hero-info-container .name{
-    margin-right: 20px;
+    margin-right: 15px;
+}
+
+.hero-info-container .txt{
+    vertical-align: middle;
+}
+
+.hero-info-container .level-up{
+    vertical-align: middle;
+    margin-left: 3px;
 }
 
 .hero-info-container .divider{

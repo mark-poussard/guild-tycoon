@@ -5,6 +5,7 @@ import RankStar from 'components/generic/hero-info/RankStar';
 import GameModelStore from 'store/game-model/GameModelStore';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import './RecruitInfo.css';
+import 'components/header/Resource.css'
 
 interface IRecruitInfoProps {
     recruit: Recruit;
@@ -25,31 +26,55 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
     render() {
         return (
             <div className="recruit-info-container">
-                <div>
-                    {this.props.recruit.hero.name}
+                <div className="recruit-info-positioning">
+                    <div>
+                        {this.props.recruit.hero.name}
+                    </div>
+                    <div>
+                        {RankStar.generateRank(this.props.recruit.hero)}
+                    </div>
+                    <img className="recruit-img" src={this.props.recruit.hero.imgUrl} />
+                    {this.renderGoldCost()}
+                    {this.renderFameWon()}
+                    <button className="recruit-button" disabled={this.state.isTooExpensive} onClick={this.doRecruit}>Recruit</button>
                 </div>
-                <div>
-                    {RankStar.generateRank(this.props.recruit.hero)}
-                </div>
-                <img className="recruit-img" src={this.props.recruit.hero.imgUrl} />
-                <div className="resource-container">
-                    <img src="img/gold.png" />
-                    <span className="resource-value">{this.props.recruit.gold}</span>
-                </div>
-                <div className="resource-container">
-                    <img src="img/fame.png" />
-                    <span className="resource-value">{this.props.recruit.fame}</span>
-                </div>
-                <button className="recruit-button" disabled={this.state.isTooExpensive} onClick={this.doRecruit}>Recruit</button>
             </div>
         );
+    }
+
+    renderGoldCost = () => {
+        if (this.props.recruit.gold > 0) {
+            return (
+                <div className="resource-container">
+                    <img src="img/gold.png" />
+                    <span className="resource-value remove-txt">{`-${this.props.recruit.gold}`}</span>
+                </div>
+            );
+        }
+        else {
+            return null;
+        }
+    }
+
+    renderFameWon = () => {
+        if (this.props.recruit.fameWon > 0) {
+            return (
+                <div className="resource-container">
+                    <img src="img/fame.png" />
+                    <span className="resource-value add-txt">{`+${this.props.recruit.fameWon}`}</span>
+                </div>
+            );
+        }
+        else {
+            return null;
+        }
     }
 
     isRecruitTooExpensive = () => {
         const currentGold = GameModelStore.getState().gold;
         const currentFame = GameModelStore.getState().fame;
         const isNoMoreGuildRoom = GameModelStore.getState().heroes.size() >= GameModelStore.getState().guildSize;
-        return (this.props.recruit.fame > currentFame && this.props.recruit.gold > currentGold) || isNoMoreGuildRoom;
+        return this.props.recruit.fameReq > currentFame || this.props.recruit.gold > currentGold || isNoMoreGuildRoom;
     }
 
     componentDidMount() {
@@ -75,6 +100,12 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
                 type: GameModelActionTypes.ADD_GOLD,
                 payload: {
                     quantity: -this.props.recruit.gold
+                }
+            });
+            dispatcher.dispatch({
+                type: GameModelActionTypes.ADD_FAME,
+                payload: {
+                    quantity: this.props.recruit.fameWon
                 }
             });
         }

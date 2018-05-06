@@ -24,3 +24,7 @@ export interface SetAutoQuestPayload {
     heroId: string;
     autoQuest: boolean;
 }
+
+export interface HeroLevelUpPayload{
+    heroId : string;
+}

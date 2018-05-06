@@ -11,6 +11,11 @@
     border-radius: 4px;
 }
 
+.recruit-info-positioning{
+    position: relative;
+    height: 100%;
+}
+
 .recruit-img{
     display: block;
     margin-left: auto;
@@ -19,4 +24,14 @@
 
 .recruit-button{
     width:100%;
+    position: absolute;
+    bottom: 0px;
+}
+
+.remove-txt{
+    color:red;
+}
+
+.add-txt{
+    color:green;
 }

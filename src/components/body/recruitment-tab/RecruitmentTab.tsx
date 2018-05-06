@@ -12,6 +12,7 @@ interface IRecruitmentTabProps {
 
 interface IRecruitmentTabState {
     heroes: IndexedArray<string, Hero>;
+    fame: number;
 }
 
 export default class RecruitmentTab extends React.Component<IRecruitmentTabProps, IRecruitmentTabState>{
@@ -19,7 +20,8 @@ export default class RecruitmentTab extends React.Component<IRecruitmentTabProps
 
     constructor(props: IRecruitmentTabProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes };
+        const gameState = GameModelStore.getState();
+        this.state = { heroes: gameState.heroes, fame: gameState.fame };
     }
 
     render() {
@@ -32,7 +34,8 @@ export default class RecruitmentTab extends React.Component<IRecruitmentTabProps
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
-            this.setState({ heroes: GameModelStore.getState().heroes });
+            const gameState = GameModelStore.getState();
+            this.setState({ heroes: gameState.heroes, fame: gameState.fame });
         });
     }
 
@@ -43,18 +46,23 @@ export default class RecruitmentTab extends React.Component<IRecruitmentTabProps
     renderRecruits = () => {
         const result: JSX.Element[] = [];
         for (let i = 0; i < recruits.length; i++) {
-            if (!this.state.heroes.contains(recruits[i].hero.id)) {
+            if (this.shouldRenderRecruit(recruits[i])) {
                 result.push(<RecruitInfo key={`RECRUIT_${i}`} recruit={recruits[i]} />);
             }
         }
         return result;
+    }
+
+    shouldRenderRecruit = (recruit: Recruit) => {
+        return (!this.state.heroes.contains(recruit.hero.id)) && this.state.fame >= recruit.fameReq;
     }
 }
 
 const recruits: Recruit[] = [
     {
         gold: 0,
-        fame: 0,
+        fameReq: 0,
+        fameWon: 0,
         hero:
             {
                 id: "1",
@@ -67,8 +75,24 @@ const recruits: Recruit[] = [
             }
     },
     {
+        gold: 1000,
+        fameReq: 0,
+        fameWon: 20,
+        hero:
+            {
+                id: "5",
+                name: 'Hector',
+                rank: 1,
+                level: 1,
+                imgUrl: 'img/rich.png',
+                quest: null,
+                autoQuest: false
+            }
+    },
+    {
         gold: 100,
-        fame: 5,
+        fameReq: 1,
+        fameWon: 0,
         hero:
             {
                 id: "2",
@@ -82,7 +106,8 @@ const recruits: Recruit[] = [
     },
     {
         gold: 200,
-        fame: 13,
+        fameReq: 10,
+        fameWon: 0,
         hero:
             {
                 id: "3",
@@ -96,7 +121,8 @@ const recruits: Recruit[] = [
     },
     {
         gold: 1000,
-        fame: 100,
+        fameReq: 100,
+        fameWon: 10,
         hero:
             {
                 id: "4",

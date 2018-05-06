@@ -3,6 +3,7 @@ import Quest from "model/Quest";
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import GameModelStore from 'store/game-model/GameModelStore';
+import QuestGenerator from 'store/quest/QuestGenerator';
 
 enum QuestEvents {
     PROGRESS = 'progress',
@@ -10,17 +11,19 @@ enum QuestEvents {
     STARTED = 'started',
 }
 
-type QuestProgressListener = (progress: number, heroId : string) => void;
-type BasicListener = (heroId : string) => void;
+type QuestProgressListener = (progress: number, heroId: string) => void;
+type BasicListener = (heroId: string) => void;
 
 class QuestStore {
     threadsMap: Map<string, number>;
     questsMap: Map<string, Quest>;
     eventEmitter: FbEmitter.EventEmitter;
+    questGenerator: QuestGenerator;
     constructor() {
         this.threadsMap = new Map<string, number>();
         this.questsMap = new Map<string, Quest>();
         this.eventEmitter = new FbEmitter.EventEmitter();
+        this.questGenerator = new QuestGenerator();
     }
 
     startQuest = (heroId: string) => {
@@ -38,7 +41,7 @@ class QuestStore {
         return this.threadsMap.has(heroId);
     }
 
-    getQuestProgress = (heroId : string) => {
+    getQuestProgress = (heroId: string) => {
         return this.computeProgress(this.questsMap.get(heroId));
     }
 
@@ -55,31 +58,28 @@ class QuestStore {
     }
 
     generateQuest = (heroId: string): Quest => {
-        return {
-            startTime: new Date(),
-            duration: 6000,
-            reward: {
-                gold: 10,
-                exp: 2,
-                fame: 1
-            }
-        }
+        return this.questGenerator.generateQuest(heroId);
     }
 
     questHandler = (heroId: string) => {
         return () => {
             const quest = this.questsMap.get(heroId);
             let progress = this.computeProgress(quest);
-            let ended = false;
             if (progress >= 100) {
                 progress = 100;
-                ended = true;
                 this.updateResourceAfterQuest(quest);
+                GameModelDispatcher.dispatch({
+                    type: GameModelActionTypes.COMPLETE_QUEST,
+                    payload: {}
+                });
                 const hero = GameModelStore.getState().heroes.get(heroId);
                 if (hero.autoQuest) {
                     const newQuest = this.generateQuest(heroId);
                     this.questsMap.set(heroId, newQuest);
-                    GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: heroId, quest: newQuest } });
+                    GameModelDispatcher.dispatch({
+                        type: GameModelActionTypes.ASSIGN_QUEST,
+                        payload: { heroId: heroId, quest: newQuest }
+                    });
                 }
                 else {
                     clearInterval(this.threadsMap.get(heroId));
@@ -94,7 +94,6 @@ class QuestStore {
 
     updateResourceAfterQuest = (quest: Quest) => {
         GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: quest.reward.exp } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: quest.reward.fame } });
         GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: quest.reward.gold } });
     }
 
