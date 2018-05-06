@@ -77,7 +77,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     payload = action.payload as SetAutoQuestPayload;
                     const hero = newState.heroes.get(payload.heroId)
-                    if (payload.autoQuest && hero.quest.power > 0) {
+                    if (payload.autoQuest && hero.quest && hero.quest.power > 0) {
                         //Don't allow setting autoquest during dungeon quest
                         return newState;
                     }
