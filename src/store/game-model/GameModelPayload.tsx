@@ -17,6 +17,14 @@ export interface AssignQuestPayload {
     quest: QuestWrapper;
 }
 
+export interface CompleteQuestPayload {
+    quest: QuestWrapper;
+}
+
+export interface CompleteDungeonPayload {
+    dungeonId: string;
+}
+
 export interface RecruitHeroPayload {
     hero: Hero;
 }
@@ -28,4 +36,8 @@ export interface SetAutoQuestPayload {
 
 export interface HeroLevelUpPayload {
     heroId: string;
+}
+export interface SetImprovementPayload {
+    improvementKey: string;
+    value: boolean;
 }

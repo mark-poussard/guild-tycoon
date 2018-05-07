@@ -7,14 +7,13 @@ export default class Dungeon {
     imgUrl: string;
     duration: number;
     reward: QuestReward;
-    recRank: number;
-    recLvl: number;
-    partySize: number;
+    power: number;
+    partyMaxSize: number;
 }
 
 class _DungeonHelper {
-    getPower = (dungeon: Dungeon) => {
-        return HeroHelper.powerFormula(dungeon.recLvl, dungeon.recRank);
+    getRecLevel = (dungeon: Dungeon, rank : number) => {
+        return Math.ceil(dungeon.power / HeroHelper.powerMultiplier(rank));
     }
 
     durationToString(dungeon: Dungeon) {
@@ -35,6 +34,20 @@ class _DungeonHelper {
             secondsStr = '0' + secondsStr;
         }
         return hourStr + ':' + minutesStr + ':' + secondsStr;
+    }
+
+    getRecommendedRank = (power : number) => {
+        let rank = 1;
+        let lvl = power;
+        while(lvl > 30){
+            rank += 1;
+            lvl = power / HeroHelper.powerMultiplier(rank);
+        }
+        return rank;
+    }
+
+    getRecommendedLevel = (power : number) => {
+        return power / HeroHelper.powerMultiplier(DungeonHelper.getRecommendedRank(power));
     }
 }
 

@@ -1,5 +1,5 @@
 import * as FbEmitter from 'fbemitter';
-import Quest from "model/Quest";
+import Quest, { QuestHelper } from "model/Quest";
 import QuestWrapper from "model/QuestWrapper";
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
@@ -30,7 +30,7 @@ class QuestStore {
         this.questGenerator = new QuestGenerator();
     }
 
-    startQuest = (heroesId: string[], quest: Quest, dungeonId?:string) => {
+    startQuest = (heroesId: string[], quest: Quest, dungeonId?: string) => {
         const wrappedQuest = this.wrapQuest(heroesId, quest, dungeonId);
         this.questsMap.set(wrappedQuest.id, wrappedQuest);
         this.dispatchQuestAssign(wrappedQuest);
@@ -40,7 +40,7 @@ class QuestStore {
         return wrappedQuest.id;
     }
 
-    wrapQuest = (heroesId: string[], quest: Quest, dungeonId:string): QuestWrapper => {
+    wrapQuest = (heroesId: string[], quest: Quest, dungeonId: string): QuestWrapper => {
         return {
             id: (questIdGenerator++).toString(),
             heroes: heroesId,
@@ -64,7 +64,7 @@ class QuestStore {
 
     getQuestProgress = (questId: string) => {
         const quest = this.questsMap.get(questId)
-        if(quest){
+        if (quest) {
             return this.computeProgress(this.questsMap.get(questId));
         }
         return 100;
@@ -95,7 +95,9 @@ class QuestStore {
                 this.updateResourceAfterQuest(quest);
                 GameModelDispatcher.dispatch({
                     type: GameModelActionTypes.COMPLETE_QUEST,
-                    payload: {}
+                    payload: {
+                        quest
+                    }
                 });
                 this.handleQuestEndAndAutoQuesting(quest);
             }
@@ -104,12 +106,15 @@ class QuestStore {
     }
 
     updateResourceAfterQuest = (wrappedQuest: QuestWrapper) => {
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: wrappedQuest.quest.reward.exp } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: wrappedQuest.quest.reward.gold } });
-        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: wrappedQuest.quest.reward.fame } });
+        if (this.computeQuestSuccess(wrappedQuest)) {
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: wrappedQuest.quest.reward.exp } });
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: wrappedQuest.quest.reward.gold } });
+            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: wrappedQuest.quest.reward.fame } });
+        }
     }
 
-    computeQuestSuccess = (quest: Quest) => {
+    computeQuestSuccess = (wrappedQuest: QuestWrapper) => {
+        const quest = wrappedQuest.quest;
         if (quest.power == 0) {
             return true;
         }
@@ -117,9 +122,15 @@ class QuestStore {
         const reqPower = quest.power;
         // Linear success chance between 80% to 120% of the reqPower
         // <80% -> 0% chance success | >120% -> 100% chance success
-        const successPrct = (5 * chPower) / (2 * reqPower) - 2;
+        const successPrct = QuestHelper.computeSuccessRate(reqPower, chPower);
         const roll = Math.random();
         if (roll <= successPrct) {
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.COMPLETE_DUNGEON,
+                payload: {
+                    dungeonId: wrappedQuest.dungeonId
+                }
+            })
             return true;
         }
         else {
@@ -169,11 +180,11 @@ class QuestStore {
         });
     }
 
-    getDungeonQuest = (dungeonId : string) : QuestWrapper => {
+    getDungeonQuest = (dungeonId: string): QuestWrapper => {
         const quests = Array.from(this.questsMap.values());
         let dungeonQuest = null;
-        quests.forEach((quest : QuestWrapper) => {
-            if(quest.dungeonId == dungeonId){
+        quests.forEach((quest: QuestWrapper) => {
+            if (quest.dungeonId == dungeonId) {
                 dungeonQuest = quest;
             }
         })

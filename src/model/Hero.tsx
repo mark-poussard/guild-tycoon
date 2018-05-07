@@ -16,8 +16,12 @@ class _HeroHelper {
         return this.powerFormula(hero.level, hero.rank);
     }
 
-    powerFormula = (lvl : number, rank : number) => {
-        return lvl * Math.pow(3, rank - 1);
+    powerFormula = (lvl: number, rank: number) => {
+        return lvl * HeroHelper.powerMultiplier(rank);
+    }
+
+    powerMultiplier = (rank: number) => {
+        return Math.pow(3, rank - 1);
     }
 
     expRequiredToLevel = (hero: Hero) => {

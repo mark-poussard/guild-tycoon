@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
 import Dungeon, { DungeonHelper } from 'model/Dungeon';
 import Quest from 'model/Quest';
+import { HeroHelper } from 'model/Hero';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import RankStar from 'components/generic/hero-info/RankStar';
 import QuestStore from 'store/quest/QuestStore';
@@ -43,12 +44,12 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
                 <div>
                     <span>
                         {`Recommended : `}
-                        {RankStar.generateRank(this.props.dungeon.recRank)}
-                        {` lvl. ${this.props.dungeon.recLvl}`}
+                        {RankStar.generateRank(this.getRecommendedRank())}
+                        {` lvl. ${this.getRecommendedLevel()}`}
                     </span>
                 </div>
                 <div>
-                    <span>{`Party size : ${this.props.dungeon.partySize}`}</span>
+                    <span>{`Max. party size : ${this.props.dungeon.partyMaxSize}`}</span>
                 </div>
                 <div>
                     <Resource type={ResourceType.GOLD} value={this.props.dungeon.reward.gold} modifier />
@@ -61,6 +62,14 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
         );
     }
 
+    getRecommendedRank = () => {
+        return DungeonHelper.getRecommendedRank(this.props.dungeon.power);
+    }
+
+    getRecommendedLevel = () => {
+        return DungeonHelper.getRecommendedLevel(this.props.dungeon.power);
+    }
+
     dungeonSelection = () => {
         this.props.doDungeonSelection(this.props.dungeon, this.questCallback);
     }
@@ -71,11 +80,11 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
                 <QuestProgress questId={this.state.quest.id} />
             );
         }
-        else if (this.state.guildMemberCount < this.props.dungeon.partySize) {
+        /*else if (this.state.guildMemberCount < this.props.dungeon.partyMaxSize) {
             return (
                 <button disabled={true}>Not enough guild members</button>
             );
-        }
+        }*/
         else {
             return (
                 <button onClick={this.dungeonSelection}>Challenge</button>

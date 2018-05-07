@@ -16,16 +16,6 @@ interface IHeroTabState {
     isRoomLeft: boolean;
 }
 
-const hero1: Hero = {
-    id: "1",
-    name: 'Marcel',
-    rank: 3,
-    level: 65,
-    imgUrl: 'img/squire.png',
-    quest: null,
-    autoQuest: false
-}
-
 export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabState>{
     storeSubscribe: fbEmitter.EventSubscription;
 

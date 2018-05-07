@@ -1,7 +1,16 @@
 import * as FbEmitter from 'fbemitter';
 import { ReduceStore } from 'flux/utils';
 import GameModelState from './GameModelState';
-import GameModelPayload, { AddResourcePayload, AssignQuestPayload, RecruitHeroPayload, SetAutoQuestPayload, HeroLevelUpPayload } from './GameModelPayload';
+import GameModelPayload, {
+    AddResourcePayload,
+    AssignQuestPayload,
+    RecruitHeroPayload,
+    SetAutoQuestPayload,
+    HeroLevelUpPayload,
+    CompleteQuestPayload,
+    CompleteDungeonPayload,
+    SetImprovementPayload
+} from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
 import Hero, { HeroHelper } from 'model/Hero';
@@ -27,6 +36,11 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             guildSize: 10,
             statistics: {
                 questCompleted: 0
+            },
+            completedDungeons: new Set<string>(),
+            improvements : {
+                autoQuest : false,
+                stables : false,
             }
         } as GameModelState;
     }
@@ -87,9 +101,15 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 }
 
             case GameModelActionTypes.COMPLETE_QUEST:
+                payload = action.payload as CompleteQuestPayload;
                 newState.statistics.questCompleted += 1;
-                this.achievementsHelper.computeQuestStat(newState);
+                //this.achievementsHelper.computeQuestStat(newState);
                 this.eventEmitter.emit(GameModelActionTypes.COMPLETE_QUEST, newState);
+                return newState;
+
+            case GameModelActionTypes.COMPLETE_DUNGEON:
+                payload = action.payload as CompleteDungeonPayload;
+                newState.completedDungeons.add(payload.dungeonId);
                 return newState;
 
             case GameModelActionTypes.HERO_LVL_UP:
@@ -102,6 +122,12 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         hero.level += 1;
                         this.eventEmitter.emit(GameModelActionTypes.HERO_LVL_UP, newState);
                     }
+                    return newState;
+                }
+            case GameModelActionTypes.SET_IMPROVEMENT:
+                {
+                    payload = action.payload as SetImprovementPayload;
+                    newState.improvements[payload.improvementKey] = payload.value;
                     return newState;
                 }
 

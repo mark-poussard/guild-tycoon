@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
-import Dungeon from 'model/Dungeon';
+import Dungeon, { DungeonHelper } from 'model/Dungeon';
 import Hero, { HeroHelper } from 'model/Hero';
 import './SelectHeroOverlay.css'
 import GameModelStore from 'store/game-model/GameModelStore';
@@ -11,6 +11,7 @@ import QuestStore from 'store/quest/QuestStore';
 import QuestGenerator from 'store/quest/QuestGenerator';
 import RankStar from 'components/generic/hero-info/RankStar';
 import QuestWrapper from 'model/QuestWrapper'
+import { QuestHelper } from 'model/Quest';
 
 interface ISelectHeroOverlayProps {
     dungeon: Dungeon;
@@ -51,11 +52,11 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     renderOverlayTitle = () => {
         let heroTxt = 'hero';
-        if (this.props.dungeon.partySize > 1) {
+        if (this.props.dungeon.partyMaxSize > 1) {
             heroTxt = 'heroes'
         }
         return (
-            <h2>{`Please select ${this.props.dungeon.partySize} ${heroTxt} to challenge this dungeon.`}</h2>
+            <h2>{`Please select ${this.props.dungeon.partyMaxSize} ${heroTxt} to challenge this dungeon.`}</h2>
         );
     }
 
@@ -70,7 +71,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
                         selectedHeroes={this.state.selectedHeroes}
                         doSelectHero={this.doSelectHero}
                         doUnselectHero={this.doUnselectHero}
-                        partySize={this.props.dungeon.partySize} />
+                        partySize={this.props.dungeon.partyMaxSize} />
                 </HeroInfo>
             );
         }
@@ -82,14 +83,25 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
             <div>
                 <div>
                     {"Recommended minimum rank : "}
-                    {RankStar.generateRank(this.props.dungeon.recRank)}
+                    {RankStar.generateRank(this.getRecommendedRank())}
                 </div>
                 <div>
-                    {`Recommended minimum lvl : ${this.props.dungeon.recLvl}`}
+                    {`Recommended minimum lvl : ${this.getRecommendedLevel()}`}
+                </div>
+                <div>
+                    {`Dungeon power : ${this.props.dungeon.power} - Current party power : ${this.computeHeroesCombinedPower(this.state.selectedHeroes)} - Success rate : ${this.computeDungeonSuccessRate()}%`}
                 </div>
             </div>
 
         );
+    }
+
+    getRecommendedRank = () => {
+        return DungeonHelper.getRecommendedRank(this.props.dungeon.power);
+    }
+
+    getRecommendedLevel = () => {
+        return DungeonHelper.getRecommendedLevel(this.props.dungeon.power);
     }
 
     doSelectHero = (heroId: string) => {
@@ -102,7 +114,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
     }
 
     canConfirm = () => {
-        return this.state.selectedHeroes.size == this.props.dungeon.partySize;
+        return this.state.selectedHeroes.size > 0 && this.state.selectedHeroes.size <= this.props.dungeon.partyMaxSize;
     }
 
     componentDidMount() {
@@ -139,5 +151,10 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
             result += HeroHelper.getPower(hero);
         }
         return result;
+    }
+
+    computeDungeonSuccessRate = () => {
+        const heroPower = this.computeHeroesCombinedPower(this.state.selectedHeroes);
+        return Math.min(Math.max(Math.floor(QuestHelper.computeSuccessRate(this.props.dungeon.power, heroPower) * 100), 0), 100);
     }
 }

@@ -2,6 +2,7 @@ export enum TabType {
     HEROES = 'heroes',
     RECRUIT = 'recruit',
     DUNGEON = 'dungeon',
+    IMPROVEMENTS = 'improvements'
 }
 
 type Listener = (tab: TabType) => void;

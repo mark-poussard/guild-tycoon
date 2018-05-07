@@ -2,6 +2,7 @@ import * as React from 'react';
 import HeroTab from 'components/body/hero-tab/HeroTab';
 import RecruitmentTab from 'components/body/recruitment-tab/RecruitmentTab';
 import DungeonTab from 'components/body/dungeon-tab/DungeonTab';
+import ImprovementsTab from 'components/body/improvements-tab/ImprovementsTab';
 import './Content.css';
 import { TabType } from 'store/navigation/NavigationStore';
 
@@ -29,6 +30,8 @@ export default class Content extends React.Component<IContentProps, IContentStat
         switch (this.props.currentTab) {
             case TabType.HEROES:
                 return <HeroTab />
+            case TabType.IMPROVEMENTS:
+                return <ImprovementsTab />
             case TabType.RECRUIT:
                 return <RecruitmentTab />
             case TabType.DUNGEON:

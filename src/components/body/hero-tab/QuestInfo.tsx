@@ -16,6 +16,7 @@ interface IQuestInfoProps {
 }
 
 interface IQuestInfoState {
+    autoQuestImprovement: boolean;
     autoQuest: boolean;
     questId: string;
 }
@@ -28,9 +29,10 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     questGenerator: QuestGenerator;
     constructor(props: IQuestInfoProps) {
         super(props);
-        const quest = GameModelStore.getState().heroes.get(this.props.hero.id).quest;
+        const gameState = GameModelStore.getState();
+        const quest = gameState.heroes.get(this.props.hero.id).quest;
         const questId = (quest) ? quest.id : null;
-        this.state = { autoQuest: this.props.hero.autoQuest, questId: questId };
+        this.state = { autoQuest: this.props.hero.autoQuest, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest };
         this.questGenerator = new QuestGenerator();
     }
 
@@ -57,13 +59,15 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderAuto = () => {
-        if (this.state.autoQuest) {
-            return <input className="auto-quest" type="image" src="img/cross.png" onClick={this.stopAutoQuest} />
+        if (this.state.autoQuestImprovement) {
+            if (this.state.autoQuest) {
+                return <input className="auto-quest" type="image" src="img/cross.png" onClick={this.stopAutoQuest} />
+            }
+            else {
+                return <input className="auto-quest" type="image" src="img/auto.png" onClick={this.startAutoQuest} />
+            }
         }
-        else {
-            return <input className="auto-quest" type="image" src="img/auto.png" onClick={this.startAutoQuest} />
-
-        }
+        return null;
     }
 
     componentDidMount() {
@@ -78,9 +82,10 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             }
         });
         this.gameModelListener = GameModelStore.addListener(() => {
-            const hero = GameModelStore.getState().heroes.get(this.props.hero.id);
+            const gameState = GameModelStore.getState();
+            const hero = gameState.heroes.get(this.props.hero.id);
             const questId = (hero.quest) ? hero.quest.id : null;
-            this.setState({ autoQuest: hero.autoQuest, questId: questId });
+            this.setState({ autoQuest: hero.autoQuest, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest });
         });
     }
 

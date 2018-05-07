@@ -7,4 +7,6 @@ export enum GameModelActionTypes {
     RECRUIT_HERO = 'recruit_hero',
     COMPLETE_QUEST = 'complete_quest',
     HERO_LVL_UP = 'hero_level_up',
+    COMPLETE_DUNGEON = 'complete_dungeon',
+    SET_IMPROVEMENT = 'set_improvement',
 }

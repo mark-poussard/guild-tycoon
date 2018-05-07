@@ -1,21 +1,28 @@
 import * as React from 'react';
+import * as fbEmitter from 'fbemitter';
 import Dungeon from 'model/Dungeon';
 import DungeonInfo from 'components/body/dungeon-tab/DungeonInfo';
 import SelectHeroOverlay from 'components/body/dungeon-tab/SelectHeroOverlay';
+import GameModelStore from 'store/game-model/GameModelStore';
+import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 
 interface IDungeonTabProps {
 
 }
 
 interface IDungeonTabState {
+    completedDungeons: Set<string>;
     selectedDungeon: Dungeon;
     questCallback: (questId: string) => void;
 }
 
 export default class DungeonTab extends React.Component<IDungeonTabProps, IDungeonTabState>{
+    storeSubscribe: fbEmitter.EventSubscription;
+
     constructor(props: IDungeonTabProps) {
         super(props);
-        this.state = { selectedDungeon: null, questCallback: null };
+        const completedDungeons = GameModelStore.getState().completedDungeons;
+        this.state = { selectedDungeon: null, questCallback: null, completedDungeons: completedDungeons };
     }
 
     render() {
@@ -27,10 +34,22 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
         );
     }
 
+    componentDidMount() {
+        this.storeSubscribe = GameModelStore.addListener(() => {
+            this.setState({ completedDungeons: GameModelStore.getState().completedDungeons });
+        });
+    }
+
+    componentWillUnmount() {
+        this.storeSubscribe.remove();
+    }
+
     renderDungeons = () => {
         const result: JSX.Element[] = [];
         for (let i = 0; i < dungeons.length; i++) {
-            result.push(<DungeonInfo key={`DUNGEONINFO_${i}`} dungeon={dungeons[i]} doDungeonSelection={this.doDungeonSelection} />);
+            if (!this.state.completedDungeons.has(dungeons[i].id)) {
+                result.push(<DungeonInfo key={`DUNGEONINFO_${i}`} dungeon={dungeons[i]} doDungeonSelection={this.doDungeonSelection} />);
+            }
         }
         return result;
     }
@@ -55,69 +74,64 @@ const dungeons: Dungeon[] = [
         name: 'Haunted Windmill',
         imgUrl: 'img/haunted_windmill.png',
         duration: 45000,
-        partySize: 1,
+        partyMaxSize: 1,
         reward: {
-            gold: 200,
-            exp: 20,
-            fame: 5
+            gold: 300,
+            exp: 50,
+            fame: 10
         },
-        recRank: 1,
-        recLvl: 10,
+        power: 10,
     },
     {
         id: '2',
         name: 'Creepy Crypt',
         imgUrl: 'img/haunted_windmill.png',
         duration: 75000,
-        partySize: 2,
+        partyMaxSize: 2,
         reward: {
-            gold: 500,
-            exp: 40,
-            fame: 10
+            gold: 600,
+            exp: 80,
+            fame: 20
         },
-        recRank: 1,
-        recLvl: 30,
+        power: 30,
     },
     {
         id: '3',
         name: 'Gassy Swamp',
         imgUrl: 'img/haunted_windmill.png',
         duration: 90000,
-        partySize: 2,
+        partyMaxSize: 2,
         reward: {
             gold: 1000,
-            exp: 80,
-            fame: 15
+            exp: 200,
+            fame: 30
         },
-        recRank: 2,
-        recLvl: 20,
+        power: 60,
     },
     {
         id: '4',
         name: 'Cursed Castle',
         imgUrl: 'img/haunted_windmill.png',
         duration: 120000,
-        partySize: 4,
+        partyMaxSize: 4,
         reward: {
             gold: 2000,
-            exp: 200,
-            fame: 30
+            exp: 400,
+            fame: 50
         },
-        recRank: 3,
-        recLvl: 15,
+        power: 135,
     },
     {
         id: '5',
         name: 'Dragon Cave',
         imgUrl: 'img/haunted_windmill.png',
         duration: 300000,
-        partySize: 8,
+        partyMaxSize: 8,
         reward: {
             gold: 7500,
             exp: 800,
-            fame: 50
+            fame: 100
         },
-        recRank: 4,
-        recLvl: 10,
+        power: 270,
     }
 ];

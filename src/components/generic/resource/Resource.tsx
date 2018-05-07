@@ -14,6 +14,7 @@ interface IResourceProps {
     modifier?: boolean;
     remove?: boolean;
     inline?: boolean;
+    style?: React.CSSProperties;
 }
 
 interface IResourceState {
@@ -28,14 +29,14 @@ export default class Resource extends React.Component<IResourceProps, IResourceS
     render() {
         if (this.props.inline) {
             return (
-                <span className="resource-container">
+                <span style={this.props.style} className="resource-container">
                     {this.renderContent()}
                 </span>
             );
         }
         else {
             return (
-                <div className="resource-container">
+                <div style={this.props.style} className="resource-container">
                     {this.renderContent()}
                 </div>
             );
