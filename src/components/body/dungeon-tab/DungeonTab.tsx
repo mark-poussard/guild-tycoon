@@ -93,7 +93,7 @@ const dungeons: Dungeon[] = [
             exp: 80,
             fame: 20
         },
-        power: 30,
+        power: 20,
     },
     {
         id: '3',

@@ -91,7 +91,7 @@ const recruits: Recruit[] = [
             }
     },
     {
-        gold: 100,
+        gold: 50,
         fameReq: 0,
         fameWon: 0,
         hero:
