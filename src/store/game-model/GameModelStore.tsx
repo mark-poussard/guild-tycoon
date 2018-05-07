@@ -20,11 +20,11 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
     getInitialState() {
         return {
-            gold: 1000,
-            fame: 100,
-            exp: 1000,
+            gold: 0,
+            fame: 0,
+            exp: 0,
             heroes: new IndexedArray<string, Hero>(x => x.id),
-            guildSize: 5,
+            guildSize: 10,
             statistics: {
                 questCompleted: 0
             }
@@ -77,8 +77,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     payload = action.payload as SetAutoQuestPayload;
                     const hero = newState.heroes.get(payload.heroId)
-                    if (payload.autoQuest && hero.quest && hero.quest.power > 0) {
-                        //Don't allow setting autoquest during dungeon quest
+                    if (payload.autoQuest && hero.quest && (hero.quest.quest.power > 0 || hero.quest.heroes.length > 1)) {
+                        //Don't allow setting autoquest during quest with multiple participants or that wasn't auto-generated (dungeon quests)
                         return newState;
                     }
                     hero.autoQuest = payload.autoQuest;

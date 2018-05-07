@@ -11,7 +11,6 @@ export default class QuestGenerator {
         const hero = GameModelStore.getState().heroes.get(heroId);
         const fame = GameModelStore.getState().fame;
         return {
-            startTime: new Date(),
             duration: 6000,
             power: 0,
             challengingPower: HeroHelper.getPower(hero),
@@ -19,15 +18,12 @@ export default class QuestGenerator {
                 gold: this.computeGoldReward(fame, hero),
                 exp: this.computeExpReward(hero),
                 fame: 0,
-                claimed: false
             }
         }
     }
 
     generateQuestFromDungeon = (dungeon: Dungeon, combinedPower : number): Quest => {
-        dungeon.reward.claimed = false;
         return {
-            startTime: new Date(),
             duration: dungeon.duration,
             reward: dungeon.reward,
             power: DungeonHelper.getPower(dungeon),
@@ -44,6 +40,6 @@ export default class QuestGenerator {
     }
 
     computeExpReward = (hero: Hero) => {
-        return Math.pow(10, hero.rank - 1);
+        return Math.pow(3, hero.rank - 1);
     }
 }

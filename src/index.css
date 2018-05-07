@@ -33,3 +33,12 @@ button[disabled]{
   cursor: initial;
   background:#FF7800;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  color: rgb(124, 58, 0);
+  margin : 3px;
+}
+
+h1, h2{
+  text-align: center;
+}

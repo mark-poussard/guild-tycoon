@@ -1,9 +1,11 @@
 import * as FbEmitter from 'fbemitter';
 import Quest from "model/Quest";
+import QuestWrapper from "model/QuestWrapper";
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import GameModelStore from 'store/game-model/GameModelStore';
 import QuestGenerator from 'store/quest/QuestGenerator';
+
 
 enum QuestEvents {
     PROGRESS = 'progress',
@@ -11,38 +13,61 @@ enum QuestEvents {
     STARTED = 'started',
 }
 
-type QuestProgressListener = (progress: number, heroId: string) => void;
-type BasicListener = (heroId: string) => void;
+type QuestProgressListener = (progress: number, wrappedQuest: QuestWrapper) => void;
+type BasicListener = (wrappedQuest: QuestWrapper) => void;
+
+var questIdGenerator = 0;
 
 class QuestStore {
     threadsMap: Map<string, number>;
-    questsMap: Map<string, Quest>;
+    questsMap: Map<string, QuestWrapper>;
     eventEmitter: FbEmitter.EventEmitter;
     questGenerator: QuestGenerator;
     constructor() {
         this.threadsMap = new Map<string, number>();
-        this.questsMap = new Map<string, Quest>();
+        this.questsMap = new Map<string, QuestWrapper>();
         this.eventEmitter = new FbEmitter.EventEmitter();
         this.questGenerator = new QuestGenerator();
     }
 
-    startQuest = (heroId: string, quest?: Quest) => {
-        if (!this.threadsMap.has(heroId)) {
-            quest = quest || this.generateQuest(heroId);
-            this.questsMap.set(heroId, quest);
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: heroId, quest: quest } });
-            const intervalId = window.setInterval(this.questHandler(heroId), 200);
-            this.threadsMap.set(heroId, intervalId);
-            this.eventEmitter.emit(QuestEvents.STARTED, heroId);
+    startQuest = (heroesId: string[], quest: Quest, dungeonId?:string) => {
+        const wrappedQuest = this.wrapQuest(heroesId, quest, dungeonId);
+        this.questsMap.set(wrappedQuest.id, wrappedQuest);
+        this.dispatchQuestAssign(wrappedQuest);
+        const intervalId = window.setInterval(this.questHandler(wrappedQuest.id), 200);
+        this.threadsMap.set(wrappedQuest.id, intervalId);
+        this.eventEmitter.emit(QuestEvents.STARTED, wrappedQuest);
+        return wrappedQuest.id;
+    }
+
+    wrapQuest = (heroesId: string[], quest: Quest, dungeonId:string): QuestWrapper => {
+        return {
+            id: (questIdGenerator++).toString(),
+            heroes: heroesId,
+            quest: quest,
+            startTime: new Date(),
+            dungeonId: dungeonId,
+        };
+    }
+
+    dispatchQuestAssign = (wrappedQuest: QuestWrapper) => {
+        wrappedQuest.heroes.forEach(
+            (heroId: string) => {
+                GameModelDispatcher.dispatch({ type: GameModelActionTypes.ASSIGN_QUEST, payload: { heroId: heroId, quest: wrappedQuest } });
+            }
+        );
+    }
+
+    isQuestInProgress = (questId: string) => {
+        return this.threadsMap.has(questId);
+    }
+
+    getQuestProgress = (questId: string) => {
+        const quest = this.questsMap.get(questId)
+        if(quest){
+            return this.computeProgress(this.questsMap.get(questId));
         }
-    }
-
-    isQuestInProgress = (heroId: string) => {
-        return this.threadsMap.has(heroId);
-    }
-
-    getQuestProgress = (heroId: string) => {
-        return this.computeProgress(this.questsMap.get(heroId));
+        return 100;
     }
 
     registerQuestProgressListener = (listener: QuestProgressListener) => {
@@ -61,9 +86,9 @@ class QuestStore {
         return this.questGenerator.generateAutoQuest(heroId);
     }
 
-    questHandler = (heroId: string) => {
+    questHandler = (wrapId: string) => {
         return () => {
-            const quest = this.questsMap.get(heroId);
+            const quest = this.questsMap.get(wrapId);
             let progress = this.computeProgress(quest);
             if (progress >= 100) {
                 progress = 100;
@@ -72,37 +97,16 @@ class QuestStore {
                     type: GameModelActionTypes.COMPLETE_QUEST,
                     payload: {}
                 });
-                const hero = GameModelStore.getState().heroes.get(heroId);
-                if (hero.autoQuest) {
-                    const newQuest = this.generateQuest(heroId);
-                    this.questsMap.set(heroId, newQuest);
-                    GameModelDispatcher.dispatch({
-                        type: GameModelActionTypes.ASSIGN_QUEST,
-                        payload: { heroId: heroId, quest: newQuest }
-                    });
-                }
-                else {
-                    clearInterval(this.threadsMap.get(heroId));
-                    this.threadsMap.delete(heroId);
-                    this.questsMap.delete(heroId);
-                    this.eventEmitter.emit(QuestEvents.ENDED, heroId);
-                    GameModelDispatcher.dispatch({
-                        type: GameModelActionTypes.ASSIGN_QUEST,
-                        payload: { heroId: heroId, quest: null }
-                    });
-                }
+                this.handleQuestEndAndAutoQuesting(quest);
             }
-            this.eventEmitter.emit(QuestEvents.PROGRESS, progress, heroId);
+            this.eventEmitter.emit(QuestEvents.PROGRESS, progress, quest);
         };
     }
 
-    updateResourceAfterQuest = (quest: Quest) => {
-        if (!quest.reward.claimed && this.computeQuestSuccess(quest)) {
-            quest.reward.claimed = true;
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: quest.reward.exp } });
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: quest.reward.gold } });
-            GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: quest.reward.fame } });
-        }
+    updateResourceAfterQuest = (wrappedQuest: QuestWrapper) => {
+        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: wrappedQuest.quest.reward.exp } });
+        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: wrappedQuest.quest.reward.gold } });
+        GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: wrappedQuest.quest.reward.fame } });
     }
 
     computeQuestSuccess = (quest: Quest) => {
@@ -123,16 +127,57 @@ class QuestStore {
         }
     }
 
-    computeProgress = (quest: Quest) => {
-        const currentDuration: number = new Date().getTime() - quest.startTime.getTime();
+    computeProgress = (wrappedQuest: QuestWrapper) => {
+        const currentDuration: number = new Date().getTime() - wrappedQuest.startTime.getTime();
         let progress;
-        if (quest.duration > 0) {
-            progress = (currentDuration / quest.duration) * 100;
+        if (wrappedQuest.quest.duration > 0) {
+            progress = (currentDuration / wrappedQuest.quest.duration) * 100;
         }
         else {
             progress = 100;
         }
         return progress;
+    }
+
+    handleQuestEndAndAutoQuesting = (wrappedQuest: QuestWrapper) => {
+        if (wrappedQuest.heroes.length == 1) {
+            const hero = GameModelStore.getState().heroes.get(wrappedQuest.heroes[0]);
+            if (hero.autoQuest) {
+                const newQuest = this.generateQuest(hero.id);
+                wrappedQuest.quest = newQuest;
+                wrappedQuest.startTime = new Date();
+                GameModelDispatcher.dispatch({
+                    type: GameModelActionTypes.ASSIGN_QUEST,
+                    payload: { heroId: hero.id, quest: wrappedQuest }
+                });
+                return;
+            }
+        }
+        clearInterval(this.threadsMap.get(wrappedQuest.id));
+        this.threadsMap.delete(wrappedQuest.id);
+        this.questsMap.delete(wrappedQuest.id);
+        this.eventEmitter.emit(QuestEvents.ENDED, wrappedQuest);
+        this.dispatchUnassignQuest(wrappedQuest);
+    }
+
+    dispatchUnassignQuest = (wrappedQuest: QuestWrapper) => {
+        wrappedQuest.heroes.forEach((heroId) => {
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.ASSIGN_QUEST,
+                payload: { heroId: heroId, quest: null }
+            });
+        });
+    }
+
+    getDungeonQuest = (dungeonId : string) : QuestWrapper => {
+        const quests = Array.from(this.questsMap.values());
+        let dungeonQuest = null;
+        quests.forEach((quest : QuestWrapper) => {
+            if(quest.dungeonId == dungeonId){
+                dungeonQuest = quest;
+            }
+        })
+        return dungeonQuest;
     }
 }
 

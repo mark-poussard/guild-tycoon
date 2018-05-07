@@ -3,9 +3,10 @@ import * as FbEmitter from 'fbemitter';
 import Quest from 'model/Quest';
 import QuestStore from 'store/quest/QuestStore';
 import './QuestProgress.css';
+import QuestWrapper from 'model/QuestWrapper';
 
 interface IQuestProgressProps {
-    heroId: string;
+    questId: string;
 }
 
 interface IQuestProgressState {
@@ -18,7 +19,7 @@ export default class QuestProgress extends React.Component<IQuestProgressProps, 
 
     constructor(props: IQuestProgressProps) {
         super(props);
-        this.state = { progress: QuestStore.getQuestProgress(this.props.heroId) };
+        this.state = { progress: QuestStore.getQuestProgress(this.props.questId) };
     }
 
     render() {
@@ -30,8 +31,8 @@ export default class QuestProgress extends React.Component<IQuestProgressProps, 
     }
 
     componentDidMount() {
-        this.questProgressListener = QuestStore.registerQuestProgressListener((progress: number, heroId: string) => {
-            if (heroId == this.props.heroId) {
+        this.questProgressListener = QuestStore.registerQuestProgressListener((progress: number, quest: QuestWrapper) => {
+            if (quest.id == this.props.questId) {
                 this.setState({ progress: progress });
             }
         });

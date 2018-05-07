@@ -48,9 +48,9 @@ export default class Resource extends React.Component<IResourceProps, IResourceS
         const sign = this.computeSign();
 
         const result: JSX.Element[] = [];
-        result.push(<img className="icon" src={iconUrl} />);
+        result.push(<img key="RESSOURCE_ICON" className="icon" src={iconUrl} />);
         result.push(
-            <span className={`resource-value ${colorClass}`}>
+            <span key="RESSOURCE_VALUE" className={`resource-value ${colorClass}`}>
                 {`${sign}${this.props.value}`}
             </span>
         );

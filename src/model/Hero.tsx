@@ -1,4 +1,5 @@
 import Quest from 'model/Quest';
+import QuestWrapper from 'model/QuestWrapper';
 
 export default class Hero {
     id: string;
@@ -6,7 +7,7 @@ export default class Hero {
     rank: number;
     level: number;
     imgUrl: string;
-    quest: Quest;
+    quest: QuestWrapper;
     autoQuest: boolean;
 }
 
@@ -20,7 +21,7 @@ class _HeroHelper {
     }
 
     expRequiredToLevel = (hero: Hero) => {
-        return hero.level * Math.pow(10, hero.rank - 1);
+        return hero.level * Math.pow(3, hero.rank - 1);
     }
 }
 

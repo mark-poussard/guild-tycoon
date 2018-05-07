@@ -10,10 +10,11 @@ import HeroSelectButton from 'components/body/dungeon-tab/HeroSelectButton';
 import QuestStore from 'store/quest/QuestStore';
 import QuestGenerator from 'store/quest/QuestGenerator';
 import RankStar from 'components/generic/hero-info/RankStar';
+import QuestWrapper from 'model/QuestWrapper'
 
 interface ISelectHeroOverlayProps {
     dungeon: Dungeon;
-    callback: (heroes: Set<string>) => void;
+    callback: (questId: string) => void;
     doDungeonSelection: (dungeon: Dungeon, callback: Function) => void;
 }
 
@@ -50,7 +51,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     renderOverlayTitle = () => {
         let heroTxt = 'hero';
-        if(this.props.dungeon.partySize > 1){
+        if (this.props.dungeon.partySize > 1) {
             heroTxt = 'heroes'
         }
         return (
@@ -125,10 +126,8 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
     doDungeon = () => {
         const combinedPower = this.computeHeroesCombinedPower(this.state.selectedHeroes);
         const quest = this.questGenerator.generateQuestFromDungeon(this.props.dungeon, combinedPower);
-        this.state.selectedHeroes.forEach((heroId: string) => {
-            QuestStore.startQuest(heroId, quest);
-        });
-        this.props.callback(this.state.selectedHeroes);
+        const questId = QuestStore.startQuest(Array.from(this.state.selectedHeroes), quest, this.props.dungeon.id);
+        this.props.callback(questId);
         this.closeOverlay();
     }
 

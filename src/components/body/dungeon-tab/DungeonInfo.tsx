@@ -6,6 +6,9 @@ import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import RankStar from 'components/generic/hero-info/RankStar';
 import QuestStore from 'store/quest/QuestStore';
 import './DungeonInfo.css'
+import QuestWrapper from 'model/QuestWrapper';
+import QuestProgress from 'components/generic/quest/QuestProgress';
+import GameModelStore from 'store/game-model/GameModelStore';
 
 interface IDungeonInfoProps {
     dungeon: Dungeon;
@@ -13,15 +16,20 @@ interface IDungeonInfoProps {
 }
 
 interface IDungeonInfoState {
-    inProgress : boolean;
+    quest: QuestWrapper;
+    guildMemberCount: number;
 }
 
 export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDungeonInfoState>{
-    questStoreListener : fbEmitter.EventSubscription;
+    questStoreListener: fbEmitter.EventSubscription;
+    gameStoreListener: fbEmitter.EventSubscription;
 
     constructor(props: IDungeonInfoProps) {
         super(props);
-        this.state = {inProgress : false};
+        this.state = {
+            quest: QuestStore.getDungeonQuest(this.props.dungeon.id),
+            guildMemberCount: GameModelStore.getState().heroes.size()
+        };
     }
 
     render() {
@@ -58,8 +66,15 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
     }
 
     renderDungeonButton = () => {
-        if (this.state.inProgress) {
-            return (<button disabled={true}>Dungeon in progress</button>);
+        if (this.state.quest) {
+            return (
+                <QuestProgress questId={this.state.quest.id} />
+            );
+        }
+        else if (this.state.guildMemberCount < this.props.dungeon.partySize) {
+            return (
+                <button disabled={true}>Not enough guild members</button>
+            );
         }
         else {
             return (
@@ -68,20 +83,28 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
         }
     }
 
-    questCallback = (heroes : Set<string>) => {
-        this.setState({inProgress : true});
-        this.questStoreListener = QuestStore.registerQuestEndedListener((heroId : string) => {
-            if(heroes.has(heroId)){
-                this.setState({inProgress : false});
-                this.questStoreListener.remove()
-                this.questStoreListener = null;
+    questCallback = (questId: string) => {
+        const quest = QuestStore.questsMap.get(questId);
+        this.setState({ quest: quest });
+    }
+
+    componentWillMount() {
+        this.questStoreListener = QuestStore.registerQuestEndedListener((quest: QuestWrapper) => {
+            if (this.state.quest && this.state.quest.id == quest.id) {
+                this.setState({ quest: null });
             }
+        });
+        this.gameStoreListener = GameModelStore.addListener(() => {
+            this.setState({ guildMemberCount: GameModelStore.getState().heroes.size() });
         });
     }
 
-    componentWillUnmount(){
-        if(this.questStoreListener){
+    componentWillUnmount() {
+        if (this.questStoreListener) {
             this.questStoreListener.remove();
+        }
+        if (this.gameStoreListener) {
+            this.gameStoreListener.remove();
         }
     }
 }

@@ -2,13 +2,14 @@ import QuestReward from 'model/QuestReward';
 import { HeroHelper } from 'model/Hero';
 
 export default class Dungeon {
+    id: string;
     name: string;
     imgUrl: string;
     duration: number;
     reward: QuestReward;
     recRank: number;
     recLvl: number;
-    partySize : number;
+    partySize: number;
 }
 
 class _DungeonHelper {
@@ -18,8 +19,8 @@ class _DungeonHelper {
 
     durationToString(dungeon: Dungeon) {
         const hours = Math.floor(dungeon.duration / (60000 * 60000));
-        const minutes = Math.floor(dungeon.duration / 60000);
-        const seconds = Math.floor(dungeon.duration / 1000)
+        const minutes = Math.floor((dungeon.duration - hours*(60000 * 60000)) / 60000);
+        const seconds = Math.floor((dungeon.duration - hours*(60000 * 60000) - minutes*60000) / 1000)
 
         let hourStr = hours.toString();
         if (hourStr.length < 2) {

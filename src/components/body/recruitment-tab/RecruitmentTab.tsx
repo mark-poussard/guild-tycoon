@@ -27,6 +27,7 @@ export default class RecruitmentTab extends React.Component<IRecruitmentTabProps
     render() {
         return (
             <div>
+                <h3 style={{verticalAlign:'middle'}}>More heroes will become available as you gain <img style={{verticalAlign:'middle'}} src="img/fame.png"/></h3>
                 {this.renderRecruits()}
             </div>
         );
@@ -69,7 +70,7 @@ const recruits: Recruit[] = [
                 name: 'Alex',
                 rank: 1,
                 level: 1,
-                imgUrl: 'img/squire.png',
+                imgUrl: 'img/char/squire.png',
                 quest: null,
                 autoQuest: false
             }
@@ -77,14 +78,14 @@ const recruits: Recruit[] = [
     {
         gold: 1000,
         fameReq: 0,
-        fameWon: 20,
+        fameWon: 30,
         hero:
             {
                 id: "5",
                 name: 'Hector',
                 rank: 1,
                 level: 1,
-                imgUrl: 'img/rich.png',
+                imgUrl: 'img/char/rich.png',
                 quest: null,
                 autoQuest: false
             }
@@ -101,37 +102,97 @@ const recruits: Recruit[] = [
                 level: 1,
                 quest: null,
                 autoQuest: false,
-                imgUrl: 'img/sprite.png'
+                imgUrl: 'img/char/sprite.png'
             }
     },
     {
-        gold: 200,
+        gold: 150,
         fameReq: 10,
         fameWon: 0,
         hero:
             {
                 id: "3",
-                name: 'Demi',
+                name: 'Mike',
+                rank: 1,
+                level: 1,
+                quest: null,
+                autoQuest: false,
+                imgUrl: 'img/char/mike.png'
+            }
+    },
+    {
+        gold: 300,
+        fameReq: 20,
+        fameWon: 2,
+        hero:
+            {
+                id: "7",
+                name: 'Denis',
                 rank: 2,
                 level: 1,
                 quest: null,
                 autoQuest: false,
-                imgUrl: 'img/battle_monk.png'
+                imgUrl: 'img/char/battle_monk.png'
+            }
+    },
+    {
+        gold: 500,
+        fameReq: 25,
+        fameWon: 5,
+        hero:
+            {
+                id: "8",
+                name: 'Rene',
+                rank: 2,
+                level: 1,
+                quest: null,
+                autoQuest: false,
+                imgUrl: 'img/char/rene.png'
             }
     },
     {
         gold: 1000,
-        fameReq: 100,
-        fameWon: 10,
+        fameReq: 50,
+        fameWon: 8,
         hero:
             {
-                id: "4",
+                id: "9",
+                name: 'Julie',
+                rank: 2,
+                level: 1,
+                quest: null,
+                autoQuest: false,
+                imgUrl: 'img/char/julie.png'
+            }
+    },
+    {
+        gold: 2000,
+        fameReq: 100,
+        fameWon: 15,
+        hero:
+            {
+                id: "6",
                 name: 'Gilgamesh',
                 rank: 3,
                 level: 1,
                 quest: null,
                 autoQuest: false,
-                imgUrl: 'img/blood_elf.png'
+                imgUrl: 'img/char/blood_elf.png'
             }
-    }
+    },
+    {
+        gold: 3500,
+        fameReq: 150,
+        fameWon: 20,
+        hero:
+            {
+                id: "10",
+                name: 'Rhodes',
+                rank: 3,
+                level: 1,
+                quest: null,
+                autoQuest: false,
+                imgUrl: 'img/char/rhodes.png'
+            }
+    },
 ];

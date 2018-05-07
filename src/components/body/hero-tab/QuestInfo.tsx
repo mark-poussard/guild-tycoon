@@ -2,13 +2,14 @@ import * as React from 'react';
 import * as FbEmitter from 'fbemitter';
 import Hero from 'model/Hero';
 import Quest from 'model/Quest';
-import QuestProgress from 'components/body/hero-tab/QuestProgress';
+import QuestProgress from 'components/generic/quest/QuestProgress';
 import QuestButton from 'components/body/hero-tab/QuestButton';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import QuestStore from 'store/quest/QuestStore';
 import './QuestInfo.css';
 import GameModelStore from 'store/game-model/GameModelStore';
+import QuestGenerator from 'store/quest/QuestGenerator';
 
 interface IQuestInfoProps {
     hero: Hero;
@@ -16,16 +17,21 @@ interface IQuestInfoProps {
 
 interface IQuestInfoState {
     autoQuest: boolean;
-    isInProgress: boolean;
+    questId: string;
 }
 
 export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestInfoState>{
     questEndedListener: FbEmitter.EventSubscription;
     questStartedListener: FbEmitter.EventSubscription;
     gameModelListener: FbEmitter.EventSubscription;
+
+    questGenerator: QuestGenerator;
     constructor(props: IQuestInfoProps) {
         super(props);
-        this.state = { autoQuest: this.props.hero.autoQuest, isInProgress: QuestStore.isQuestInProgress(this.props.hero.id) };
+        const quest = GameModelStore.getState().heroes.get(this.props.hero.id).quest;
+        const questId = (quest) ? quest.id : null;
+        this.state = { autoQuest: this.props.hero.autoQuest, questId: questId };
+        this.questGenerator = new QuestGenerator();
     }
 
     render() {
@@ -38,14 +44,14 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderQuest = () => {
-        if (this.state.isInProgress) {
+        if (this.state.questId) {
             return (
-                <QuestProgress heroId={this.props.hero.id} />
+                <QuestProgress questId={this.state.questId} />
             );
         }
         else {
             return (
-                <QuestButton heroId={this.props.hero.id} />
+                <QuestButton heroId={this.props.hero.id} doSetQuestId={this.doSetQuestId} />
             );
         }
     }
@@ -61,20 +67,20 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     componentDidMount() {
-        this.questEndedListener = QuestStore.registerQuestEndedListener((heroId) => {
-            if(heroId == this.props.hero.id){
-                this.setState({ isInProgress: false });
+        this.questEndedListener = QuestStore.registerQuestEndedListener((quest) => {
+            if (quest.id == this.state.questId) {
+                this.doSetQuestId(null);
             }
         });
-        this.questStartedListener = QuestStore.registerQuestStartedListener((heroId) => {
-            if(heroId == this.props.hero.id){
-            this.setState({ isInProgress: true });
+        this.questStartedListener = QuestStore.registerQuestStartedListener((quest) => {
+            if (quest.heroes.indexOf(this.props.hero.id) > -1) {
+                this.doSetQuestId(quest.id);
             }
         });
         this.gameModelListener = GameModelStore.addListener(() => {
-            const heroes = GameModelStore.getState().heroes;
-            const autoQuest = heroes.get(this.props.hero.id).autoQuest;
-            this.setState({ autoQuest: autoQuest });
+            const hero = GameModelStore.getState().heroes.get(this.props.hero.id);
+            const questId = (hero.quest) ? hero.quest.id : null;
+            this.setState({ autoQuest: hero.autoQuest, questId: questId });
         });
     }
 
@@ -98,9 +104,14 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
                 autoQuest: true
             }
         });
-        if (!this.state.isInProgress) {
-            QuestStore.startQuest(this.props.hero.id);
+        if (!this.state.questId) {
+            const questId = QuestStore.startQuest([this.props.hero.id], this.questGenerator.generateAutoQuest(this.props.hero.id));
+            this.doSetQuestId(questId);
         }
+    }
+
+    doSetQuestId = (questId: string) => {
+        this.setState({ questId: questId });
     }
 
     stopAutoQuest = () => {
