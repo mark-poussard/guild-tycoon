@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as FbEmitter from 'fbemitter';
 import Hero from 'model/Hero';
 import Quest from 'model/Quest';
-import QuestProgress from 'components/generic/quest/QuestProgress';
+import QuestProgressContainer from 'components/generic/quest/QuestProgressContainer';
 import QuestButton from 'components/body/hero-tab/QuestButton';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
@@ -48,7 +48,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     renderQuest = () => {
         if (this.state.questId) {
             return (
-                <QuestProgress questId={this.state.questId} />
+                <QuestProgressContainer questId={this.state.questId} />
             );
         }
         else {

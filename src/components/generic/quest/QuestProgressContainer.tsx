@@ -2,31 +2,29 @@ import * as React from 'react';
 import * as FbEmitter from 'fbemitter';
 import Quest from 'model/Quest';
 import QuestStore from 'store/quest/QuestStore';
-import './QuestProgress.css';
 import QuestWrapper from 'model/QuestWrapper';
+import {ProgressBar} from './ProgressBar';
 
-interface IQuestProgressProps {
+interface IQuestProgressContainerProps {
     questId: string;
 }
 
-interface IQuestProgressState {
+interface IQuestProgressContainerState {
     progress: number;
 }
 
-export default class QuestProgress extends React.Component<IQuestProgressProps, IQuestProgressState>{
+export default class QuestProgressContainer extends React.Component<IQuestProgressContainerProps, IQuestProgressContainerState>{
     questProgressListener: FbEmitter.EventSubscription;
     intervalId: number;
 
-    constructor(props: IQuestProgressProps) {
+    constructor(props: IQuestProgressContainerProps) {
         super(props);
         this.state = { progress: QuestStore.getQuestProgress(this.props.questId) };
     }
 
     render() {
         return (
-            <div className="progress-bar-container">
-                <div className="progress-bar" style={{ width: `${this.state.progress}%` }} />
-            </div>
+            <ProgressBar progress={this.state.progress}/>
         );
     }
 

@@ -8,7 +8,7 @@ import RankStar from 'components/generic/hero-info/RankStar';
 import QuestStore from 'store/quest/QuestStore';
 import './DungeonInfo.css'
 import QuestWrapper from 'model/QuestWrapper';
-import QuestProgress from 'components/generic/quest/QuestProgress';
+import QuestProgressContainer from 'components/generic/quest/QuestProgressContainer';
 import GameModelStore from 'store/game-model/GameModelStore';
 
 interface IDungeonInfoProps {
@@ -77,7 +77,7 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
     renderDungeonButton = () => {
         if (this.state.quest) {
             return (
-                <QuestProgress questId={this.state.quest.id} />
+                <QuestProgressContainer questId={this.state.quest.id} />
             );
         }
         /*else if (this.state.guildMemberCount < this.props.dungeon.partyMaxSize) {

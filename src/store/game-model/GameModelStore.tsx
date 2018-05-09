@@ -35,7 +35,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             heroes: new IndexedArray<string, Hero>(x => x.id),
             guildSize: 10,
             statistics: {
-                questCompleted: 0
+                questCompleted: 0,
+                trainClicks: 0,
             },
             completedDungeons: new Set<string>(),
             improvements : {
@@ -128,6 +129,14 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     payload = action.payload as SetImprovementPayload;
                     newState.improvements[payload.improvementKey] = payload.value;
+                    return newState;
+                }
+                case GameModelActionTypes.TRAIN_CLICK:
+                {
+                    newState.statistics.trainClicks += 1;
+                    if(newState.statistics.trainClicks % 5 == 0){
+                        newState.exp += 1;
+                    }
                     return newState;
                 }
 

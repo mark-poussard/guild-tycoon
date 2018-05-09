@@ -6,6 +6,7 @@ import GameModelStore from 'store/game-model/GameModelStore';
 import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
 import IndexedArray from 'business/collection/IndexedArray';
 import QuestInfo from 'components/body/hero-tab/QuestInfo';
+import TrainInfo from 'components/body/hero-tab/train/TrainInfo';
 
 interface IHeroTabProps {
 
@@ -27,6 +28,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     render() {
         return (
             <div>
+                <TrainInfo />
                 {this.renderHeroes()}
                 {this.renderHeroRecruit()}
             </div>
