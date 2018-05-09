@@ -26,7 +26,7 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
 
     render() {
         return (
-            <div className="hero-info-container">
+            <div className="container hero-info-container">
                 <div className="divider">
                     {this.renderHeroName()}
                     <div className="lvl">

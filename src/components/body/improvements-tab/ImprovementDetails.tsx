@@ -25,7 +25,7 @@ export default class ImprovementDetails extends React.Component<ImprovementDetai
 
     render() {
         return (
-            <div className='improvement-container'>
+            <div className='container'>
                 <h3>{this.props.improvement.title}</h3>
                 <Resource style={{ float: 'right' }} value={this.props.improvement.cost} type={ResourceType.GOLD} modifier remove inline />
                 <p>{this.props.improvement.desc}</p>

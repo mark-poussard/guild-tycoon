@@ -15,13 +15,21 @@ export default class TrainProgress extends React.Component<ITrainProgressProps, 
 
     constructor(props:ITrainProgressProps){
         super(props);
-        const progress = this.props.totalClicks % 5;
+        const progress = this.computeProgress(this.props.totalClicks);
         this.progress = progress;
+    }
+
+    componentDidUpdate(){
+        this.progress = this.computeProgress(this.props.totalClicks);
     }
 
     render(){
         return (
             <ProgressBar progress={this.progress}/>
         );
+    }
+
+    computeProgress = (totalClicks : number) => {
+        return (this.props.totalClicks % 5)*100/4;
     }
 }

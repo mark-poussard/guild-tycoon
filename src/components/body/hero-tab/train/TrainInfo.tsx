@@ -26,7 +26,7 @@ export default class TrainInfo extends React.Component<ITrainInfoProps, ITrainIn
     render(){
         if(this.state.nbHeroes > 0){
             return (
-                <div>
+                <div className="container">
                     <TrainProgress totalClicks={this.state.totalTrainClicks}/>
                     <TrainButton />
                 </div>

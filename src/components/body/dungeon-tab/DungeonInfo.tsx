@@ -37,7 +37,7 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
         //<div className="dungeon-illustration" style={{background: `url(${this.props.dungeon.imgUrl})`}} />
         const durationStr = DungeonHelper.durationToString(this.props.dungeon);
         return (
-            <div className="dungeon-container">
+            <div className="container dungeon-container">
                 <div>
                     <h3>{this.props.dungeon.name}</h3>
                 </div>
