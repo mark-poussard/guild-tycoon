@@ -16,6 +16,7 @@ import { GameModelActionTypes } from './GameModelActionTypes';
 import Hero, { HeroHelper } from 'model/Hero';
 import IndexedArray from 'business/collection/IndexedArray';
 import AchievementsHelper from 'store/achievements/AchievementsHelper';
+import { TrainingHelper } from 'store/TrainingHelper';
 
 class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     eventEmitter: FbEmitter.EventEmitter;
@@ -29,8 +30,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
     getInitialState() {
         return {
-            gold: 0,
-            fame: 0,
+            gold: 5000,
+            fame: 5000,
             exp: 0,
             heroes: new IndexedArray<string, Hero>(x => x.id),
             guildSize: 10,
@@ -39,9 +40,9 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 trainClicks: 0,
             },
             completedDungeons: new Set<string>(),
-            improvements : {
-                autoQuest : false,
-                stables : false,
+            improvements: {
+                autoQuest: false,
+                stables: false,
             }
         } as GameModelState;
     }
@@ -125,17 +126,19 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     }
                     return newState;
                 }
+
             case GameModelActionTypes.SET_IMPROVEMENT:
                 {
                     payload = action.payload as SetImprovementPayload;
                     newState.improvements[payload.improvementKey] = payload.value;
                     return newState;
                 }
-                case GameModelActionTypes.TRAIN_CLICK:
+
+            case GameModelActionTypes.TRAIN_CLICK:
                 {
                     newState.statistics.trainClicks += 1;
-                    if(newState.statistics.trainClicks > 0 && newState.statistics.trainClicks % 5 == 0){
-                        newState.exp += 1;
+                    if (newState.statistics.trainClicks > 0 && newState.statistics.trainClicks % TrainingHelper.computeReqClicks(newState) == 0) {
+                        newState.exp += TrainingHelper.computeExpReward(newState);
                     }
                     return newState;
                 }

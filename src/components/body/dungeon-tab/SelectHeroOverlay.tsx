@@ -12,6 +12,7 @@ import QuestGenerator from 'store/quest/QuestGenerator';
 import RankStar from 'components/generic/hero-info/RankStar';
 import QuestWrapper from 'model/QuestWrapper'
 import { QuestHelper } from 'model/Quest';
+import { SortOrder } from 'model/Sorting';
 
 interface ISelectHeroOverlayProps {
     dungeon: Dungeon;
@@ -22,6 +23,9 @@ interface ISelectHeroOverlayProps {
 interface ISelectHeroOverlayState {
     heroes: IndexedArray<string, Hero>;
     selectedHeroes: Set<string>;
+    rankOrder: SortOrder;
+    lvlOrder: SortOrder;
+    nameOrder: SortOrder;
 }
 
 export default class SelectHeroOverlay extends React.Component<ISelectHeroOverlayProps, ISelectHeroOverlayState>{
@@ -30,7 +34,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     constructor(props: ISelectHeroOverlayProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes, selectedHeroes: new Set<string>() };
+        this.state = { heroes: GameModelStore.getState().heroes, selectedHeroes: new Set<string>(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
         this.questGenerator = new QuestGenerator();
     }
 
@@ -62,6 +66,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     renderHeroes = () => {
         const heroArray = this.state.heroes.asArray();
+        heroArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
         const result: JSX.Element[] = [];
         for (let i = 0; i < heroArray.length; i++) {
             result.push(

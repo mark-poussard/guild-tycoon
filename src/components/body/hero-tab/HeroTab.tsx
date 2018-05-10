@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
-import Hero from 'model/Hero';
+import Hero, { HeroHelper } from 'model/Hero';
+import { SortOrder } from 'model/Sorting';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
@@ -15,6 +16,9 @@ interface IHeroTabProps {
 interface IHeroTabState {
     heroes: IndexedArray<string, Hero>;
     isRoomLeft: boolean;
+    rankOrder: SortOrder;
+    lvlOrder: SortOrder;
+    nameOrder: SortOrder;
 }
 
 export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabState>{
@@ -22,13 +26,18 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
 
     constructor(props: IHeroTabProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes, isRoomLeft: this.computeIsRoomLeft() };
+        this.state = { heroes: GameModelStore.getState().heroes, isRoomLeft: this.computeIsRoomLeft(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
     }
 
     render() {
         return (
             <div>
                 <TrainInfo />
+                <div>
+                    {this.renderSortButton(this.state.rankOrder, 'rank', () => { this.setState({ rankOrder: -this.state.rankOrder }) })}
+                    {this.renderSortButton(this.state.lvlOrder, 'lvl', () => { this.setState({ lvlOrder: -this.state.lvlOrder }) })}
+                    {this.renderSortButton(this.state.nameOrder, 'name', () => { this.setState({ nameOrder: -this.state.nameOrder }) })}
+                </div>
                 {this.renderHeroes()}
                 {this.renderHeroRecruit()}
             </div>
@@ -55,6 +64,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     renderHeroes = () => {
         const result: JSX.Element[] = [];
         const heroesArray = this.state.heroes.asArray();
+        heroesArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
         for (let i = 0; i < heroesArray.length; i++) {
             result.push(
                 <HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} >
@@ -72,5 +82,18 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
             );
         }
         return null;
+    }
+
+    renderSortButton = (order: SortOrder, txt: string, toggle: () => void) => {
+        let icon = 'angle-up';
+        if (order < 0) {
+            icon = 'angle-down';
+        }
+        return (
+            <button onClick={toggle}>
+                {txt}
+                <i className={`fa fa-${icon}`}></i>
+            </button>
+        );
     }
 }

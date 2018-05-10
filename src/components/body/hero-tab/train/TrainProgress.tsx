@@ -1,30 +1,32 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
 import GameModelStore from 'store/game-model/GameModelStore';
-import {ProgressBar} from 'components/generic/quest/ProgressBar';
+import { ProgressBar } from 'components/generic/quest/ProgressBar';
+import { TrainingHelper } from 'store/TrainingHelper';
 import './TrainProgress.css'
 
-interface ITrainProgressProps{
-    totalClicks : number;
+interface ITrainProgressProps {
+    totalClicks: number;
 }
 
-interface ITrainProgressState{
+interface ITrainProgressState {
 }
 
 export default class TrainProgress extends React.Component<ITrainProgressProps, ITrainProgressState>{
 
-    constructor(props:ITrainProgressProps){
+    constructor(props: ITrainProgressProps) {
         super(props);
     }
 
-    render(){
+    render() {
         const progress = this.computeProgress(this.props.totalClicks);
         return (
-            <ProgressBar className='train-progress' progress={progress}/>
+            <ProgressBar className='train-progress' progress={progress} />
         );
     }
 
-    computeProgress = (totalClicks : number) => {
-        return (this.props.totalClicks % 5)*100/4;
+    computeProgress = (totalClicks: number) => {
+        const reqClicks = TrainingHelper.computeReqClicks(GameModelStore.getState());
+        return (this.props.totalClicks % reqClicks) * 100 / (reqClicks - 1);
     }
 }
