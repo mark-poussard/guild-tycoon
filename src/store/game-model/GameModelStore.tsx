@@ -36,7 +36,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             guildSize: 10,
             statistics: {
                 questCompleted: 0,
-                trainClicks: 1,
+                trainClicks: 0,
             },
             completedDungeons: new Set<string>(),
             improvements : {
@@ -134,7 +134,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 case GameModelActionTypes.TRAIN_CLICK:
                 {
                     newState.statistics.trainClicks += 1;
-                    if(newState.statistics.trainClicks % 5 == 1){
+                    if(newState.statistics.trainClicks > 0 && newState.statistics.trainClicks % 5 == 0){
                         newState.exp += 1;
                     }
                     return newState;

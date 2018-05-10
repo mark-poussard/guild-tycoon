@@ -3,6 +3,7 @@ import * as fbEmitter from 'fbemitter';
 import GameModelStore from 'store/game-model/GameModelStore';
 import TrainProgress from './TrainProgress';
 import TrainButton from './TrainButton';
+import './TrainInfo.css'
 
 interface ITrainInfoProps{
 
@@ -26,9 +27,9 @@ export default class TrainInfo extends React.Component<ITrainInfoProps, ITrainIn
     render(){
         if(this.state.nbHeroes > 0){
             return (
-                <div className="container">
+                <div className="train-container container">
                     <TrainProgress totalClicks={this.state.totalTrainClicks}/>
-                    <TrainButton />
+                    <TrainButton className='train-button'/>
                 </div>
             );
         }

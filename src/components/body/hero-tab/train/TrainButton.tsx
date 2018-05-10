@@ -4,7 +4,7 @@ import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import {GameModelActionTypes} from 'store/game-model/GameModelActionTypes';
 
 interface ITrainButtonProps{
-
+    className?: string;
 }
 
 interface ITrainButtonState{
@@ -18,7 +18,7 @@ export default class TrainButton extends React.Component<ITrainButtonProps, ITra
 
     render(){
         return (
-            <button onClick={this.doTrain}>Train</button>
+            <button onClick={this.doTrain} className={this.props.className}>Train</button>
         );
     }
 

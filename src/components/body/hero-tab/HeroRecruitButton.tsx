@@ -18,7 +18,7 @@ export default class HeroRecruitButton extends React.Component<IHeroRecruitButto
 
     render() {
         return (
-            <div className="hero-info-container">
+            <div className="hero-info-container container">
                 <input className="hero-recruit-button" type="image" src="img/add.png" onClick={this.goToRecruit} />
             </div>
         );
