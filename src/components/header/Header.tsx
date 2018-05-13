@@ -3,6 +3,7 @@ import * as fbEmitter from 'fbemitter';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import './Header.css';
 import GameModelStore from 'store/game-model/GameModelStore';
+import Settings from 'components/header/Settings';
 
 interface IHeaderProps {
 
@@ -41,9 +42,14 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState>{
     render() {
         return (
             <div className="header">
-                <Resource value={this.state.gold} type={ResourceType.GOLD} inline />
-                <Resource value={this.state.xp} type={ResourceType.EXP} inline />
-                <Resource value={this.state.fame} type={ResourceType.FAME} inline />
+                <div className="header-left">
+                    <Resource value={this.state.gold} type={ResourceType.GOLD} inline />
+                    <Resource value={this.state.xp} type={ResourceType.EXP} inline />
+                    <Resource value={this.state.fame} type={ResourceType.FAME} inline />
+                </div>
+                <div className="header-right">
+                    <Settings />
+                </div>
             </div>
         );
     }

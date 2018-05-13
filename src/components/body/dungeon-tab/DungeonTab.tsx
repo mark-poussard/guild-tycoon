@@ -5,6 +5,7 @@ import DungeonInfo from 'components/body/dungeon-tab/DungeonInfo';
 import SelectHeroOverlay from 'components/body/dungeon-tab/SelectHeroOverlay';
 import GameModelStore from 'store/game-model/GameModelStore';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
+import Overlay from 'components/generic/Overlay';
 
 interface IDungeonTabProps {
 
@@ -55,12 +56,11 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     }
 
     renderOverlay = () => {
-        if (this.state.selectedDungeon) {
-            return (
+        return (
+            <Overlay display={!!this.state.selectedDungeon} closeOverlayCallback={() => this.doDungeonSelection(null, null)} width={80} height={80}>
                 <SelectHeroOverlay dungeon={this.state.selectedDungeon} callback={this.state.questCallback} doDungeonSelection={this.doDungeonSelection} />
-            );
-        }
-        return null;
+            </Overlay>
+        );
     }
 
     doDungeonSelection = (dungeon: Dungeon, callback: (questId: string) => void) => {

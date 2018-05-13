@@ -5,9 +5,7 @@ const HtmlIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const Compression = require('compression-webpack-plugin');
 
 module.exports = {
-    entry: {
-        main: "./src/index.tsx"
-    },
+    entry: { main: "./src/index.tsx" },
     output: {
         filename: "js/[name].bundle.js",
         path: path.resolve(__dirname + "/dist"),
@@ -46,6 +44,16 @@ module.exports = {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'file-loader',
                 options: { name: '[path][name].[ext]' }
+            },
+            // the url-loader uses DataUrls. 
+            // the file-loader emits files. 
+            { 
+              test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+              loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+            },
+            { 
+              test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+              loader: "file-loader" 
             },
         ]
     },

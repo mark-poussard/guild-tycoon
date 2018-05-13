@@ -8,6 +8,8 @@ import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
 import IndexedArray from 'business/collection/IndexedArray';
 import QuestInfo from 'components/body/hero-tab/QuestInfo';
 import TrainInfo from 'components/body/hero-tab/train/TrainInfo';
+import SortButton from 'components/generic/hero-info/SortButton';
+import './HeroTab.css'
 
 interface IHeroTabProps {
 
@@ -33,10 +35,10 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         return (
             <div>
                 <TrainInfo />
-                <div>
-                    {this.renderSortButton(this.state.rankOrder, 'rank', () => { this.setState({ rankOrder: -this.state.rankOrder }) })}
-                    {this.renderSortButton(this.state.lvlOrder, 'lvl', () => { this.setState({ lvlOrder: -this.state.lvlOrder }) })}
-                    {this.renderSortButton(this.state.nameOrder, 'name', () => { this.setState({ nameOrder: -this.state.nameOrder }) })}
+                <div className="sort-buttons">
+                    <SortButton order={this.state.rankOrder} txt={'rank'} toggle={() => { this.setState({ rankOrder: -this.state.rankOrder }) }} />
+                    <SortButton order={this.state.lvlOrder} txt={'lvl'} toggle={() => { this.setState({ lvlOrder: -this.state.lvlOrder }) }} />
+                    <SortButton order={this.state.nameOrder} txt={'name'} toggle={() => { this.setState({ nameOrder: -this.state.nameOrder }) }} />
                 </div>
                 {this.renderHeroes()}
                 {this.renderHeroRecruit()}

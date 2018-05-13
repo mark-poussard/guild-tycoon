@@ -13,6 +13,7 @@ import RankStar from 'components/generic/hero-info/RankStar';
 import QuestWrapper from 'model/QuestWrapper'
 import { QuestHelper } from 'model/Quest';
 import { SortOrder } from 'model/Sorting';
+import SortButton from 'components/generic/hero-info/SortButton';
 
 interface ISelectHeroOverlayProps {
     dungeon: Dungeon;
@@ -40,16 +41,18 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     render() {
         return (
-            <div className="blackout" onClick={this.closeOverlay}>
-                <div className="overlay" onClick={this.dontCloseOverlay}>
-                    <input className="cross" type="image" src="img/cross.png" onClick={this.closeOverlay} />
-                    {this.renderOverlayTitle()}
-                    {this.printHeroRequirementTxt()}
-                    <div className="hero-container">
-                        {this.renderHeroes()}
+            <div>
+                {this.renderOverlayTitle()}
+                {this.printHeroRequirementTxt()}
+                <div className="hero-container">
+                    <div>
+                        <SortButton order={this.state.rankOrder} txt={'rank'} toggle={() => { this.setState({ rankOrder: -this.state.rankOrder }) }} />
+                        <SortButton order={this.state.lvlOrder} txt={'lvl'} toggle={() => { this.setState({ lvlOrder: -this.state.lvlOrder }) }} />
+                        <SortButton order={this.state.nameOrder} txt={'name'} toggle={() => { this.setState({ nameOrder: -this.state.nameOrder }) }} />
                     </div>
-                    <button className="confirm-button" disabled={!this.canConfirm()} onClick={this.doDungeon}>Challenge dungeon</button>
+                    {this.renderHeroes()}
                 </div>
+                <button className="confirm-button" disabled={!this.canConfirm()} onClick={this.doDungeon}>Challenge dungeon</button>
             </div>
         );
     }
@@ -134,10 +137,6 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     closeOverlay = () => {
         this.props.doDungeonSelection(null, null);
-    }
-
-    dontCloseOverlay = (e: any) => {
-        e.stopPropagation();
     }
 
     doDungeon = () => {

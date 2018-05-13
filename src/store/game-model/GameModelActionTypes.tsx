@@ -10,4 +10,5 @@ export enum GameModelActionTypes {
     COMPLETE_DUNGEON = 'complete_dungeon',
     SET_IMPROVEMENT = 'set_improvement',
     TRAIN_CLICK = 'train_click',
+    CLEAR_GAME_DATA = 'clear_game_data',
 }

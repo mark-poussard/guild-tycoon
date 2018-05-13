@@ -1,6 +1,6 @@
 import * as FbEmitter from 'fbemitter';
 import { ReduceStore } from 'flux/utils';
-import GameModelState from './GameModelState';
+import GameModelState, { StartingGameState, GameStateSerializer, GameStateDeserializer } from './GameModelState';
 import GameModelPayload, {
     AddResourcePayload,
     AssignQuestPayload,
@@ -18,6 +18,8 @@ import IndexedArray from 'business/collection/IndexedArray';
 import AchievementsHelper from 'store/achievements/AchievementsHelper';
 import { TrainingHelper } from 'store/TrainingHelper';
 
+export const CACHE_GAME_STATE_KEY = "game-state";
+
 class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     eventEmitter: FbEmitter.EventEmitter;
 
@@ -29,22 +31,11 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
     }
 
     getInitialState() {
-        return {
-            gold: 5000,
-            fame: 5000,
-            exp: 0,
-            heroes: new IndexedArray<string, Hero>(x => x.id),
-            guildSize: 10,
-            statistics: {
-                questCompleted: 0,
-                trainClicks: 0,
-            },
-            completedDungeons: new Set<string>(),
-            improvements: {
-                autoQuest: false,
-                stables: false,
-            }
-        } as GameModelState;
+        let gameState = localStorage.getItem(CACHE_GAME_STATE_KEY);
+        if (gameState) {
+            return GameStateDeserializer(gameState);
+        }
+        return StartingGameState();
     }
 
     subscribe = (action: GameModelActionTypes, listener: Function) => {
@@ -59,19 +50,19 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 payload = action.payload as AddResourcePayload;
                 newState.gold += payload.quantity;
                 this.eventEmitter.emit(GameModelActionTypes.ADD_GOLD, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.ADD_EXP:
                 payload = action.payload as AddResourcePayload;
                 newState.exp += payload.quantity;
                 this.eventEmitter.emit(GameModelActionTypes.ADD_EXP, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.ADD_FAME:
                 payload = action.payload as AddResourcePayload;
                 newState.fame += payload.quantity;
                 this.eventEmitter.emit(GameModelActionTypes.ADD_FAME, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.ASSIGN_QUEST:
                 payload = action.payload as AssignQuestPayload;
@@ -79,7 +70,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.heroes.get(payload.heroId).quest = payload.quest;
                 }
                 this.eventEmitter.emit(GameModelActionTypes.ASSIGN_QUEST, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
@@ -87,7 +78,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.heroes.add(payload.hero);
                 }
                 this.eventEmitter.emit(GameModelActionTypes.RECRUIT_HERO, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.SET_AUTO_QUEST:
                 {
@@ -99,7 +90,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     }
                     hero.autoQuest = payload.autoQuest;
                     this.eventEmitter.emit(GameModelActionTypes.SET_AUTO_QUEST, newState);
-                    return newState;
+                    break;
                 }
 
             case GameModelActionTypes.COMPLETE_QUEST:
@@ -107,12 +98,12 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 newState.statistics.questCompleted += 1;
                 //this.achievementsHelper.computeQuestStat(newState);
                 this.eventEmitter.emit(GameModelActionTypes.COMPLETE_QUEST, newState);
-                return newState;
+                break;
 
             case GameModelActionTypes.COMPLETE_DUNGEON:
                 payload = action.payload as CompleteDungeonPayload;
                 newState.completedDungeons.add(payload.dungeonId);
-                return newState;
+                break;
 
             case GameModelActionTypes.HERO_LVL_UP:
                 {
@@ -124,14 +115,14 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         hero.level += 1;
                         this.eventEmitter.emit(GameModelActionTypes.HERO_LVL_UP, newState);
                     }
-                    return newState;
+                    break;
                 }
 
             case GameModelActionTypes.SET_IMPROVEMENT:
                 {
                     payload = action.payload as SetImprovementPayload;
                     newState.improvements[payload.improvementKey] = payload.value;
-                    return newState;
+                    break;
                 }
 
             case GameModelActionTypes.TRAIN_CLICK:
@@ -140,12 +131,17 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     if (newState.statistics.trainClicks > 0 && newState.statistics.trainClicks % TrainingHelper.computeReqClicks(newState) == 0) {
                         newState.exp += TrainingHelper.computeExpReward(newState);
                     }
-                    return newState;
+                    break;
                 }
 
-            default:
-                return newState;
+            case GameModelActionTypes.CLEAR_GAME_DATA:
+                {
+                    localStorage.removeItem(CACHE_GAME_STATE_KEY);
+                    return StartingGameState();
+                }
         }
+        localStorage.setItem(CACHE_GAME_STATE_KEY, GameStateSerializer(newState));
+        return newState;
     }
 }
 
