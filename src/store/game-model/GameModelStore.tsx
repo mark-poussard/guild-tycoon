@@ -9,7 +9,9 @@ import GameModelPayload, {
     HeroLevelUpPayload,
     CompleteQuestPayload,
     CompleteDungeonPayload,
-    SetImprovementPayload
+    SetImprovementPayload,
+    StartQuestPayload,
+    EndQuestPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -67,7 +69,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             case GameModelActionTypes.ASSIGN_QUEST:
                 payload = action.payload as AssignQuestPayload;
                 if (newState.heroes.contains(payload.heroId)) {
-                    newState.heroes.get(payload.heroId).quest = payload.quest;
+                    //newState.heroes.get(payload.heroId).quest = payload.quest;
                 }
                 this.eventEmitter.emit(GameModelActionTypes.ASSIGN_QUEST, newState);
                 break;
@@ -84,7 +86,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     payload = action.payload as SetAutoQuestPayload;
                     const hero = newState.heroes.get(payload.heroId)
-                    if (payload.autoQuest && hero.quest && (hero.quest.quest.power > 0 || hero.quest.heroes.length > 1)) {
+                    if (payload.autoQuest /*&& hero.quest && (hero.quest.quest.power > 0 || hero.quest.heroes.length > 1)*/) {
                         //Don't allow setting autoquest during quest with multiple participants or that wasn't auto-generated (dungeon quests)
                         return newState;
                     }
@@ -130,6 +132,49 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.statistics.trainClicks += 1;
                     if (newState.statistics.trainClicks > 0 && newState.statistics.trainClicks % TrainingHelper.computeReqClicks(newState) == 0) {
                         newState.exp += TrainingHelper.computeExpReward(newState);
+                    }
+                    break;
+                }
+
+            case GameModelActionTypes.START_QUEST:
+                {
+                    //Modifying state by side effect
+                    payload = action.payload as StartQuestPayload;
+                    payload.quest.startedAt = new Date();
+                    for (let i = 0; i < payload.heroes.length; i++) {
+                        payload.heroes[i].questId = payload.quest.id;
+                    }
+                    break;
+                }
+
+            case GameModelActionTypes.END_QUEST_SUCCEED:
+                {
+                    //Modifying state by side effect
+                    payload = action.payload as EndQuestPayload;
+                    payload.quest.completedAt = new Date();
+                    const heroes = newState.heroes.asArray();
+                    for (let i = 0; i < heroes.length; i++) {
+                        if (heroes[i].questId === payload.quest.id) {
+                            heroes[i].questId = null;
+                        }
+                    }
+                    //Add rewards + items
+                    newState.gold += payload.quest.reward.gold;
+                    newState.exp += payload.quest.reward.exp;
+                    break;
+                }
+
+            case GameModelActionTypes.END_QUEST_FAIL:
+                {
+                    //Modifying state by side effect
+                    payload = action.payload as EndQuestPayload;
+                    payload.quest.startedAt = null;
+                    payload.quest.completedAt = null;
+                    const heroes = newState.heroes.asArray();
+                    for (let i = 0; i < heroes.length; i++) {
+                        if (heroes[i].questId === payload.quest.id) {
+                            heroes[i].questId = null;
+                        }
                     }
                     break;
                 }

@@ -8,7 +8,7 @@ export default class Hero {
     rank: number;
     level: number;
     imgUrl: string;
-    quest: QuestWrapper;
+    questId: string;
     autoQuest: boolean;
 }
 

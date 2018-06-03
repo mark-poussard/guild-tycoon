@@ -2,6 +2,7 @@ import { GameModelActionTypes } from './GameModelActionTypes';
 import Quest from 'model/Quest';
 import QuestWrapper from 'model/QuestWrapper';
 import Hero from 'model/Hero';
+import Item from 'model/Item';
 
 export default interface GameModelPayload {
     type: GameModelActionTypes;
@@ -37,7 +38,18 @@ export interface SetAutoQuestPayload {
 export interface HeroLevelUpPayload {
     heroId: string;
 }
+
 export interface SetImprovementPayload {
     improvementKey: string;
     value: boolean;
+}
+
+export interface StartQuestPayload {
+    heroes: Hero[];
+    quest: Quest;
+    drops: Item[];
+}
+
+export interface EndQuestPayload {
+    quest: Quest;
 }

@@ -11,4 +11,7 @@ export enum GameModelActionTypes {
     SET_IMPROVEMENT = 'set_improvement',
     TRAIN_CLICK = 'train_click',
     CLEAR_GAME_DATA = 'clear_game_data',
+    START_QUEST = 'start_quest',
+    END_QUEST_SUCCEED = 'end_quest_succeed',
+    END_QUEST_FAIL = 'end_quest_fail',
 }

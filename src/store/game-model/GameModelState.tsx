@@ -2,6 +2,8 @@ import Hero from 'model/Hero';
 import Improvements from 'model/Improvements';
 import Statistics from 'model/Statistics';
 import IndexedArray from 'business/collection/IndexedArray';
+import GameSwitches from 'model/GameSwitches';
+import Quest from 'model/Quest';
 
 export default interface GameModelState {
     gold: number,
@@ -12,6 +14,8 @@ export default interface GameModelState {
     statistics: Statistics;
     completedDungeons: Set<string>;
     improvements: Improvements;
+    quests : Quest[];
+    gameSwitches: GameSwitches;
 }
 
 export const StartingGameState = (): GameModelState => {
@@ -29,12 +33,13 @@ export const StartingGameState = (): GameModelState => {
         improvements: {
             autoQuest: false,
             stables: false,
-        }
+        },
+        gameSwitches: {}
     } as GameModelState;
 }
 
-export const GameStateSerializer = (obj : GameModelState) => JSON.stringify(obj, replacer);
-export const GameStateDeserializer = (str : string) => JSON.parse(str, reviver);
+export const GameStateSerializer = (obj: GameModelState) => JSON.stringify(obj, replacer);
+export const GameStateDeserializer = (str: string) => JSON.parse(str, reviver);
 
 const reviver = (key: any, value: any) => {
     switch (key) {
@@ -42,7 +47,6 @@ const reviver = (key: any, value: any) => {
             {
                 const result = new IndexedArray<string, Hero>(x => x.id);
                 JSON.parse(value).forEach((element: Hero) => {
-                    element.quest = null;
                     element.autoQuest = false;
                     result.add(element);
                 });
