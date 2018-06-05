@@ -47,7 +47,6 @@ export interface SetImprovementPayload {
 export interface StartQuestPayload {
     heroes: Hero[];
     quest: Quest;
-    drops: Item[];
 }
 
 export interface EndQuestPayload {

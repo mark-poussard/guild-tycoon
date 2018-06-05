@@ -5,10 +5,10 @@ import GameModelStore from 'store/game-model/GameModelStore';
 import './HeroSelectButton.css';
 
 interface IHeroSelectButtonProps {
-    selectedHeroes: Set<string>;
+    selectedHeroes: Set<Hero>;
     hero: Hero;
-    doSelectHero: (heroId: string) => void;
-    doUnselectHero: (heroId: string) => void;
+    doSelectHero: (hero: Hero) => void;
+    doUnselectHero: (hero: Hero) => void;
     partySize: number;
 }
 
@@ -57,24 +57,23 @@ export default class HeroSelectButton extends React.Component<IHeroSelectButtonP
 
     doButtonCall = () => {
         if (this.isHeroSelected()) {
-            this.props.doUnselectHero(this.props.hero.id);
+            this.props.doUnselectHero(this.props.hero);
         }
         else {
-            this.props.doSelectHero(this.props.hero.id);
+            this.props.doSelectHero(this.props.hero);
         }
     }
 
     doUnselectHero = () => {
-        this.props.doUnselectHero(this.props.hero.id);
+        this.props.doUnselectHero(this.props.hero);
     }
 
     isHeroBusy = () => {
-        const hero = GameModelStore.getState().heroes.get(this.props.hero.id);
-        return hero.quest !== null || hero.autoQuest;
+        return this.props.hero.questId !== null;
     }
 
-    isHeroSelected = () =>{
-        return this.props.selectedHeroes.has(this.props.hero.id);
+    isHeroSelected = () => {
+        return this.props.selectedHeroes.has(this.props.hero);
     }
 
     componentDidMount() {

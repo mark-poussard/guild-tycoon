@@ -27,4 +27,11 @@ export default class Duration {
         }
         return result;
     }
+
+    toMs() {
+        return this.days * 24 * 60 * 60000
+            + this.hours * 60 * 60000
+            + this.minutes * 60000
+            + this.seconds * 1000
+    }
 }

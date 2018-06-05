@@ -19,18 +19,18 @@ class BattleEngine {
             const roll = Math.random();
             if (roll <= successPrct) {
                 j++;
-                contenders[i] = this.downgradeBAOnWin(heroBA);
+                contenders[i] = this.downgradeBAOnWin(heroBA, ennemyBA);
             }
             else{
                 i++;
-                toBeat[j] = this.downgradeBAOnWin(ennemyBA);
+                toBeat[j] = this.downgradeBAOnWin(ennemyBA, heroBA);
             }
         }
         return i < contenders.length;
     }
 
-    downgradeBAOnWin = (ba : number) => {
-        return ba * 0.9;
+    downgradeBAOnWin = (winBA : number, loseBA : number) => {
+        return winBA - (loseBA*0.1);
     }
 
     // Linear success chance between 80% to 120% of the reqPower

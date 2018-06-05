@@ -58,7 +58,7 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     renderOverlay = () => {
         return (
             <Overlay display={!!this.state.selectedDungeon} closeOverlayCallback={() => this.doDungeonSelection(null, null)} width={80} height={80}>
-                <SelectHeroOverlay dungeon={this.state.selectedDungeon} callback={this.state.questCallback} doDungeonSelection={this.doDungeonSelection} />
+                <SelectHeroOverlay quest={this.state.selectedDungeon} callback={this.state.questCallback} doDungeonSelection={this.doDungeonSelection} />
             </Overlay>
         );
     }

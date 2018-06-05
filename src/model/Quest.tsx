@@ -9,6 +9,7 @@ export default class Quest extends Activity {
     title: string;
     description: string;
     ennemies: BattleEntity[];
+    maxPartySize: number;
     reward: QuestReward;
     drop: Drop[];
     switchDependencies: string[];

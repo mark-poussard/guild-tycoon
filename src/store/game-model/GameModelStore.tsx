@@ -15,10 +15,11 @@ import GameModelPayload, {
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
-import Hero, { HeroHelper } from 'model/Hero';
+import Hero from 'model/Hero';
 import IndexedArray from 'business/collection/IndexedArray';
 import AchievementsHelper from 'store/achievements/AchievementsHelper';
 import { TrainingHelper } from 'store/TrainingHelper';
+import HeroHelper from 'business/HeroHelper';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -90,7 +91,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         //Don't allow setting autoquest during quest with multiple participants or that wasn't auto-generated (dungeon quests)
                         return newState;
                     }
-                    hero.autoQuest = payload.autoQuest;
+                    //hero.autoQuest = payload.autoQuest;
                     this.eventEmitter.emit(GameModelActionTypes.SET_AUTO_QUEST, newState);
                     break;
                 }
@@ -161,6 +162,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     //Add rewards + items
                     newState.gold += payload.quest.reward.gold;
                     newState.exp += payload.quest.reward.exp;
+                    //Add switch
+                    newState.gameSwitches[payload.quest.id] = true;
                     break;
                 }
 
