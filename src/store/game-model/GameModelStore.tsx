@@ -183,21 +183,22 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     break;
                 }
 
-                case GameModelActionTypes.REGISTER_CFH_RESULT:
+            case GameModelActionTypes.REGISTER_CFH_RESULT:
                 {
                     payload = action.payload as RegisterCFHResultPayload;
-                    if(!newState.statistics[payload.cfh.id]){
+                    if (!newState.statistics.hasOwnProperty(payload.cfh.id)) {
                         newState.statistics[payload.cfh.id] = 0;
                     }
                     newState.statistics[payload.cfh.id] += 1;
 
-                    if(payload.hero){
+                    if (payload.hero) {
                         newState.heroes.add(payload.hero);
                     }
 
-                    if(payload.dupId){
+                    if (payload.dupId) {
                         newState.heroes.get(payload.dupId).dupLevel += 1;
                     }
+                    break;
                 }
 
             case GameModelActionTypes.CLEAR_GAME_DATA:

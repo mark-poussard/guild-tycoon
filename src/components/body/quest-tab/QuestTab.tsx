@@ -42,6 +42,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
                 <h3 style={{ verticalAlign: 'middle' }}>Available guild quests</h3>
                 {this.renderQuests()}
                 {this.renderQuestEndOverlay()}
+                {this.renderQuestStartOverlay()}
             </div>
         );
     }
