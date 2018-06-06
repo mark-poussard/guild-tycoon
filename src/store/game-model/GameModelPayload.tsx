@@ -3,6 +3,8 @@ import Quest from 'model/Quest';
 import QuestWrapper from 'model/QuestWrapper';
 import Hero from 'model/Hero';
 import Item from 'model/Item';
+import CallForHero from 'model/CallForHero';
+import BaseHero from 'model/BaseHero';
 
 export default interface GameModelPayload {
     type: GameModelActionTypes;
@@ -51,4 +53,10 @@ export interface StartQuestPayload {
 
 export interface EndQuestPayload {
     quest: Quest;
+}
+
+export interface RegisterCFHResultPayload {
+    cfh: CallForHero;
+    hero : Hero;
+    dupId : string;
 }

@@ -2,10 +2,10 @@ import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
 import Dungeon from 'model/Dungeon';
 import DungeonInfo from 'components/body/dungeon-tab/DungeonInfo';
-import SelectHeroOverlay from 'components/body/dungeon-tab/SelectHeroOverlay';
 import GameModelStore from 'store/game-model/GameModelStore';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import Overlay from 'components/generic/Overlay';
+import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
 
 interface IDungeonTabProps {
 
@@ -27,10 +27,12 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     }
 
     render() {
+        /*
+                {this.renderOverlay()}
+        */
         return (
             <div>
                 {this.renderDungeons()}
-                {this.renderOverlay()}
             </div>
         );
     }
@@ -55,13 +57,13 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
         return result;
     }
 
-    renderOverlay = () => {
+    /*renderOverlay = () => {
         return (
             <Overlay display={!!this.state.selectedDungeon} closeOverlayCallback={() => this.doDungeonSelection(null, null)} width={80} height={80}>
                 <SelectHeroOverlay quest={this.state.selectedDungeon} callback={this.state.questCallback} doDungeonSelection={this.doDungeonSelection} />
             </Overlay>
         );
-    }
+    }*/
 
     doDungeonSelection = (dungeon: Dungeon, callback: (questId: string) => void) => {
         this.setState({ selectedDungeon: dungeon, questCallback: callback });

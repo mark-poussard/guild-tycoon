@@ -13,23 +13,32 @@ export default class CallTab extends React.Component<{}, ICallTabState>{
 
     constructor(props: {}) {
         super(props);
-        this.state = { beginnerCFH: false };
+        this.state = { beginnerCFH: this.isBeginnerCFH() };
     }
 
     render() {
         return (
             <div>
                 <h3>Perform a Call For Heroes !</h3>
+                {this.renderAvailableCFH()}
             </div>
         );
     }
 
     componentWillMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
+            const beginnerCFH = this.isBeginnerCFH();
             this.setState({
-                beginnerCFH: GameModelStore.getState().gameSwitches['beginnerCFH']
+                beginnerCFH: beginnerCFH
             });
         });
+    }
+
+    isBeginnerCFH = () => {
+        const CFH1nbr = GameModelStore.getState().statistics[CFHData.CFH1.id];
+        const CFH2nbr = GameModelStore.getState().statistics[CFHData.CFH2.id];
+        const CFH3nbr = GameModelStore.getState().statistics[CFHData.CFH3.id];
+        return (!CFH1nbr || CFH1nbr == 0) && (!CFH2nbr || CFH2nbr == 0) && (!CFH3nbr || CFH3nbr == 0);
     }
 
     componentWillUnmount() {

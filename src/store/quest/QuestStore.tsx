@@ -1,5 +1,5 @@
 import * as FbEmitter from 'fbemitter';
-import Quest, { QuestHelper } from "model/Quest";
+import Quest from "model/Quest";
 import QuestWrapper from "model/QuestWrapper";
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
@@ -90,7 +90,7 @@ class QuestStore {
         return () => {
             const quest = this.questsMap.get(wrapId);
             let progress = this.computeProgress(quest);
-            if (progress >= 100) {
+            /*if (progress >= 100) {
                 progress = 100;
                 this.updateResourceAfterQuest(quest);
                 GameModelDispatcher.dispatch({
@@ -100,7 +100,7 @@ class QuestStore {
                     }
                 });
                 this.handleQuestEndAndAutoQuesting(quest);
-            }
+            }*/
             this.eventEmitter.emit(QuestEvents.PROGRESS, progress, quest);
         };
     }
@@ -115,7 +115,7 @@ class QuestStore {
 
     computeQuestSuccess = (wrappedQuest: QuestWrapper) => {
         const quest = wrappedQuest.quest;
-        if (quest.power == 0) {
+        /*if (quest.power == 0) {
             return true;
         }
         const chPower = quest.challengingPower;
@@ -135,23 +135,24 @@ class QuestStore {
         }
         else {
             return false;
-        }
+        }*/
+        return false;
     }
 
     computeProgress = (wrappedQuest: QuestWrapper) => {
         const currentDuration: number = new Date().getTime() - wrappedQuest.startTime.getTime();
         let progress;
-        if (wrappedQuest.quest.duration > 0) {
+        /*if (wrappedQuest.quest.duration > 0) {
             progress = (currentDuration / wrappedQuest.quest.duration) * 100;
         }
         else {
             progress = 100;
-        }
+        }*/
         return progress;
     }
 
     handleQuestEndAndAutoQuesting = (wrappedQuest: QuestWrapper) => {
-        if (wrappedQuest.heroes.length == 1) {
+        /*if (wrappedQuest.heroes.length == 1) {
             const hero = GameModelStore.getState().heroes.get(wrappedQuest.heroes[0]);
             if (hero.autoQuest) {
                 const newQuest = this.generateQuest(hero.id);
@@ -163,7 +164,7 @@ class QuestStore {
                 });
                 return;
             }
-        }
+        }*/
         clearInterval(this.threadsMap.get(wrappedQuest.id));
         this.threadsMap.delete(wrappedQuest.id);
         this.questsMap.delete(wrappedQuest.id);

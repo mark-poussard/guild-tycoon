@@ -55,12 +55,12 @@ export default class RecruitmentTab extends React.Component<IRecruitmentTabProps
     }
 
     shouldRenderRecruit = (recruit: Recruit) => {
-        return (!this.state.heroes.contains(recruit.hero.id)) && this.state.fame >= recruit.fameReq;
+        return (!this.state.heroes.contains(recruit.hero.data.id)) && this.state.fame >= recruit.fameReq;
     }
 }
 
 const recruits: Recruit[] = [
-    {
+    /*{
         gold: 0,
         fameReq: 0,
         fameWon: 0,
@@ -194,5 +194,5 @@ const recruits: Recruit[] = [
                 autoQuest: false,
                 imgUrl: 'img/char/rhodes.png'
             }
-    },
+    },*/
 ];

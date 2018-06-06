@@ -6,7 +6,6 @@ import './SelectHeroOverlay.css'
 import GameModelStore from 'store/game-model/GameModelStore';
 import IndexedArray from 'business/collection/IndexedArray';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
-import HeroSelectButton from 'components/body/dungeon-tab/HeroSelectButton';
 import QuestStore from 'store/quest/QuestStore';
 import QuestGenerator from 'store/quest/QuestGenerator';
 import RankStar from 'components/generic/hero-info/RankStar';
@@ -17,6 +16,7 @@ import HeroHelper from 'business/HeroHelper';
 import QuestHelper from 'business/QuestHelper';
 import Quest from 'model/Quest';
 import Overlay from 'components/generic/Overlay';
+import HeroSelectButton from 'components/generic/select-hero-overlay/HeroSelectButton';
 
 interface ISelectHeroOverlayProps {
     display: boolean;

@@ -11,8 +11,8 @@ import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
-import SelectHeroOverlay from 'components/body/dungeon-tab/SelectHeroOverlay';
 import Hero from 'model/Hero';
+import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
 
 interface IQuestTabState {
     gameSwitches: GameSwitches;

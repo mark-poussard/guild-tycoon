@@ -28,12 +28,12 @@ export default class RecruitInfo extends React.Component<IRecruitInfoProps, IRec
             <div className="recruit-info-container">
                 <div className="recruit-info-positioning">
                     <div>
-                        {this.props.recruit.hero.name}
+                        {this.props.recruit.hero.data.name}
                     </div>
                     <div>
                         {RankStar.generateRank(this.props.recruit.hero.rank)}
                     </div>
-                    <img className="recruit-img" src={this.props.recruit.hero.imgUrl} />
+                    <img className="recruit-img" src={this.props.recruit.hero.data.imgUrl} />
                     {this.renderGoldCost()}
                     {this.renderFameWon()}
                     <button className="recruit-button" disabled={this.state.isTooExpensive} onClick={this.doRecruit}>Recruit</button>

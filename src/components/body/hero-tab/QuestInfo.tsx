@@ -30,9 +30,8 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     constructor(props: IQuestInfoProps) {
         super(props);
         const gameState = GameModelStore.getState();
-        const quest = gameState.heroes.get(this.props.hero.id).quest;
-        const questId = (quest) ? quest.id : null;
-        this.state = { autoQuest: this.props.hero.autoQuest, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest };
+        const questId = gameState.heroes.get(this.props.hero.data.id).questId;
+        this.state = { autoQuest: false, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest };
         this.questGenerator = new QuestGenerator();
     }
 
@@ -53,7 +52,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
         }
         else {
             return (
-                <QuestButton heroId={this.props.hero.id} doSetQuestId={this.doSetQuestId} />
+                <QuestButton heroId={this.props.hero.data.id} doSetQuestId={this.doSetQuestId} />
             );
         }
     }
@@ -77,15 +76,15 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             }
         });
         this.questStartedListener = QuestStore.registerQuestStartedListener((quest) => {
-            if (quest.heroes.indexOf(this.props.hero.id) > -1) {
+            if (quest.heroes.indexOf(this.props.hero.data.id) > -1) {
                 this.doSetQuestId(quest.id);
             }
         });
         this.gameModelListener = GameModelStore.addListener(() => {
             const gameState = GameModelStore.getState();
-            const hero = gameState.heroes.get(this.props.hero.id);
-            const questId = (hero.quest) ? hero.quest.id : null;
-            this.setState({ autoQuest: hero.autoQuest, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest });
+            const hero = gameState.heroes.get(this.props.hero.data.id);
+            const questId = hero.questId;
+            this.setState({ autoQuest: false, questId: questId, autoQuestImprovement: gameState.improvements.autoQuest });
         });
     }
 
@@ -105,12 +104,12 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
         GameModelDispatcher.dispatch({
             type: GameModelActionTypes.SET_AUTO_QUEST,
             payload: {
-                heroId: this.props.hero.id,
+                heroId: this.props.hero.data.id,
                 autoQuest: true
             }
         });
         if (!this.state.questId) {
-            const questId = QuestStore.startQuest([this.props.hero.id], this.questGenerator.generateAutoQuest(this.props.hero.id));
+            const questId = QuestStore.startQuest([this.props.hero.data.id], this.questGenerator.generateAutoQuest(this.props.hero.data.id));
             this.doSetQuestId(questId);
         }
     }
@@ -123,7 +122,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
         GameModelDispatcher.dispatch({
             type: GameModelActionTypes.SET_AUTO_QUEST,
             payload: {
-                heroId: this.props.hero.id,
+                heroId: this.props.hero.data.id,
                 autoQuest: false
             }
         });

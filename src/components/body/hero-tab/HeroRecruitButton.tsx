@@ -25,6 +25,6 @@ export default class HeroRecruitButton extends React.Component<IHeroRecruitButto
     }
 
     goToRecruit = () => {
-        NavigationStore.navigateTo(TabType.RECRUIT);
+        NavigationStore.navigateTo(TabType.CFH);
     }
 }

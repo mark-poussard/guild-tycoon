@@ -25,12 +25,13 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     render() {
         const quest = this.props.quest;
         return (
-            <div>
+            <div className='container'>
                 <h3>{quest.title}</h3>
                 <p>{quest.description}</p>
                 <Resource type={ResourceType.GOLD} value={quest.reward.gold} modifier />
                 <Resource type={ResourceType.EXP} value={quest.reward.exp} modifier />
                 <Resource type={ResourceType.TIME} value={quest.duration.toString()} />
+                {this.renderQuestAction()}
             </div>
         );
     }

@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
 import Dungeon, { DungeonHelper } from 'model/Dungeon';
 import Quest from 'model/Quest';
-import { HeroHelper } from 'model/Hero';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import RankStar from 'components/generic/hero-info/RankStar';
 import QuestStore from 'store/quest/QuestStore';

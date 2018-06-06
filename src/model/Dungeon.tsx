@@ -1,5 +1,5 @@
 import QuestReward from 'model/QuestReward';
-import { HeroHelper } from 'model/Hero';
+import HeroHelper from 'business/HeroHelper';
 
 export default class Dungeon {
     id: string;

@@ -1,7 +1,8 @@
 import Quest from 'model/Quest';
-import Hero, { HeroHelper } from 'model/Hero';
+import Hero from 'model/Hero';
 import Dungeon, { DungeonHelper } from 'model/Dungeon';
 import GameModelStore from 'store/game-model/GameModelStore';
+import HeroHelper from 'business/HeroHelper';
 
 export default class QuestGenerator {
     constructor() {
@@ -10,7 +11,7 @@ export default class QuestGenerator {
     generateAutoQuest = (heroId: string): Quest => {
         const hero = GameModelStore.getState().heroes.get(heroId);
         const fame = GameModelStore.getState().fame;
-        return {
+        return null;/*{
             duration: this.computeDuration(),
             power: 0,
             challengingPower: HeroHelper.getPower(hero),
@@ -19,16 +20,17 @@ export default class QuestGenerator {
                 exp: this.computeExpReward(hero),
                 fame: 0,
             }
-        }
+        }*/
     }
 
     generateQuestFromDungeon = (dungeon: Dungeon, combinedPower : number): Quest => {
-        return {
+        /*return {
             duration: dungeon.duration,
             reward: dungeon.reward,
             power: dungeon.power,
             challengingPower: combinedPower,
-        }
+        }*/
+        return null;
     }
 
     computeGoldReward = (fame: number, hero: Hero) => {

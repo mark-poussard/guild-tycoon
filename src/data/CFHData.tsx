@@ -8,7 +8,7 @@ export const CFH1: CallForHero = {
     price: 0,
     pool: {
         content: { sp: [HERO1] },
-        rates: { sp: 100 }
+        rates : [{nbr : 100, rarity: 'sp'}]
     }
 }
 
@@ -19,7 +19,7 @@ export const CFH2: CallForHero = {
     price: 0,
     pool: {
         content: { sp: [HERO2] },
-        rates: { sp: 100 }
+        rates : [{nbr : 100, rarity: 'sp'}]
     }
 }
 
@@ -30,6 +30,6 @@ export const CFH3: CallForHero = {
     price: 0,
     pool: {
         content: { sp: [HERO3] },
-        rates: { sp: 100 }
+        rates : [{nbr : 100, rarity: 'sp'}]
     }
 }

@@ -17,12 +17,16 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
     }
 
     render() {
+        /*
+                <MenuButton txt="Recruit" onClick={this.onMenuClick(TabType.RECRUIT)} />
+                <MenuButton txt="Dungeon" onClick={this.onMenuClick(TabType.DUNGEON)} />
+        */
         return (
             <div className="menu-container">
                 <MenuButton txt="Heroes" onClick={this.onMenuClick(TabType.HEROES)} />
+                <MenuButton txt="Call For Heroes" onClick={this.onMenuClick(TabType.CFH)} />
+                <MenuButton txt="Quests" onClick={this.onMenuClick(TabType.QUESTS)} />
                 <MenuButton txt="Improvements" onClick={this.onMenuClick(TabType.IMPROVEMENTS)} />
-                <MenuButton txt="Recruit" onClick={this.onMenuClick(TabType.RECRUIT)} />
-                <MenuButton txt="Dungeon" onClick={this.onMenuClick(TabType.DUNGEON)} />
             </div>
         );
     }

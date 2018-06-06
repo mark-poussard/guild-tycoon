@@ -5,6 +5,8 @@ import DungeonTab from 'components/body/dungeon-tab/DungeonTab';
 import ImprovementsTab from 'components/body/improvements-tab/ImprovementsTab';
 import './Content.css';
 import { TabType } from 'store/navigation/NavigationStore';
+import CallTab from 'components/body/call-tab/CallTab';
+import QuestTab from 'components/body/quest-tab/QuestTab';
 
 interface IContentProps {
     currentTab: TabType;
@@ -30,6 +32,10 @@ export default class Content extends React.Component<IContentProps, IContentStat
         switch (this.props.currentTab) {
             case TabType.HEROES:
                 return <HeroTab />
+            case TabType.CFH:
+                return <CallTab />
+            case TabType.QUESTS:
+                return <QuestTab />
             case TabType.IMPROVEMENTS:
                 return <ImprovementsTab />
             case TabType.RECRUIT:
