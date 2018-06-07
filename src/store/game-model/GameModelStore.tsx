@@ -142,7 +142,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     //Modifying state by side effect
                     payload = action.payload as StartQuestPayload;
-                    payload.quest.startedAt = new Date();
+                    payload.quest.startedAt = new Date().getTime();
                     for (let i = 0; i < payload.heroes.length; i++) {
                         payload.heroes[i].questId = payload.quest.id;
                     }
@@ -153,7 +153,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     //Modifying state by side effect
                     payload = action.payload as EndQuestPayload;
-                    payload.quest.completedAt = new Date();
+                    payload.quest.completedAt = new Date().getTime();
                     const heroes = newState.heroes.asArray();
                     for (let i = 0; i < heroes.length; i++) {
                         if (heroes[i].questId === payload.quest.id) {

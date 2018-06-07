@@ -13,5 +13,5 @@ export default class Quest extends Activity {
     reward: QuestReward;
     drop: Drop[];
     switchDependencies: string[];
-    repeat: Duration;
+    repeat: number;
 }

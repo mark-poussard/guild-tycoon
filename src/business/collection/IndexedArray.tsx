@@ -14,6 +14,12 @@ export default class IndexedArray<K,V>{
         this.internalMap.set(this.extractor(obj), obj);
     }
 
+    addAll = (all : V[]) => {
+        for(let i=0; i<all.length; i++){
+            this.add(all[i]);
+        }
+    }
+
     get = (key : K) => {
         return this.internalMap.get(key);
     }

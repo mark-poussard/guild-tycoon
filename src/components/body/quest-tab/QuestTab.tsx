@@ -64,9 +64,9 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuests = () => {
         const result: JSX.Element[] = [];
-        for (let i = 0; i < QuestData.length; i++) {
-            if (this.shouldRenderQuest(QuestData[i])) {
-                result.push(<QuestInfo key={`QUEST_${i}`} quest={QuestData[i]} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
+        for (let i = 0; i < this.state.quests.length; i++) {
+            if (this.shouldRenderQuest(this.state.quests[i])) {
+                result.push(<QuestInfo key={`QUEST_${i}`} quest={this.state.quests[i]} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
             }
         }
         return result;

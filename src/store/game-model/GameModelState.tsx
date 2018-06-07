@@ -4,6 +4,8 @@ import Statistics from 'model/Statistics';
 import IndexedArray from 'business/collection/IndexedArray';
 import GameSwitches from 'model/GameSwitches';
 import Quest from 'model/Quest';
+import {QuestData} from 'data/QuestData';
+import ItemCollection from 'model/serializable/ItemCollection';
 
 export default interface GameModelState {
     gold: number,
@@ -16,6 +18,7 @@ export default interface GameModelState {
     improvements: Improvements;
     quests : Quest[];
     gameSwitches: GameSwitches;
+    items : ItemCollection;
 }
 
 export const StartingGameState = (): GameModelState => {
@@ -34,7 +37,9 @@ export const StartingGameState = (): GameModelState => {
             autoQuest: false,
             stables: false,
         },
-        gameSwitches: {}
+        gameSwitches: {},
+        quests : QuestData,
+        items : {}
     } as GameModelState;
 }
 
