@@ -26,7 +26,7 @@ interface ISelectHeroOverlayProps {
 }
 
 interface ISelectHeroOverlayState {
-    heroes: IndexedArray<string, Hero>;
+    heroes: Hero[];
     selectedHeroes: Set<Hero>;
     rankOrder: SortOrder;
     lvlOrder: SortOrder;
@@ -39,7 +39,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     constructor(props: ISelectHeroOverlayProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes, selectedHeroes: new Set<Hero>(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
+        this.state = { heroes: GameModelStore.getState().heroes.asArray(), selectedHeroes: new Set<Hero>(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
         this.questGenerator = new QuestGenerator();
     }
 
@@ -61,7 +61,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
     }
 
     renderHeroes = () => {
-        const heroArray = this.state.heroes.asArray();
+        const heroArray = this.state.heroes;
         heroArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
         const result: JSX.Element[] = [];
         for (let i = 0; i < heroArray.length; i++) {
@@ -94,7 +94,7 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
-            this.setState({ heroes: GameModelStore.getState().heroes });
+            this.setState({ heroes: GameModelStore.getState().heroes.asArray() });
         });
     }
 

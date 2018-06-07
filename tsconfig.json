@@ -6,8 +6,8 @@
         "noImplicitAny": true,
         "allowJs": true,
         "module": "commonjs",
-        "target": "es5",
-        "lib" : ["es5", "es6", "dom"],
+        "target": "es6",
+        "lib" : ["es6", "dom"],
         "jsx": "react"
     },
     "include": [

@@ -4,6 +4,7 @@ import { GameModelActionTypes } from "store/game-model/GameModelActionTypes";
 import BattleEngine from "business/BattleEngine";
 import GameModelDispatcher from "store/game-model/GameModelDispatcher";
 import Hero from "model/Hero";
+import { QuestData } from "data/QuestData";
 
 class QuestHelper {
 
@@ -14,8 +15,9 @@ class QuestHelper {
     }
 
     endQuest = (quest: Quest) => {
+        const questData = QuestData.get(quest.id);
         const questHeroes = this.getQuestHeroes(quest);
-        const isWin = (quest.ennemies)?BattleEngine.computeBattleResult(questHeroes, quest.ennemies):true;
+        const isWin = (questData.ennemies)?BattleEngine.computeBattleResult(questHeroes, questData.ennemies):true;
         const actionType = (isWin)
             ? (GameModelActionTypes.END_QUEST_SUCCEED)
             : (GameModelActionTypes.END_QUEST_FAIL);
@@ -29,11 +31,11 @@ class QuestHelper {
     }
 
     getQuestHeroes = (quest: Quest) => {
-        const heroes = GameModelStore.getState().heroes.asArray();
+        const heroes = GameModelStore.getState().heroes;
         const questHeroes = [];
-        for (let i = 0; i < heroes.length; i++) {
-            if (heroes[i].questId === quest.id) {
-                questHeroes.push(heroes[i]);
+        for (let hero of heroes) {
+            if (hero.questId === quest.id) {
+                questHeroes.push(hero);
             }
         }
         return questHeroes;

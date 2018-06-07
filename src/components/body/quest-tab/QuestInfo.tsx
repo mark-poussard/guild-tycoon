@@ -6,6 +6,8 @@ import { ProgressBar } from '../../generic/quest/ProgressBar';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import QuestHelper from 'business/QuestHelper';
+import { QuestData } from 'data/QuestData';
+import BaseQuest from 'model/BaseQuest';
 
 interface IQuestInfoProps {
     quest: Quest;
@@ -18,23 +20,25 @@ interface IQuestInfoState {
 }
 
 export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestInfoState>{
-    intervalId : number;
-    
+    intervalId: number;
+    questData: BaseQuest;
+
     constructor(props: IQuestInfoProps) {
         super(props);
         this.state = { progress: this.computeProgress(this.props.quest) };
         this.intervalId = null;
+        this.questData = QuestData.get(this.props.quest.id);
     }
 
     render() {
-        const quest = this.props.quest;
+        const questData = this.questData;
         return (
             <div className='container'>
-                <h3>{quest.title}</h3>
-                <p>{quest.description}</p>
-                <Resource type={ResourceType.GOLD} value={quest.reward.gold} modifier />
-                <Resource type={ResourceType.EXP} value={quest.reward.exp} modifier />
-                <Resource type={ResourceType.TIME} value={QuestHelper.durationToString(quest.duration)} />
+                <h3>{questData.title}</h3>
+                <p>{questData.description}</p>
+                <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
+                <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
+                <Resource type={ResourceType.TIME} value={questData.duration.toString()} />
                 {this.renderQuestAction()}
             </div>
         );
@@ -60,7 +64,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.stopProgressRefresh();
     }
 
@@ -73,7 +77,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     stopProgressRefresh = () => {
-        if(this.intervalId != null){
+        if (this.intervalId != null) {
             window.clearInterval(this.intervalId);
         }
     }
@@ -81,8 +85,8 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     computeProgress = (quest: Quest) => {
         if (quest.startedAt != null) {
             const t = new Date().getTime() - quest.startedAt;
-            const duration = quest.duration;
-            return Math.min(t / duration *100, 100);
+            const duration = this.questData.duration.toMs();
+            return Math.min(t / duration * 100, 100);
         }
         return 0;
     }

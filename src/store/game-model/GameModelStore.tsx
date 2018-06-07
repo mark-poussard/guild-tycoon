@@ -21,6 +21,7 @@ import IndexedArray from 'business/collection/IndexedArray';
 import AchievementsHelper from 'store/achievements/AchievementsHelper';
 import { TrainingHelper } from 'store/TrainingHelper';
 import HeroHelper from 'business/HeroHelper';
+import { QuestData } from 'data/QuestData';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -154,15 +155,15 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     //Modifying state by side effect
                     payload = action.payload as EndQuestPayload;
                     payload.quest.completedAt = new Date().getTime();
-                    const heroes = newState.heroes.asArray();
-                    for (let i = 0; i < heroes.length; i++) {
-                        if (heroes[i].questId === payload.quest.id) {
-                            heroes[i].questId = null;
+                    for (let hero of newState.heroes) {
+                        if (hero.questId === payload.quest.id) {
+                            hero.questId = null;
                         }
                     }
                     //Add rewards + items
-                    newState.gold += payload.quest.reward.gold;
-                    newState.exp += payload.quest.reward.exp;
+                    const questData = QuestData.get(payload.quest.id);
+                    newState.gold += questData.reward.gold;
+                    newState.exp += questData.reward.exp;
                     //Add switch
                     newState.gameSwitches[payload.quest.id] = true;
                     break;
@@ -174,10 +175,9 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     payload = action.payload as EndQuestPayload;
                     payload.quest.startedAt = null;
                     payload.quest.completedAt = null;
-                    const heroes = newState.heroes.asArray();
-                    for (let i = 0; i < heroes.length; i++) {
-                        if (heroes[i].questId === payload.quest.id) {
-                            heroes[i].questId = null;
+                    for (let hero of newState.heroes) {
+                        if (hero.questId === payload.quest.id) {
+                            hero.questId = null;
                         }
                     }
                     break;

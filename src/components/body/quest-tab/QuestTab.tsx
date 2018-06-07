@@ -13,6 +13,7 @@ import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
 import Hero from 'model/Hero';
 import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
+import BaseQuest from 'model/BaseQuest';
 
 interface IQuestTabState {
     gameSwitches: GameSwitches;
@@ -64,24 +65,11 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuests = () => {
         const result: JSX.Element[] = [];
-        for (let i = 0; i < this.state.quests.length; i++) {
-            if (this.shouldRenderQuest(this.state.quests[i])) {
-                result.push(<QuestInfo key={`QUEST_${i}`} quest={this.state.quests[i]} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
-            }
+        let i = 0;
+        for (let quest of this.state.quests) {
+            result.push(<QuestInfo key={`QUEST_${i++}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
         }
         return result;
-    }
-
-    shouldRenderQuest = (quest: Quest) => {
-        let isRender = true;
-        const dependencies = quest.switchDependencies;
-        for (let i = 0; i < dependencies.length; i++) {
-            const dependency = dependencies[i];
-            if (!this.state.gameSwitches[dependency]) {
-                return false;
-            }
-        }
-        return quest.completedAt == null || quest.repeat != null;
     }
 
     renderQuestEndOverlay = () => {
@@ -102,13 +90,14 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuestStartOverlay = () => {
         if (this.state.questSelect) {
+            const questData = QuestData.get(this.state.questSelect.id);
             return (
                 <SelectHeroOverlay
                     display={!!this.state.questSelect}
-                    maxSelection={this.state.questSelect.maxPartySize}
+                    maxSelection={questData.maxPartySize}
                     doCancelSelection={() => this.setState({ questSelect: null })}
                     doConfirmSelection={(heroes: Hero[]) => this.startQuest(this.state.questSelect, heroes)}>
-                    <h3>{this.state.questSelect.title}</h3>
+                    <h3>{questData.title}</h3>
                     <h2>Select heroes to go on this quest.</h2>
                 </SelectHeroOverlay>
             );
@@ -133,20 +122,22 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     }
 
     renderQuestWin = (quest: Quest) => {
+        const questData = QuestData.get(quest.id);
         return (
             <div>
-                <h3>{quest.title}</h3>
+                <h3>{questData.title}</h3>
                 <h2>WIN !</h2>
-                <Resource type={ResourceType.GOLD} value={quest.reward.gold} modifier />
-                <Resource type={ResourceType.EXP} value={quest.reward.exp} modifier />
+                <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
+                <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
             </div>
         );
     }
 
     renderQuestLose = (quest: Quest) => {
+        const questData = QuestData.get(quest.id);
         return (
             <div>
-                <h3>{quest.title}</h3>
+                <h3>{questData.title}</h3>
                 <h2>LOSE !</h2>
             </div>
         );

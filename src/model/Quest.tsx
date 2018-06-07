@@ -4,14 +4,8 @@ import BattleEntity from 'model/BattleEntity';
 import Drop from 'model/Drop';
 import Duration from 'model/Duration';
 
-export default class Quest extends Activity {
+export default class Quest {
     id: string;
-    title: string;
-    description: string;
-    ennemies: BattleEntity[];
-    maxPartySize: number;
-    reward: QuestReward;
-    drop: Drop[];
-    switchDependencies: string[];
-    repeat: number;
+    startedAt: number;
+    completedAt: number;
 }

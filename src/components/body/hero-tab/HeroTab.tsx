@@ -17,7 +17,7 @@ interface IHeroTabProps {
 }
 
 interface IHeroTabState {
-    heroes: IndexedArray<string, Hero>;
+    heroes: Hero[];
     isRoomLeft: boolean;
     rankOrder: SortOrder;
     lvlOrder: SortOrder;
@@ -29,7 +29,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
 
     constructor(props: IHeroTabProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes, isRoomLeft: this.computeIsRoomLeft(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
+        this.state = { heroes: GameModelStore.getState().heroes.asArray(), isRoomLeft: this.computeIsRoomLeft(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
     }
 
     render() {
@@ -50,7 +50,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                heroes: GameModelStore.getState().heroes,
+                heroes: GameModelStore.getState().heroes.asArray(),
                 isRoomLeft: this.computeIsRoomLeft()
             });
         });
@@ -66,7 +66,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
 
     renderHeroes = () => {
         const result: JSX.Element[] = [];
-        const heroesArray = this.state.heroes.asArray();
+        const heroesArray = this.state.heroes;
         heroesArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
         for (let i = 0; i < heroesArray.length; i++) {
             result.push(
