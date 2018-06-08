@@ -6,6 +6,10 @@ export default class ItemsTab extends React.Component<{}, {}>{
     }
 
     render(){
-        
+        return (
+        <div>
+
+        </div>
+        );
     }
 }

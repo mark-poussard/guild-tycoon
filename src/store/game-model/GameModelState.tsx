@@ -33,12 +33,15 @@ export const StartingGameState = (): GameModelState => {
             trainClicks: 0,
         },
         completedDungeons: new Set<string>(),
-        improvements: {
-            autoQuest: false,
-            stables: false,
-        },
+        improvements: new Improvements(),
         gameSwitches: {},
-        quests : QuestData,
+        quests : [
+            {
+                id : 'QUEST01',
+                startedAt : null,
+                completedAt:null
+            }
+        ],
         items : {}
     } as GameModelState;
 }

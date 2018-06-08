@@ -25,9 +25,10 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
 
     constructor(props: IQuestInfoProps) {
         super(props);
+        this.questData = QuestData.get(this.props.quest.id);
         this.state = { progress: this.computeProgress(this.props.quest) };
         this.intervalId = null;
-        this.questData = QuestData.get(this.props.quest.id);
+        this.updateAsyncProgress();
     }
 
     render() {
@@ -51,13 +52,11 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             );
         }
         else if (!this.props.quest.completedAt && this.state.progress < 100) {
-            this.startProgressRefresh();
             return (
                 <ProgressBar progress={this.state.progress} />
             );
         }
         else if (!this.props.quest.completedAt && this.state.progress == 100) {
-            this.stopProgressRefresh();
             return (
                 <button onClick={this.endQuest}>Finish quest</button>
             );
@@ -66,6 +65,19 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
 
     componentWillUnmount() {
         this.stopProgressRefresh();
+    }
+
+    componentDidUpdate(){
+        this.updateAsyncProgress();
+    }
+
+    updateAsyncProgress = () => {
+        if(!this.props.quest.completedAt && this.state.progress < 100){
+            this.startProgressRefresh();
+        }
+        else if(!this.props.quest.completedAt && this.state.progress == 100){
+            this.stopProgressRefresh();
+        }
     }
 
     startProgressRefresh = () => {

@@ -13,10 +13,8 @@ import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
 import Hero from 'model/Hero';
 import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
-import BaseQuest from 'model/BaseQuest';
 
 interface IQuestTabState {
-    gameSwitches: GameSwitches;
     quests: Quest[];
     questResult: Quest;
     isQuestResultWin: boolean;
@@ -29,7 +27,6 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     constructor(props: {}) {
         super(props);
         this.state = {
-            gameSwitches: GameModelStore.getState().gameSwitches,
             quests: GameModelStore.getState().quests,
             questResult: null,
             isQuestResultWin: false,
@@ -51,7 +48,6 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     componentWillMount() {
         this.gameStoreListener = GameModelStore.addListener(() => {
             this.setState({
-                gameSwitches: GameModelStore.getState().gameSwitches,
                 quests: GameModelStore.getState().quests
             });
         });
@@ -65,11 +61,18 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuests = () => {
         const result: JSX.Element[] = [];
-        let i = 0;
+        let i=0;
         for (let quest of this.state.quests) {
-            result.push(<QuestInfo key={`QUEST_${i++}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
+            if (this.shouldRenderQuest(quest)) {
+                result.push(<QuestInfo key={`QUEST_${i++}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
+            }
         }
         return result;
+    }
+
+    shouldRenderQuest = (quest: Quest) => {
+        const questData = QuestData.get(quest.id);
+        return quest.completedAt == null || questData.repeat != null;
     }
 
     renderQuestEndOverlay = () => {

@@ -5,9 +5,10 @@ export default class IndexedArray<K, V>{
     extractor: KeyExtractor<K, V>;
     internalMap: Map<K, V>;
 
-    constructor(extractor: KeyExtractor<K, V>) {
+    constructor(extractor: KeyExtractor<K, V>, ...elements : V[]) {
         this.extractor = extractor;
         this.internalMap = new Map<K, V>();
+        this.addAll(elements);
     }
 
     add = (obj: V) => {
@@ -15,8 +16,8 @@ export default class IndexedArray<K, V>{
     }
 
     addAll = (all: V[]) => {
-        for (let i = 0; i < all.length; i++) {
-            this.add(all[i]);
+        for (let element of all) {
+            this.add(element);
         }
     }
 
@@ -41,7 +42,8 @@ export default class IndexedArray<K, V>{
         return {
             next: () => {
                 let itResult: IteratorResult<[K, V]> = mapIterator.next();
-                return { value: itResult.value[1], done: false };
+                let value = (itResult.value)?itResult.value[1]:null;
+                return { value: value, done: value == null };
             }
         }
     };

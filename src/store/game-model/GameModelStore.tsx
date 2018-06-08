@@ -155,6 +155,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     //Modifying state by side effect
                     payload = action.payload as EndQuestPayload;
                     payload.quest.completedAt = new Date().getTime();
+                    //Remove ended quest id from participating heroes
                     for (let hero of newState.heroes) {
                         if (hero.questId === payload.quest.id) {
                             hero.questId = null;
@@ -166,6 +167,21 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.exp += questData.reward.exp;
                     //Add switch
                     newState.gameSwitches[payload.quest.id] = true;
+                    //Remove from active quests if non-repeatable
+                    if(questData.repeat == null){
+                        let index = newState.quests.indexOf(payload.quest);
+                        if(index > -1){
+                            newState.quests.splice(index, 1);
+                        }
+                    }
+                    //Add activated quests
+                    for(let questId of questData.activates){
+                        newState.quests.push({
+                            id : questId,
+                            completedAt : null,
+                            startedAt : null
+                        });
+                    }
                     break;
                 }
 

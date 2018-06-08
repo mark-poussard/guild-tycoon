@@ -106,11 +106,11 @@ class QuestStore {
     }
 
     updateResourceAfterQuest = (wrappedQuest: QuestWrapper) => {
-        if (this.computeQuestSuccess(wrappedQuest)) {
+        /*if (this.computeQuestSuccess(wrappedQuest)) {
             GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_EXP, payload: { quantity: wrappedQuest.quest.reward.exp } });
             GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_GOLD, payload: { quantity: wrappedQuest.quest.reward.gold } });
             GameModelDispatcher.dispatch({ type: GameModelActionTypes.ADD_FAME, payload: { quantity: wrappedQuest.quest.reward.fame } });
-        }
+        }*/
     }
 
     computeQuestSuccess = (wrappedQuest: QuestWrapper) => {
