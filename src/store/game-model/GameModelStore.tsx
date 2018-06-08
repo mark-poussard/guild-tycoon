@@ -11,8 +11,9 @@ import GameModelPayload, {
     CompleteDungeonPayload,
     SetImprovementPayload,
     StartQuestPayload,
-    EndQuestPayload,
-    RegisterCFHResultPayload
+    EndQuestFailPayload,
+    RegisterCFHResultPayload,
+    EndQuestWinPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -21,7 +22,7 @@ import IndexedArray from 'business/collection/IndexedArray';
 import AchievementsHelper from 'store/achievements/AchievementsHelper';
 import { TrainingHelper } from 'store/TrainingHelper';
 import HeroHelper from 'business/HeroHelper';
-import { QuestData } from 'data/QuestData';
+import { QuestDataArray } from 'data/QuestData';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -153,7 +154,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             case GameModelActionTypes.END_QUEST_SUCCEED:
                 {
                     //Modifying state by side effect
-                    payload = action.payload as EndQuestPayload;
+                    payload = action.payload as EndQuestWinPayload;
                     payload.quest.completedAt = new Date().getTime();
                     //Remove ended quest id from participating heroes
                     for (let hero of newState.heroes) {
@@ -161,25 +162,32 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                             hero.questId = null;
                         }
                     }
-                    //Add rewards + items
-                    const questData = QuestData.get(payload.quest.id);
+                    //Add rewards
+                    const questData = QuestDataArray.get(payload.quest.id);
                     newState.gold += questData.reward.gold;
                     newState.exp += questData.reward.exp;
+                    //Add drops
+                    for (let drop of payload.drops) {
+                        if (!newState.items.hasOwnProperty(drop.item.id)) {
+                            newState.items[drop.item.id] = 0;
+                        }
+                        newState.items[drop.item.id] += drop.quantity;
+                    }
                     //Add switch
                     newState.gameSwitches[payload.quest.id] = true;
                     //Remove from active quests if non-repeatable
-                    if(questData.repeat == null){
+                    if (questData.repeat == null) {
                         let index = newState.quests.indexOf(payload.quest);
-                        if(index > -1){
+                        if (index > -1) {
                             newState.quests.splice(index, 1);
                         }
                     }
                     //Add activated quests
-                    for(let questId of questData.activates){
+                    for (let questId of questData.activates) {
                         newState.quests.push({
-                            id : questId,
-                            completedAt : null,
-                            startedAt : null
+                            id: questId,
+                            completedAt: null,
+                            startedAt: null
                         });
                     }
                     break;
@@ -188,7 +196,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             case GameModelActionTypes.END_QUEST_FAIL:
                 {
                     //Modifying state by side effect
-                    payload = action.payload as EndQuestPayload;
+                    payload = action.payload as EndQuestFailPayload;
                     payload.quest.startedAt = null;
                     payload.quest.completedAt = null;
                     for (let hero of newState.heroes) {

@@ -4,7 +4,7 @@ import Statistics from 'model/Statistics';
 import IndexedArray from 'business/collection/IndexedArray';
 import GameSwitches from 'model/GameSwitches';
 import Quest from 'model/Quest';
-import {QuestData} from 'data/QuestData';
+import { QuestDataArray, QuestData } from 'data/QuestData';
 import ItemCollection from 'model/serializable/ItemCollection';
 
 export default interface GameModelState {
@@ -16,9 +16,9 @@ export default interface GameModelState {
     statistics: Statistics;
     completedDungeons: Set<string>;
     improvements: Improvements;
-    quests : Quest[];
+    quests: Quest[];
     gameSwitches: GameSwitches;
-    items : ItemCollection;
+    items: ItemCollection;
 }
 
 export const StartingGameState = (): GameModelState => {
@@ -35,14 +35,14 @@ export const StartingGameState = (): GameModelState => {
         completedDungeons: new Set<string>(),
         improvements: new Improvements(),
         gameSwitches: {},
-        quests : [
+        quests: [
             {
-                id : 'QUEST01',
-                startedAt : null,
-                completedAt:null
+                id: QuestData.QUEST1.id,
+                startedAt: null,
+                completedAt: null
             }
         ],
-        items : {}
+        items: {}
     } as GameModelState;
 }
 

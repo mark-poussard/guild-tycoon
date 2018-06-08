@@ -4,7 +4,10 @@ import { GameModelActionTypes } from "store/game-model/GameModelActionTypes";
 import BattleEngine from "business/BattleEngine";
 import GameModelDispatcher from "store/game-model/GameModelDispatcher";
 import Hero from "model/Hero";
-import { QuestData } from "data/QuestData";
+import { QuestDataArray } from "data/QuestData";
+import BaseQuest from "model/BaseQuest";
+import QuestDrop from "model/QuestDrop";
+import EndQuestResult from "business/EndQuestResult";
 
 class QuestHelper {
 
@@ -15,19 +18,51 @@ class QuestHelper {
     }
 
     endQuest = (quest: Quest) => {
-        const questData = QuestData.get(quest.id);
+        const questResult = new EndQuestResult();
+        questResult.quest = quest;
+        const questData = QuestDataArray.get(quest.id);
         const questHeroes = this.getQuestHeroes(quest);
-        const isWin = (questData.ennemies)?BattleEngine.computeBattleResult(questHeroes, questData.ennemies):true;
-        const actionType = (isWin)
-            ? (GameModelActionTypes.END_QUEST_SUCCEED)
-            : (GameModelActionTypes.END_QUEST_FAIL);
-        GameModelDispatcher.dispatch({
-            type: actionType,
-            payload: {
-                quest: quest
+        const isWin = (questData.ennemies) ? BattleEngine.computeBattleResult(questHeroes, questData.ennemies) : true;
+        questResult.result = isWin;
+        if(isWin){
+            const drops = this.computeDrops(quest, questData);
+            questResult.drops = drops;
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.END_QUEST_SUCCEED,
+                payload: {
+                    quest: quest,
+                    drops : drops
+                }
+            });
+        }
+        else{
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.END_QUEST_FAIL,
+                payload: {
+                    quest: quest
+                }
+            });
+        }
+        return questResult;
+    }
+
+    computeDrops = (quest: Quest, questData: BaseQuest) => {
+        const drops: QuestDrop[] = [];
+        for (let drop of questData.drop) {
+            let quantity = 0;
+            for (let rate of drop.rates) {
+                if (Math.random() * 100 <= rate) {
+                    quantity++;
+                }
+                else {
+                    break;
+                }
             }
-        });
-        return isWin;
+            if (quantity > 0) {
+                drops.push({ item: drop.item, quantity: quantity });
+            }
+        }
+        return drops;
     }
 
     getQuestHeroes = (quest: Quest) => {
@@ -51,10 +86,10 @@ class QuestHelper {
         })
     }
 
-    durationToString(duration : number) {
+    durationToString(duration: number) {
         const hours = Math.floor(duration / (60000 * 60000));
-        const minutes = Math.floor((duration - hours*(60000 * 60000)) / 60000);
-        const seconds = Math.floor((duration - hours*(60000 * 60000) - minutes*60000) / 1000)
+        const minutes = Math.floor((duration - hours * (60000 * 60000)) / 60000);
+        const seconds = Math.floor((duration - hours * (60000 * 60000) - minutes * 60000) / 1000)
 
         let hourStr = hours.toString();
         if (hourStr.length < 2) {

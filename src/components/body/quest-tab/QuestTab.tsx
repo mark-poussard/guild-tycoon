@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
-import { QuestData } from 'data/QuestData';
+import { QuestDataArray } from 'data/QuestData';
 import Quest from 'model/Quest';
 import QuestInfo from 'components/body/quest-tab/QuestInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
@@ -13,11 +13,12 @@ import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
 import Hero from 'model/Hero';
 import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
+import QuestDrop from 'model/QuestDrop';
+import EndQuestResult from 'business/EndQuestResult';
 
 interface IQuestTabState {
     quests: Quest[];
-    questResult: Quest;
-    isQuestResultWin: boolean;
+    questResult: EndQuestResult;
     questSelect: Quest;
 }
 
@@ -29,7 +30,6 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         this.state = {
             quests: GameModelStore.getState().quests,
             questResult: null,
-            isQuestResultWin: false,
             questSelect: null
         };
     }
@@ -61,7 +61,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuests = () => {
         const result: JSX.Element[] = [];
-        let i=0;
+        let i = 0;
         for (let quest of this.state.quests) {
             if (this.shouldRenderQuest(quest)) {
                 result.push(<QuestInfo key={`QUEST_${i++}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
@@ -71,7 +71,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     }
 
     shouldRenderQuest = (quest: Quest) => {
-        const questData = QuestData.get(quest.id);
+        const questData = QuestDataArray.get(quest.id);
         return quest.completedAt == null || questData.repeat != null;
     }
 
@@ -80,9 +80,9 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         if (quest) {
             return (
                 <Overlay display={!!quest} closeOverlayCallback={() => this.setState({ questResult: null })} width={80} height={80}>
-                    {this.state.isQuestResultWin &&
+                    {this.state.questResult.result &&
                         this.renderQuestWin(quest)}
-                    {!this.state.isQuestResultWin &&
+                    {!this.state.questResult.result &&
                         this.renderQuestLose(quest)}
                     <button onClick={() => this.setState({ questResult: null })}>Acknowledge</button>
                 </Overlay>
@@ -93,7 +93,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuestStartOverlay = () => {
         if (this.state.questSelect) {
-            const questData = QuestData.get(this.state.questSelect.id);
+            const questData = QuestDataArray.get(this.state.questSelect.id);
             return (
                 <SelectHeroOverlay
                     display={!!this.state.questSelect}
@@ -108,24 +108,9 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         return null;
     }
 
-    renderQuestSelectOverlay = () => {
-        const quest = this.state.questSelect;
-        if (quest) {
-            return (
-                <Overlay display={!!quest} closeOverlayCallback={() => this.setState({ questSelect: null })} width={80} height={80}>
-                    {this.state.isQuestResultWin &&
-                        this.renderQuestWin(quest)}
-                    {!this.state.isQuestResultWin &&
-                        this.renderQuestLose(quest)}
-                    <button onClick={() => this.setState({ questResult: null })}>Acknowledge</button>
-                </Overlay>
-            );
-        }
-        return null;
-    }
-
-    renderQuestWin = (quest: Quest) => {
-        const questData = QuestData.get(quest.id);
+    renderQuestWin = (questResult: EndQuestResult) => {
+        const quest = questResult.quest;
+        const questData = QuestDataArray.get(quest.id);
         return (
             <div>
                 <h3>{questData.title}</h3>
@@ -136,8 +121,9 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         );
     }
 
-    renderQuestLose = (quest: Quest) => {
-        const questData = QuestData.get(quest.id);
+    renderQuestLose = (questResult: EndQuestResult) => {
+        const quest = questResult.quest;
+        const questData = QuestDataArray.get(quest.id);
         return (
             <div>
                 <h3>{questData.title}</h3>
@@ -147,8 +133,8 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     }
 
     endQuest = (quest: Quest) => {
-        const isWin = QuestHelper.endQuest(quest);
-        this.setState({ questResult: quest, isQuestResultWin: isWin });
+        const questResult = QuestHelper.endQuest(quest);
+        this.setState({ questResult: questResult });
     }
 
     startQuest = (quest: Quest, heroes: Hero[]) => {

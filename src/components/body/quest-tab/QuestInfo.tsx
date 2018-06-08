@@ -6,7 +6,7 @@ import { ProgressBar } from '../../generic/quest/ProgressBar';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import QuestHelper from 'business/QuestHelper';
-import { QuestData } from 'data/QuestData';
+import { QuestDataArray } from 'data/QuestData';
 import BaseQuest from 'model/BaseQuest';
 
 interface IQuestInfoProps {
@@ -25,7 +25,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
 
     constructor(props: IQuestInfoProps) {
         super(props);
-        this.questData = QuestData.get(this.props.quest.id);
+        this.questData = QuestDataArray.get(this.props.quest.id);
         this.state = { progress: this.computeProgress(this.props.quest) };
         this.intervalId = null;
         this.updateAsyncProgress();

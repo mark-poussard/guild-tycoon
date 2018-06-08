@@ -1,4 +1,4 @@
-import Item from "model/Item";
+import Item from "model/items/Item";
 
 export default class Drop{
     item : Item;
