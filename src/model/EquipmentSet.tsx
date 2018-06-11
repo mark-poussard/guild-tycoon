@@ -1,5 +1,4 @@
-import Equipment from "model/Equipment";
-import Weapon from "model/Weapon";
+import Equipment from "model/items/Equipment";
 
 export default class EquipmentSet{
     head : Equipment;
@@ -7,6 +6,6 @@ export default class EquipmentSet{
     hands : Equipment;
     legs : Equipment;
     feet : Equipment;
-    leftHand : Weapon;
-    rightHand : Weapon;
+    leftHand : Equipment;
+    rightHand : Equipment;
 }

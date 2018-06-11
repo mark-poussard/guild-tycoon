@@ -15,6 +15,7 @@ import Hero from 'model/Hero';
 import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
 import QuestDrop from 'model/QuestDrop';
 import EndQuestResult from 'business/EndQuestResult';
+import ItemInfo from 'components/body/items-tab/ItemInfo';
 
 interface IQuestTabState {
     quests: Quest[];
@@ -117,8 +118,18 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
                 <h2>WIN !</h2>
                 <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
                 <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
+                {this.renderDropInfo(questResult.drops)}
             </div>
         );
+    }
+
+    renderDropInfo = (drops : QuestDrop[]) => {
+        const result : JSX.Element[] = [];
+        let i = 0;
+        for(let drop of drops){
+            result.push(<ItemInfo key={`ITEM_${i++}`} item={drop.item} quantity={drop.quantity}/>)
+        }
+        return result;
     }
 
     renderQuestLose = (questResult: EndQuestResult) => {

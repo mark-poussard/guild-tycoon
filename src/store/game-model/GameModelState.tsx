@@ -37,7 +37,7 @@ export const StartingGameState = (): GameModelState => {
         gameSwitches: {},
         quests: [
             {
-                id: QuestData.QUEST1.id,
+                id: QuestData.QUEST01.id,
                 startedAt: null,
                 completedAt: null
             }
