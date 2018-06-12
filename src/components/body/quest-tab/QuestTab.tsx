@@ -29,7 +29,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     constructor(props: {}) {
         super(props);
         this.state = {
-            quests: GameModelStore.getState().quests,
+            quests: GameModelStore.getState().quests.slice(),
             questResult: null,
             questSelect: null
         };
@@ -49,7 +49,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     componentWillMount() {
         this.gameStoreListener = GameModelStore.addListener(() => {
             this.setState({
-                quests: GameModelStore.getState().quests
+                quests: GameModelStore.getState().quests.slice()
             });
         });
     }
@@ -62,10 +62,9 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     renderQuests = () => {
         const result: JSX.Element[] = [];
-        let i = 0;
         for (let quest of this.state.quests) {
             if (this.shouldRenderQuest(quest)) {
-                result.push(<QuestInfo key={`QUEST_${i++}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
+                result.push(<QuestInfo key={`QUEST_${quest.id}`} quest={quest} doEndQuest={this.endQuest} doSelectQuest={this.doSelectQuest} />);
             }
         }
         return result;
@@ -80,7 +79,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         const quest = this.state.questResult;
         if (quest) {
             return (
-                <Overlay display={!!quest} closeOverlayCallback={() => this.setState({ questResult: null })} width={80} height={80}>
+                <Overlay display={!!quest} closeOverlayCallback={() => this.setState({ questResult: null })} width={30} height={50}>
                     {this.state.questResult.result &&
                         this.renderQuestWin(quest)}
                     {!this.state.questResult.result &&

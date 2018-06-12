@@ -72,7 +72,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     updateAsyncProgress = () => {
-        if(!this.props.quest.completedAt && this.state.progress < 100){
+        if(this.intervalId == null && !this.props.quest.completedAt && this.state.progress < 100){
             this.startProgressRefresh();
         }
         else if(!this.props.quest.completedAt && this.state.progress == 100){
@@ -85,12 +85,14 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             this.setState({
                 progress: this.computeProgress(this.props.quest)
             });
+            this.updateAsyncProgress();
         }, 100);
     }
 
     stopProgressRefresh = () => {
         if (this.intervalId != null) {
             window.clearInterval(this.intervalId);
+            this.intervalId = null;
         }
     }
 

@@ -13,12 +13,13 @@ export default class ItemsTab extends React.Component<{}, IItemsTabState>{
 
     constructor(props : {}){
         super(props);
+        this.state = {items : Object.assign({}, GameModelStore.getState().items)};
     }
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                items: GameModelStore.getState().items
+                items : Object.assign({}, GameModelStore.getState().items)
             });
         });
     }
@@ -30,7 +31,7 @@ export default class ItemsTab extends React.Component<{}, IItemsTabState>{
     render(){
         return (
         <div>
-            {this.renderItems}
+            {this.renderItems()}
         </div>
         );
     }

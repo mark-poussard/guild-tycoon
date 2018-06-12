@@ -1,11 +1,11 @@
-import BattleEntity from "model/BattleEntity";
+import Ennemy from "model/BattleEntity";
 import Hero from "model/Hero";
 import HeroHelper from "business/HeroHelper";
 
 class BattleEngine {
 
     //True win, False lose
-    computeBattleResult = (heroes: Hero[], ennemies: BattleEntity[]) => {
+    computeBattleResult = (heroes: Hero[], ennemies: Ennemy[]) => {
         const contenders = heroes.map(v => HeroHelper.computeHeroBA(v));
         contenders.sort();
         const toBeat = ennemies.map(v => v.ba);
