@@ -1,7 +1,7 @@
 import Item from "model/items/Item";
 import IndexedArray from "business/collection/IndexedArray";
 import Weapon from "model/items/Weapon";
-import Equipment, { EquipmentSlot } from "model/items/Equipment";
+import Equipment, { EquipmentType } from "model/items/Equipment";
 import * as ClassData from 'data/ClassData';
 import ObjectUtils from "business/utils/ObjectUtils";
 
@@ -15,7 +15,7 @@ export const ItemData = {
         icon: 'img/items/stick.png',
         ba: 1,
         classRestriction: [],
-        slot : EquipmentSlot.ONE_HANDED
+        type : EquipmentType.ONE_HANDED
     } as Equipment,
     STONE_SLING: {
         id: "ITEM2",
@@ -24,7 +24,7 @@ export const ItemData = {
         icon: '',
         ba: 4,
         classRestriction: [ClassData.MINSTREL_CLASS.name],
-        slot : EquipmentSlot.TWO_HANDED
+        type : EquipmentType.TWO_HANDED
     } as Equipment
 };
 
