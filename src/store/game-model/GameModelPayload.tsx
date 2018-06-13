@@ -6,6 +6,7 @@ import Item from 'model/items/Item';
 import CallForHero from 'model/CallForHero';
 import BaseHero from 'model/BaseHero';
 import QuestDrop from 'model/QuestDrop';
+import EquipmentSet from 'model/EquipmentSet';
 
 export default interface GameModelPayload {
     type: GameModelActionTypes;
@@ -65,4 +66,10 @@ export interface RegisterCFHResultPayload {
     cfh: CallForHero;
     hero: Hero;
     dupId: string;
+}
+
+export interface EquipItemPayload {
+    hero: Hero;
+    itemId: string;
+    slot : keyof EquipmentSet;
 }

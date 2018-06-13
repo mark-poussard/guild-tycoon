@@ -13,7 +13,8 @@ import GameModelPayload, {
     StartQuestPayload,
     EndQuestFailPayload,
     RegisterCFHResultPayload,
-    EndQuestWinPayload
+    EndQuestWinPayload,
+    EquipItemPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -23,6 +24,9 @@ import AchievementsHelper from 'store/achievements/AchievementsHelper';
 import { TrainingHelper } from 'store/TrainingHelper';
 import HeroHelper from 'business/HeroHelper';
 import { QuestDataArray } from 'data/QuestData';
+import { ItemDataArray } from 'data/ItemData';
+import Equipment, { EquipmentType } from 'model/items/Equipment';
+import EquipmentSet from 'model/EquipmentSet';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -223,6 +227,36 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         newState.heroes.get(payload.dupId).dupLevel += 1;
                     }
                     break;
+                }
+
+            case GameModelActionTypes.EQUIP_ITEM:
+                {
+                    payload = action.payload as EquipItemPayload;
+                    const slotsToRemove: (keyof EquipmentSet)[] = [];
+                    const item = ItemDataArray.get(payload.itemId) as Equipment;
+                    if (payload.slot === 'leftHand' || payload.slot === 'rightHand') {
+                        const otherHand = (payload.slot === 'leftHand') ? 'rightHand' : 'leftHand';
+                        const otherHandItemId = payload.hero.equipment[otherHand];
+                        if(otherHandItemId){
+                            const otherHandItem = ItemDataArray.get(otherHandItemId) as Equipment;
+                            if (otherHandItem.type === EquipmentType.TWO_HANDED
+                                || item.type === EquipmentType.TWO_HANDED) {
+                                    slotsToRemove.push(otherHand);
+                            }
+                        }
+                    }
+                    slotsToRemove.push(payload.slot);
+                    for(let slotToRemove of slotsToRemove){
+                        const slotItemId = payload.hero.equipment[slotToRemove];
+                        if(slotItemId){
+                            newState.heroes.get(payload.hero.data.id).equipment[slotToRemove] = null;
+                            if(!newState.items.hasOwnProperty(slotItemId)){
+                                newState.items[slotItemId] = 0;
+                            }
+                            newState.items[slotItemId] += 1;
+                        }
+                    }
+                    newState.heroes.get(payload.hero.data.id).equipment[payload.slot] = payload.itemId;
                 }
 
             case GameModelActionTypes.CLEAR_GAME_DATA:

@@ -3,10 +3,10 @@ import Item from "model/items/Item";
 export default class Equipment extends Item {
     ba: number;
     classRestriction: string[];
-    slot: EquipmentSlot;
+    type: EquipmentType;
 }
 
-export enum EquipmentSlot {
+export enum EquipmentType {
     HEAD = ('head'),
     TORSO = ('torso'),
     HANDS = ('hands'),
