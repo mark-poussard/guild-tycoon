@@ -35,7 +35,7 @@ export default class ClassInfo extends React.Component<IClassInfoProps>{
         let color = 'green';
         for(let className of this.classList){
             result.push(<div key={`CLASSNAME_${i++}`} style={{color:color}}>{className}</div>);
-            color = 'black';
+            color = 'white';
         }
         return result;
     }

@@ -9,6 +9,7 @@ import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import GameModelState from 'store/game-model/GameModelState';
 import HeroHelper from 'business/HeroHelper';
+import ClassInfo from 'components/generic/hero-info/ClassInfo';
 
 interface IHeroInfoProps {
     hero: Hero;
@@ -37,7 +38,13 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
                     <div className="icon"><img src={this.props.hero.data.imgUrl} /></div>
                 </div>
                 <div className="divider">
+                    <ClassInfo class={this.props.hero.data.class} forRank={this.props.hero.rank}/>
+                </div>
+                <div className="divider">
                     <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
+                </div>
+                <div className="divider">
+                    {this.renderBattleAbility()}
                 </div>
                 <div className="divider">
                     {this.props.children}
@@ -80,5 +87,12 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
             type: GameModelActionTypes.HERO_LVL_UP,
             payload: { heroId: this.props.hero.data.id }
         });
+    }
+
+    renderBattleAbility = () => {
+        const ba = HeroHelper.computeHeroBA(this.props.hero);
+        return (
+            <span>{`Battle Ability : ${ba}`}</span>
+        );
     }
 }

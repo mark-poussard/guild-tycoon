@@ -8,6 +8,7 @@ import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import QuestHelper from 'business/QuestHelper';
 import { QuestDataArray } from 'data/QuestData';
 import BaseQuest from 'model/BaseQuest';
+import EnnemyInfo from 'components/generic/EnnemyInfo';
 
 interface IQuestInfoProps {
     quest: Quest;
@@ -37,12 +38,44 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             <div className='container'>
                 <h3>{questData.title}</h3>
                 <p>{questData.description}</p>
-                <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
-                <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
-                <Resource type={ResourceType.TIME} value={questData.duration.toString()} />
+                {this.renderQuestDetails()}
                 {this.renderQuestAction()}
             </div>
         );
+    }
+
+    renderQuestDetails = () => {
+        return (
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <Resource type={ResourceType.GOLD} value={this.questData.reward.gold} modifier />
+                            <Resource type={ResourceType.EXP} value={this.questData.reward.exp} modifier />
+                            <Resource type={ResourceType.TIME} value={this.questData.duration.toString()} />
+                        </td>
+                        {this.renderEnnemyCells()}
+                    </tr>
+                </tbody>
+            </table>
+        );
+    }
+
+    renderEnnemyCells = () => {
+        if(!this.questData.ennemies){
+            return null;
+        }
+        const result : JSX.Element[] = [];
+        let i=0;
+        if(this.questData.ennemies.length > 0){
+            result.push(<td key={`ENNEMY_${i++}`}>Ennemies - </td>);
+        }
+        for(let ennemy of this.questData.ennemies){
+            result.push(<td key={`ENNEMY_${i++}`}><EnnemyInfo ennemy={ennemy} /></td>)
+        }
+        return result;
     }
 
     renderQuestAction = () => {

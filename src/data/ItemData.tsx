@@ -5,6 +5,8 @@ import Equipment, { EquipmentSlot } from "model/items/Equipment";
 import * as ClassData from 'data/ClassData';
 import ObjectUtils from "business/utils/ObjectUtils";
 
+export const NO_ICON_PATH = "img/items/none.png";
+
 export const ItemData = {
     WOODEN_STICK: {
         id: "ITEM1",

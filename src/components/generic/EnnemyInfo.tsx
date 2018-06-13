@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Ennemy from 'model/BattleEntity';
-import ClassInfo from 'components/body/quest-tab/ClassInfo';
+import ClassInfo from 'components/generic/hero-info/ClassInfo';
 
 interface IEnnemyInfoProps{
     ennemy : Ennemy;
