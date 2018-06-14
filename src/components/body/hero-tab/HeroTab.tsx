@@ -11,6 +11,7 @@ import TrainInfo from 'components/body/hero-tab/train/TrainInfo';
 import SortButton from 'components/generic/hero-info/SortButton';
 import './HeroTab.css'
 import HeroHelper from 'business/HeroHelper';
+import EquipmentButton from 'components/body/hero-tab/EquipmentButton';
 
 interface IHeroTabProps {
 
@@ -71,6 +72,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         for (let i = 0; i < heroesArray.length; i++) {
             result.push(
                 <HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} >
+                    <EquipmentButton hero={heroesArray[i]}/>
                 </HeroInfo>
             );
         }

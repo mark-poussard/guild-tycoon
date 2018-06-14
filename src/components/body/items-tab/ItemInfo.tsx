@@ -14,10 +14,12 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
 
     render() {
         return (
+            <div onDragStart={this.onItemDrag} draggable>
             <ToolTip toolTipContent={this.renderItemInfo()}>
                 <img src={this.props.item.icon} />
                 {this.props.quantity}
             </ToolTip>
+            </div>
         );
     }
 
@@ -32,6 +34,10 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
                 </div>
             </div>
         )
+    }
+
+    onItemDrag = (event: React.DragEvent<HTMLDivElement>) => {
+        event.dataTransfer.setData("itemId", this.props.item.id);
     }
 
 }

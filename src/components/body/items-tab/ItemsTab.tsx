@@ -40,7 +40,9 @@ export default class ItemsTab extends React.Component<{}, IItemsTabState>{
         const result : JSX.Element[] = [];
         let i=0;
         for(let objectId in this.state.items){
-            result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]}/>)
+            if(this.state.items[objectId] > 0){
+                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]}/>)
+            }
         }
         return result;
     }

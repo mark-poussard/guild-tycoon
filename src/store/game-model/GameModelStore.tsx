@@ -14,7 +14,8 @@ import GameModelPayload, {
     EndQuestFailPayload,
     RegisterCFHResultPayload,
     EndQuestWinPayload,
-    EquipItemPayload
+    EquipItemPayload,
+    RemoveAllItemsPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -247,6 +248,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     }
                     slotsToRemove.push(payload.slot);
                     for(let slotToRemove of slotsToRemove){
+                        //Remove slot method
                         const slotItemId = payload.hero.equipment[slotToRemove];
                         if(slotItemId){
                             newState.heroes.get(payload.hero.data.id).equipment[slotToRemove] = null;
@@ -256,7 +258,27 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                             newState.items[slotItemId] += 1;
                         }
                     }
+                    newState.items[payload.itemId] -= 1;
                     newState.heroes.get(payload.hero.data.id).equipment[payload.slot] = payload.itemId;
+                    break;
+                }
+
+                case GameModelActionTypes.REMOVE_ALL_ITEMS:
+                {
+                    payload = action.payload as RemoveAllItemsPayload;
+                    const equipmentSlots : (keyof EquipmentSet)[] = ["head", "torso", "hands", "legs", "feet", "leftHand", "rightHand"];
+                    for(let slot of equipmentSlots){
+                        //Remove slot method
+                        const slotItemId = payload.hero.equipment[slot];
+                        if(slotItemId){
+                            newState.heroes.get(payload.hero.data.id).equipment[slot] = null;
+                            if(!newState.items.hasOwnProperty(slotItemId)){
+                                newState.items[slotItemId] = 0;
+                            }
+                            newState.items[slotItemId] += 1;
+                        }
+                    }
+                    break;
                 }
 
             case GameModelActionTypes.CLEAR_GAME_DATA:

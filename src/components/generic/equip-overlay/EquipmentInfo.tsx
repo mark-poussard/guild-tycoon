@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Hero from 'model/Hero';
 import EquipmentPiece from 'components/generic/equip-overlay/EquipmentPiece';
+import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
+import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 
 interface IEquipmentInfoProps{
     hero : Hero;
@@ -9,11 +11,11 @@ interface IEquipmentInfoProps{
 export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
     render() {
         return (
+            <div>
             <table>
                 <thead>
                 </thead>
                 <tbody>
-                </tbody>
                     <tr>
                         <td></td>
                         <td>
@@ -54,7 +56,19 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
                         <EquipmentPiece hero={this.props.hero} type={'leftHand'}/>
                         </td>
                     </tr>
+                </tbody>
                 </table>
+                <button onClick={this.removeAll}>Remove all</button>
+                </div>
         );
+    }
+
+    removeAll = () => {
+        GameModelDispatcher.dispatch({
+            type : GameModelActionTypes.REMOVE_ALL_ITEMS,
+            payload : {
+                hero : this.props.hero
+            }
+        });
     }
 }

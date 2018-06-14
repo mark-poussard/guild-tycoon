@@ -22,7 +22,7 @@ export default class Settings extends React.Component<ISettingsProps, ISettingsS
             <div>
                 <i style={{fontSize:"32px", margin:"3px"}} onClick={this.displayOverlay} className="fa fa-cog"></i>
                 <Overlay display={this.state.displayed} closeOverlayCallback={this.closeOverlay} width={40} height={60}>
-                    <button>Clear saved game data</button>
+                    <button onClick={this.clearGameData}>Clear saved game data</button>
                 </Overlay>
             </div>
         );

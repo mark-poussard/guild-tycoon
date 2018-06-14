@@ -4,6 +4,11 @@ export default class Equipment extends Item {
     ba: number;
     classRestriction: string[];
     type: EquipmentType;
+
+    constructor(props : Equipment){
+        super();
+        Object.assign(this, props);
+    }
 }
 
 export enum EquipmentType {

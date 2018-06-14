@@ -15,5 +15,6 @@ export enum GameModelActionTypes {
     END_QUEST_SUCCEED = 'end_quest_succeed',
     END_QUEST_FAIL = 'end_quest_fail',
     REGISTER_CFH_RESULT = 'register_cfh_result',
-    EQUIP_ITEM = 'equip_item'
+    EQUIP_ITEM = 'equip_item',
+    REMOVE_ALL_ITEMS = 'remove_all_items'
 }

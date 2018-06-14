@@ -73,3 +73,7 @@ export interface EquipItemPayload {
     itemId: string;
     slot : keyof EquipmentSet;
 }
+
+export interface RemoveAllItemsPayload {
+    hero: Hero;
+}

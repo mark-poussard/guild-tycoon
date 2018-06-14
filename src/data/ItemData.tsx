@@ -8,7 +8,7 @@ import ObjectUtils from "business/utils/ObjectUtils";
 export const NO_ICON_PATH = "img/items/none.png";
 
 export const ItemData = {
-    WOODEN_STICK: {
+    WOODEN_STICK: new Equipment({
         id: "ITEM1",
         name: 'Wooden Stick',
         description : '',
@@ -16,8 +16,8 @@ export const ItemData = {
         ba: 1,
         classRestriction: [],
         type : EquipmentType.ONE_HANDED
-    } as Equipment,
-    STONE_SLING: {
+    }),
+    STONE_SLING: new Equipment({
         id: "ITEM2",
         name: 'Stone Sling',
         description : '',
@@ -25,7 +25,7 @@ export const ItemData = {
         ba: 4,
         classRestriction: [ClassData.MINSTREL_CLASS.name],
         type : EquipmentType.TWO_HANDED
-    } as Equipment
+    })
 };
 
 export const ItemDataArray = new IndexedArray<string, Item>(x => x.id, ...ObjectUtils.getValues(ItemData));
