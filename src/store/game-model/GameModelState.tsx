@@ -26,7 +26,7 @@ export const StartingGameState = (): GameModelState => {
         gold: 5000,
         fame: 5000,
         exp: 0,
-        heroes: new IndexedArray<string, Hero>(x => x.data.id),
+        heroes: new IndexedArray<string, Hero>(x => x.data),
         guildSize: 10,
         statistics: {
             questCompleted: 0,
@@ -53,7 +53,7 @@ const reviver = (key: any, value: any) => {
     switch (key) {
         case 'heroes':
             {
-                const result = new IndexedArray<string, Hero>(x => x.data.id);
+                const result = new IndexedArray<string, Hero>(x => x.data);
                 JSON.parse(value).forEach((element: Hero) => {
                     result.add(element);
                 });

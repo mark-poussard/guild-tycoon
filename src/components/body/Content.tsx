@@ -1,7 +1,5 @@
 import * as React from 'react';
 import HeroTab from 'components/body/hero-tab/HeroTab';
-import RecruitmentTab from 'components/body/recruitment-tab/RecruitmentTab';
-import DungeonTab from 'components/body/dungeon-tab/DungeonTab';
 import ImprovementsTab from 'components/body/improvements-tab/ImprovementsTab';
 import './Content.css';
 import { TabType } from 'store/navigation/NavigationStore';
@@ -41,10 +39,6 @@ export default class Content extends React.Component<IContentProps, IContentStat
                 return <ImprovementsTab />
             case TabType.ITEMS:
                 return <ItemsTab />
-            case TabType.RECRUIT:
-                return <RecruitmentTab />
-            case TabType.DUNGEON:
-                return <DungeonTab />
             default:
                 return null;
         }

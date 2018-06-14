@@ -1,10 +1,8 @@
-import Quest from 'model/Quest';
 import BaseHero from 'model/BaseHero';
 import EquipmentSet from 'model/EquipmentSet';
-import EquipmentSetHelper from 'business/EquipmentSetHelper';
 
 export default class Hero {
-    data : BaseHero;
+    data : string;
     rank: number;
     level: number;
     dupLevel : number;

@@ -17,7 +17,7 @@ class CFHHelper{
         }
         else{
             newHero = {
-                data : heroPull,
+                data : heroPull.id,
                 level : 1,
                 rank : 1,
                 dupLevel : 0,

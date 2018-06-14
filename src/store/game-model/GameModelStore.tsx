@@ -251,7 +251,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         //Remove slot method
                         const slotItemId = payload.hero.equipment[slotToRemove];
                         if(slotItemId){
-                            newState.heroes.get(payload.hero.data.id).equipment[slotToRemove] = null;
+                            newState.heroes.get(payload.hero.data).equipment[slotToRemove] = null;
                             if(!newState.items.hasOwnProperty(slotItemId)){
                                 newState.items[slotItemId] = 0;
                             }
@@ -259,7 +259,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         }
                     }
                     newState.items[payload.itemId] -= 1;
-                    newState.heroes.get(payload.hero.data.id).equipment[payload.slot] = payload.itemId;
+                    newState.heroes.get(payload.hero.data).equipment[payload.slot] = payload.itemId;
                     break;
                 }
 
@@ -271,7 +271,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         //Remove slot method
                         const slotItemId = payload.hero.equipment[slot];
                         if(slotItemId){
-                            newState.heroes.get(payload.hero.data.id).equipment[slot] = null;
+                            newState.heroes.get(payload.hero.data).equipment[slot] = null;
                             if(!newState.items.hasOwnProperty(slotItemId)){
                                 newState.items[slotItemId] = 0;
                             }

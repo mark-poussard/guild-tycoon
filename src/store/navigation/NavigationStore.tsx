@@ -1,7 +1,5 @@
 export enum TabType {
     HEROES = 'heroes',
-    RECRUIT = 'recruit',
-    DUNGEON = 'dungeon',
     IMPROVEMENTS = 'improvements',
     CFH = 'cfh',
     QUESTS = 'quests',

@@ -1,6 +1,7 @@
 import Hero from "model/Hero";
 import EquipmentSetHelper from "business/EquipmentSetHelper";
 import { SortOrder } from "model/Sorting";
+import { HeroDataArray } from "data/HeroData";
 
 class HeroHelper {
     getPower = (hero: Hero) => {
@@ -20,9 +21,14 @@ class HeroHelper {
     }
 
     computeHeroBA = (hero : Hero) => {
-        const dupBonus = 1.0;
-        const bba = hero.data.bbaMult * hero.level * 4 * dupBonus;
+        const heroData = HeroDataArray.get(hero.data);
+        const dupBonus = this.computeDupBonusBA(hero);
+        const bba = heroData.bbaMult * hero.level * 4 * dupBonus;
         return bba + EquipmentSetHelper.computeBA(hero.equipment);
+    }
+
+    computeDupBonusBA = (hero : Hero) => {
+        return -(1/(0.5*hero.dupLevel+1))+2
     }
 
     //Sort by rank, then level, then name
@@ -36,7 +42,9 @@ class HeroHelper {
             if (result != 0) {
                 return result * lvlOrder;
             }
-            return h1.data.name.localeCompare(h2.data.name) * nameOrder;
+            const h1Data = HeroDataArray.get(h1.data);
+            const h2Data = HeroDataArray.get(h2.data);
+            return h1Data.name.localeCompare(h2Data.name) * nameOrder;
         }
     }
 }

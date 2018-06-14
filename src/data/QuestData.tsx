@@ -40,7 +40,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
             fame: 0
         },
         drop: [],
-        activates: [],
+        activates: ['QUEST06'],
         repeat: null,
         classReq: []
     },
@@ -94,6 +94,48 @@ export const QuestData: { [key: string]: BaseQuest } = {
         duration: new Duration(0, 0, 0, 40),
         ennemies: [],
         reward: {
+            gold: 5,
+            exp: 4,
+            fame: 0
+        },
+        drop: [],
+        activates: ['QUEST07'],
+        repeat: null,
+        classReq: [ClassData.MAGE_CLASS.name]
+    },
+    QUEST06: {
+        id: 'QUEST06',
+        title: 'Exploring the woods',
+        description: 'A walk through the woods. Maybe you will find something interesting along the way.',
+        maxPartySize: 1,
+        duration: new Duration(0, 0, 0, 20),
+        ennemies: [{
+            class: ClassData.BEAST_CLASS,
+            name: 'Feeble Stray Wolf',
+            ba: 5
+        }],
+        reward: {
+            gold: 0,
+            exp: 1,
+            fame: 0
+        },
+        drop: [{ item: ItemData.WOODEN_STICK, rates: [50, 50, 50] }],
+        activates: [],
+        repeat: new Duration(0, 0, 2, 0),
+        classReq: []
+    },
+    QUEST07: {
+        id: 'QUEST07',
+        title: 'The graveyard stakeout',
+        description: 'It seems that object animation is a very specific subset of magic that requires robust basics and is somewhat linked to necromancy. As everyone suspects, necromancy and graveyards are a recipe for trouble. The situation might be more serious than what it seemed at first sight. You decide to organize a stakeout at the graveyard to try and find the culprit and resolve the situation before it blows up.',
+        maxPartySize: 2,
+        duration: new Duration(0, 0, 1, 0),
+        ennemies: [{
+            class: ClassData.RASCAL_CLASS,
+            name: 'Hooded figure',
+            ba: 15
+        }],
+        reward: {
             gold: 10,
             exp: 6,
             fame: 0
@@ -101,8 +143,8 @@ export const QuestData: { [key: string]: BaseQuest } = {
         drop: [],
         activates: [],
         repeat: null,
-        classReq: [ClassData.MAGE_CLASS.name]
-    }
+        classReq: []
+    },
 };
 
 export const QuestDataArray = new IndexedArray<string, BaseQuest>(x => x.id, ...ObjectUtils.getValues(QuestData));

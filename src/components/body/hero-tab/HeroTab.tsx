@@ -5,8 +5,6 @@ import { SortOrder } from 'model/Sorting';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import HeroRecruitButton from 'components/body/hero-tab/HeroRecruitButton';
-import IndexedArray from 'business/collection/IndexedArray';
-import QuestInfo from 'components/body/hero-tab/QuestInfo';
 import TrainInfo from 'components/body/hero-tab/train/TrainInfo';
 import SortButton from 'components/generic/hero-info/SortButton';
 import './HeroTab.css'

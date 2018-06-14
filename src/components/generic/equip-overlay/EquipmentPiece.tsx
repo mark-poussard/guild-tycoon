@@ -78,6 +78,6 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
     }
 
     getPieceId = () => {
-        return GameModelStore.getState().heroes.get(this.props.hero.data.id).equipment[this.props.type];
+        return GameModelStore.getState().heroes.get(this.props.hero.data).equipment[this.props.type];
     }
 }

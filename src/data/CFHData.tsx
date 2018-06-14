@@ -1,5 +1,5 @@
 import CallForHero from "model/CallForHero";
-import { HERO1, HERO2, HERO3 } from "data/HeroData";
+import { HeroData } from "data/HeroData";
 
 export const CFH1: CallForHero = {
     id: 'CFH1',
@@ -7,7 +7,7 @@ export const CFH1: CallForHero = {
     description: 'Call a warrior to your guild',
     price: 0,
     pool: {
-        content: { sp: [HERO1] },
+        content: { sp: [HeroData.HERO1] },
         rates : [{nbr : 100, rarity: 'sp'}]
     }
 }
@@ -18,7 +18,7 @@ export const CFH2: CallForHero = {
     description: 'Call a mage to your guild',
     price: 0,
     pool: {
-        content: { sp: [HERO2] },
+        content: { sp: [HeroData.HERO2] },
         rates : [{nbr : 100, rarity: 'sp'}]
     }
 }
@@ -29,7 +29,7 @@ export const CFH3: CallForHero = {
     description: 'Call a minstrel to your guild',
     price: 0,
     pool: {
-        content: { sp: [HERO3] },
+        content: { sp: [HeroData.HERO3] },
         rates : [{nbr : 100, rarity: 'sp'}]
     }
 }

@@ -1,20 +1,12 @@
 import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
-import Dungeon, { DungeonHelper } from 'model/Dungeon';
 import Hero from 'model/Hero';
 import './SelectHeroOverlay.css'
 import GameModelStore from 'store/game-model/GameModelStore';
-import IndexedArray from 'business/collection/IndexedArray';
 import HeroInfo from 'components/body/hero-tab/HeroInfo';
-import QuestStore from 'store/quest/QuestStore';
-import QuestGenerator from 'store/quest/QuestGenerator';
-import RankStar from 'components/generic/hero-info/RankStar';
-import QuestWrapper from 'model/QuestWrapper'
 import { SortOrder } from 'model/Sorting';
 import SortButton from 'components/generic/hero-info/SortButton';
 import HeroHelper from 'business/HeroHelper';
-import QuestHelper from 'business/QuestHelper';
-import Quest from 'model/Quest';
 import Overlay from 'components/generic/Overlay';
 import HeroSelectButton from 'components/generic/select-hero-overlay/HeroSelectButton';
 
@@ -35,12 +27,10 @@ interface ISelectHeroOverlayState {
 
 export default class SelectHeroOverlay extends React.Component<ISelectHeroOverlayProps, ISelectHeroOverlayState>{
     storeSubscribe: fbEmitter.EventSubscription;
-    questGenerator: QuestGenerator;
 
     constructor(props: ISelectHeroOverlayProps) {
         super(props);
         this.state = { heroes: GameModelStore.getState().heroes.asArray(), selectedHeroes: new Set<Hero>(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
-        this.questGenerator = new QuestGenerator();
     }
 
     render() {
