@@ -1,0 +1,7 @@
+.equipment-piece{
+    border : 2px solid black;
+}
+
+.drag-hover{
+    border-color: white;
+}

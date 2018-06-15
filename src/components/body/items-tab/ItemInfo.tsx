@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Item from 'model/items/Item';
 import ToolTip from 'components/generic/ToolTip';
+import './ItemInfo.css';
+import Equipment from 'model/items/Equipment';
 
 interface IItemInfoProps{
     item : Item;
@@ -14,24 +16,41 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
 
     render() {
         return (
-            <div onDragStart={this.onItemDrag} draggable>
+            <div className='item-container' onDragStart={this.onItemDrag} draggable>
             <ToolTip toolTipContent={this.renderItemInfo()}>
+            <div className='item-img-container'>
                 <img src={this.props.item.icon} />
-                {this.props.quantity}
+                <div className='item-quantity-txt'>{this.props.quantity}</div>
+                </div>
             </ToolTip>
             </div>
         );
     }
 
     renderItemInfo = () => {
+        let statsInfo;
+        if(this.props.item instanceof Equipment){
+            const equipment = this.props.item as Equipment;
+            statsInfo = (
+                <div className='item-stats'>
+                    <div>
+                    Battle Ability : {equipment.ba}
+                    </div>
+                    <div>
+                    Type : {equipment.type}
+                    </div>
+                </div>
+            );
+        }
         return (
             <div>
-                <div>
+                <div className='item-name'>
                     {this.props.item.name}
                 </div>
-                <div>
+                <div className='item-description'>
                     {this.props.item.description}
                 </div>
+                {statsInfo}
             </div>
         )
     }

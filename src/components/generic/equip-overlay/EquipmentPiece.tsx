@@ -8,6 +8,9 @@ import EquipmentSetHelper from 'business/EquipmentSetHelper';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import GameModelStore from 'store/game-model/GameModelStore';
+import './EquipmentPiece.css'
+
+export const NO_ICON_PATH_SPECIFIC = (type: keyof EquipmentSet) => `img/items/none_${type}.png`
 
 interface IEquipmentPieceProps {
     hero: Hero;
@@ -16,6 +19,7 @@ interface IEquipmentPieceProps {
 
 interface IEquipmentPieceState {
     pieceId : string;
+    isDropHover : boolean
 }
 
 export default class EquipmentPiece extends React.Component<IEquipmentPieceProps, IEquipmentPieceState>{
@@ -23,7 +27,7 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
 
     constructor(props : IEquipmentPieceProps){
         super(props);
-        this.state = {pieceId : this.getPieceId()};
+        this.state = {pieceId : this.getPieceId(), isDropHover:false};
     }
 
     componentDidMount() {
@@ -39,16 +43,20 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
     }
 
     render() {
+        let classname = 'equipment-piece';
+        if(this.state.isDropHover){
+            classname += ' drag-hover';
+        }
         const piece = ItemDataArray.get(this.state.pieceId);
         let imgElement;
         if (piece) {
-            imgElement = <img src={piece.icon} />
+            imgElement = <img className={classname} src={piece.icon} />
         }
         else {
-            imgElement = <img src={NO_ICON_PATH} />
+            imgElement = <img className={classname} src={NO_ICON_PATH_SPECIFIC(this.props.type)} />
         }
         return (
-            <div onDrop={this.onDrop} onDragOver={this.preventDefault} onDragEnter={this.preventDefault}>
+            <div onDrop={this.onDrop} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnter={this.preventDefault}>
                 {imgElement}
             </div>
         );
@@ -56,25 +64,46 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
 
     onDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
+        this.setState({isDropHover : false});
         const itemId = e.dataTransfer.getData("itemId");
-        const item = ItemDataArray.get(itemId);
-        if (item instanceof Equipment) {
-            const equipment = item as Equipment;
-            if (EquipmentSetHelper.isEquipableInSlot(equipment, this.props.type)) {
+        if (this.checkItemValidity(itemId)) {
                 GameModelDispatcher.dispatch({
                     type: GameModelActionTypes.EQUIP_ITEM,
                     payload: {
                         hero: this.props.hero,
-                        itemId: item.id,
+                        itemId: itemId,
                         slot: this.props.type
                     }
                 })
+        }
+    }
+
+    checkItemValidity = (itemId : string) => {
+        const item = ItemDataArray.get(itemId);
+        if (item instanceof Equipment) {
+            const equipment = item as Equipment;
+            if (EquipmentSetHelper.isEquipableInSlot(equipment, this.props.type)) {
+                return true;
             }
         }
+        return false;
     }
 
     preventDefault = (e : React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
+    }
+
+    onDragOver = (e : React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const itemId = e.dataTransfer.getData("itemId");
+        if(this.checkItemValidity(itemId)){
+            this.setState({isDropHover : true});
+        }
+    }
+
+    onDragLeave = (e : React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        this.setState({isDropHover : false});
     }
 
     getPieceId = () => {

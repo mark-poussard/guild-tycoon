@@ -3,6 +3,25 @@
     display: inline-block;
 }
 
+.tooltip-displayed{
+    visibility: visible;
+}
+
+.tooltip-hidden{
+    visibility: hidden;
+}
+
+.tooltip-content{
+    position:absolute;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    
+    top: -5px;
+    left: 105%; 
+}
+
 /* Tooltip text */
 .tooltip .tooltiptext {
     visibility: hidden;

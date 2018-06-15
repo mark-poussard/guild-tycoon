@@ -3,6 +3,7 @@ import Hero from 'model/Hero';
 import EquipmentPiece from 'components/generic/equip-overlay/EquipmentPiece';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
+import './EquipmentInfo.css'
 
 interface IEquipmentInfoProps{
     hero : Hero;
@@ -12,7 +13,7 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
     render() {
         return (
             <div>
-            <table>
+            <table className='equip-table center'>
                 <thead>
                 </thead>
                 <tbody>
@@ -58,7 +59,7 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
                     </tr>
                 </tbody>
                 </table>
-                <button onClick={this.removeAll}>Remove all</button>
+                <button className='input-center' onClick={this.removeAll}>Remove all</button>
                 </div>
         );
     }

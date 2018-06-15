@@ -1,0 +1,39 @@
+.item-container{
+    margin:5px;
+    height:35px;
+    width:35px;
+  border-style:solid;
+  border-width: 2px;
+  border-color: #A64E00;
+  background-color: #FF9A40;
+  border-radius: 4px;
+  position:relative;
+  float: left;
+}
+
+.item-img-container{
+    position: relative;
+    text-align: center;
+    color:white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.item-quantity-txt{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.item-name{
+    color : lightgreen;
+}
+
+.item-description{
+    margin-top: 5px;
+    color : lightgray;
+}
+
+.item-stats{
+    margin-top: 5px;
+    color:lightblue;
+}
