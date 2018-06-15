@@ -22,7 +22,7 @@ export default class ImprovementsTab extends React.Component<ImprovementsTabProp
     render() {
         return (
             <div>
-                <h2>{"Guild improvements"}</h2>
+                <h2>Guild improvements</h2>
                 {this.renderImprovements()}
             </div>
         );

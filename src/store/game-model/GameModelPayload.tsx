@@ -62,6 +62,10 @@ export interface EndQuestWinPayload {
     drops: QuestDrop[];
 }
 
+export interface RepeatQuestPayload {
+    quest: Quest;
+}
+
 export interface RegisterCFHResultPayload {
     cfh: CallForHero;
     hero: Hero;

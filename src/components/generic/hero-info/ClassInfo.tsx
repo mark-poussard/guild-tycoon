@@ -23,7 +23,7 @@ export default class ClassInfo extends React.Component<IClassInfoProps>{
 
     render(){
         return (
-            <ToolTip toolTipContent={this.renderClassDetails()}>
+            <ToolTip toolTipContent={this.renderClassDetails()} width={120}>
             {this.classList[0]}
             </ToolTip>
         );

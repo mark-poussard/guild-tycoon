@@ -115,7 +115,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
             ba: 5
         }],
         reward: {
-            gold: 0,
+            gold: 1,
             exp: 1,
             fame: 0
         },

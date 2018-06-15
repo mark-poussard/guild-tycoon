@@ -19,7 +19,7 @@ export default class CallTab extends React.Component<{}, ICallTabState>{
     render() {
         return (
             <div>
-                <h3>Perform a Call For Heroes !</h3>
+                <h2>Perform a Call For Heroes !</h2>
                 {this.renderAvailableCFH()}
             </div>
         );

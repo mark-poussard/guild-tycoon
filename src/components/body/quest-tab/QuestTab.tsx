@@ -4,11 +4,7 @@ import { QuestDataArray } from 'data/QuestData';
 import Quest from 'model/Quest';
 import QuestInfo from 'components/body/quest-tab/QuestInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
-import GameSwitches from 'model/GameSwitches';
 import Overlay from 'components/generic/Overlay';
-import BattleEngine from 'business/BattleEngine';
-import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
-import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
 import Hero from 'model/Hero';
@@ -16,6 +12,7 @@ import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHero
 import QuestDrop from 'model/QuestDrop';
 import EndQuestResult from 'business/EndQuestResult';
 import ItemInfo from 'components/body/items-tab/ItemInfo';
+import ObjectUtils from 'business/utils/ObjectUtils';
 
 interface IQuestTabState {
     quests: Quest[];
@@ -29,7 +26,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     constructor(props: {}) {
         super(props);
         this.state = {
-            quests: GameModelStore.getState().quests.slice(),
+            quests: ObjectUtils.getValues(GameModelStore.getState().quests),
             questResult: null,
             questSelect: null
         };
@@ -38,7 +35,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     render() {
         return (
             <div>
-                <h3 style={{ verticalAlign: 'middle' }}>Available guild quests</h3>
+                <h2>Available guild quests</h2>
                 {this.renderQuests()}
                 {this.renderQuestEndOverlay()}
                 {this.renderQuestStartOverlay()}
@@ -49,7 +46,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     componentWillMount() {
         this.gameStoreListener = GameModelStore.addListener(() => {
             this.setState({
-                quests: GameModelStore.getState().quests.slice()
+                quests: ObjectUtils.getValues(GameModelStore.getState().quests)
             });
         });
     }
@@ -84,7 +81,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
                         this.renderQuestWin(quest)}
                     {!this.state.questResult.result &&
                         this.renderQuestLose(quest)}
-                    <button onClick={() => this.setState({ questResult: null })}>Acknowledge</button>
+                    <button className="input-center" onClick={() => this.setState({ questResult: null })}>Acknowledge</button>
                 </Overlay>
             );
         }
@@ -117,16 +114,18 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
                 <h2>WIN !</h2>
                 <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
                 <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
-                {this.renderDropInfo(questResult.drops)}
+                <div>
+                    {this.renderDropInfo(questResult.drops)}
+                </div>
             </div>
         );
     }
 
-    renderDropInfo = (drops : QuestDrop[]) => {
-        const result : JSX.Element[] = [];
+    renderDropInfo = (drops: QuestDrop[]) => {
+        const result: JSX.Element[] = [];
         let i = 0;
-        for(let drop of drops){
-            result.push(<ItemInfo key={`ITEM_${i++}`} item={drop.item} quantity={drop.quantity}/>)
+        for (let drop of drops) {
+            result.push(<ItemInfo key={`ITEM_${i++}`} item={drop.item} quantity={drop.quantity} />)
         }
         return result;
     }

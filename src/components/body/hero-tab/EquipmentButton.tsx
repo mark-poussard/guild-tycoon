@@ -20,7 +20,7 @@ export default class EquipmentButton extends React.Component<IEquipmentButtonPro
     render(){
         return (
             <>
-                <button onClick={this.showOverlay}>Equipment</button>
+                <button className='input-center' onClick={this.showOverlay}>Equipment</button>
                 <EquipmentOverlay display={this.state.display} doCancelSelection={() => this.setState({display : false})} hero={this.props.hero}/>
             </>
         )

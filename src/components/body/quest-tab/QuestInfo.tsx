@@ -1,14 +1,15 @@
 import * as React from 'react';
+import * as fbEmitter from 'fbemitter';
 import Quest from 'model/Quest';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
-import Overlay from 'components/generic/Overlay';
-import { ProgressBar } from '../../generic/quest/ProgressBar';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
-import QuestHelper from 'business/QuestHelper';
 import { QuestDataArray } from 'data/QuestData';
 import BaseQuest from 'model/BaseQuest';
-import EnnemyInfo from 'components/generic/EnnemyInfo';
+import Timer from 'components/generic/Timer';
+import QuestProgressBar from 'components/generic/quest/QuestProgressBar';
+import EnnemyInfo from 'components/generic/ennemy/EnnemyInfo';
+import GameModelStore from 'store/game-model/GameModelStore';
 
 interface IQuestInfoProps {
     quest: Quest;
@@ -17,19 +18,32 @@ interface IQuestInfoProps {
 }
 
 interface IQuestInfoState {
-    progress: number;
+    quest: Quest;
+    questEnded: boolean;
 }
 
 export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestInfoState>{
-    intervalId: number;
     questData: BaseQuest;
+    gameStoreListener: fbEmitter.EventSubscription;
 
     constructor(props: IQuestInfoProps) {
         super(props);
         this.questData = QuestDataArray.get(this.props.quest.id);
-        this.state = { progress: this.computeProgress(this.props.quest) };
-        this.intervalId = null;
-        this.updateAsyncProgress();
+        this.state = { quest: this.props.quest, questEnded: false };
+    }
+
+    componentWillMount() {
+        this.gameStoreListener = GameModelStore.addListener(() => {
+            this.setState({
+                quest: GameModelStore.getState().quests[this.props.quest.id]
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        if (this.gameStoreListener) {
+            this.gameStoreListener.remove();
+        }
     }
 
     render() {
@@ -64,85 +78,56 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderEnnemyCells = () => {
-        if(!this.questData.ennemies){
+        if (!this.questData.ennemies) {
             return null;
         }
-        const result : JSX.Element[] = [];
-        let i=0;
-        if(this.questData.ennemies.length > 0){
+        const result: JSX.Element[] = [];
+        let i = 0;
+        if (this.questData.ennemies.length > 0) {
             result.push(<td key={`ENNEMY_${i++}`}>Ennemies - </td>);
         }
-        for(let ennemy of this.questData.ennemies){
+        for (let ennemy of this.questData.ennemies) {
             result.push(<td key={`ENNEMY_${i++}`}><EnnemyInfo ennemy={ennemy} /></td>)
         }
         return result;
     }
 
     renderQuestAction = () => {
-        if (!this.props.quest.startedAt) {
+        if (!this.state.quest.startedAt) {
             return (
                 <button onClick={this.startQuest}>Start</button>
             );
         }
-        else if (!this.props.quest.completedAt && this.state.progress < 100) {
+        else if (!this.state.quest.completedAt && !this.state.questEnded) {
             return (
-                <ProgressBar progress={this.state.progress} />
+                <QuestProgressBar quest={this.state.quest} doQuestOver={() => this.setState({ questEnded: true })} />
             );
         }
-        else if (!this.props.quest.completedAt && this.state.progress == 100) {
+        else if (!this.state.quest.completedAt && this.state.questEnded) {
             return (
                 <button onClick={this.endQuest}>Finish quest</button>
             );
         }
-    }
-
-    componentWillUnmount() {
-        this.stopProgressRefresh();
-    }
-
-    componentDidUpdate(){
-        this.updateAsyncProgress();
-    }
-
-    updateAsyncProgress = () => {
-        if(this.intervalId == null && !this.props.quest.completedAt && this.state.progress < 100){
-            this.startProgressRefresh();
-        }
-        else if(!this.props.quest.completedAt && this.state.progress == 100){
-            this.stopProgressRefresh();
+        else if (this.questData.repeat != null) {
+            return <Timer until={new Date(this.state.quest.completedAt + this.questData.repeat.toMs())} doEnd={this.repeatQuest} />
         }
     }
 
-    startProgressRefresh = () => {
-        this.intervalId = window.setInterval(() => {
-            this.setState({
-                progress: this.computeProgress(this.props.quest)
-            });
-            this.updateAsyncProgress();
-        }, 100);
-    }
-
-    stopProgressRefresh = () => {
-        if (this.intervalId != null) {
-            window.clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
-    }
-
-    computeProgress = (quest: Quest) => {
-        if (quest.startedAt != null) {
-            const t = new Date().getTime() - quest.startedAt;
-            const duration = this.questData.duration.toMs();
-            return Math.min(t / duration * 100, 100);
-        }
-        return 0;
+    repeatQuest = () => {
+        GameModelDispatcher.dispatch({
+            type: GameModelActionTypes.REPEAT_QUEST,
+            payload: {
+                quest: this.state.quest
+            }
+        })
     }
 
     endQuest = () => {
-        this.props.doEndQuest(this.props.quest);
+        this.setState({ questEnded: false });
+        this.props.doEndQuest(this.state.quest);
     }
 
     startQuest = () => {
-        this.props.doSelectQuest(this.props.quest);
+        this.props.doSelectQuest(this.state.quest);
     }
 }

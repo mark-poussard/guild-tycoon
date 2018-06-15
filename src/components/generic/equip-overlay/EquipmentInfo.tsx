@@ -4,71 +4,81 @@ import EquipmentPiece from 'components/generic/equip-overlay/EquipmentPiece';
 import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import './EquipmentInfo.css'
+import BaseHero from 'model/BaseHero';
+import { HeroDataArray } from 'data/HeroData';
+import ClassInfo from '../hero-info/ClassInfo';
 
-interface IEquipmentInfoProps{
-    hero : Hero;
+interface IEquipmentInfoProps {
+    hero: Hero;
 }
 
 export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
+    heroData: BaseHero;
+    constructor(props: IEquipmentInfoProps) {
+        super(props);
+        this.heroData = HeroDataArray.get(this.props.hero.data);
+    }
     render() {
         return (
             <div>
-            <table className='equip-table center'>
-                <thead>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'head'}/>
+                <h2>{this.heroData.name}</h2>
+                <ClassInfo class={this.heroData.class} forRank={this.props.hero.rank} />
+                <table className='equip-table center'>
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'head'} />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'hands'} />
+                            </td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'torso'} />
+                            </td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'hands'} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'legs'} />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'feet'} />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr><td>
+                            <EquipmentPiece hero={this.props.hero} type={'rightHand'} />
                         </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'hands'}/>
-                        </td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'torso'}/>
-                        </td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'hands'}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'legs'}/>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'feet'}/>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr><td>
-                        <EquipmentPiece hero={this.props.hero} type={'rightHand'}/>
-                        </td>
-                        <td></td>
-                        <td>
-                        <EquipmentPiece hero={this.props.hero} type={'leftHand'}/>
-                        </td>
-                    </tr>
-                </tbody>
+                            <td></td>
+                            <td>
+                                <EquipmentPiece hero={this.props.hero} type={'leftHand'} />
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
                 <button className='input-center' onClick={this.removeAll}>Remove all</button>
-                </div>
+            </div>
         );
     }
 
     removeAll = () => {
         GameModelDispatcher.dispatch({
-            type : GameModelActionTypes.REMOVE_ALL_ITEMS,
-            payload : {
-                hero : this.props.hero
+            type: GameModelActionTypes.REMOVE_ALL_ITEMS,
+            payload: {
+                hero: this.props.hero
             }
         });
     }

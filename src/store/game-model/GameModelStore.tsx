@@ -15,7 +15,8 @@ import GameModelPayload, {
     RegisterCFHResultPayload,
     EndQuestWinPayload,
     EquipItemPayload,
-    RemoveAllItemsPayload
+    RemoveAllItemsPayload,
+    RepeatQuestPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -147,20 +148,18 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.START_QUEST:
                 {
-                    //Modifying state by side effect
                     payload = action.payload as StartQuestPayload;
-                    payload.quest.startedAt = new Date().getTime();
-                    for (let i = 0; i < payload.heroes.length; i++) {
-                        payload.heroes[i].questId = payload.quest.id;
+                    newState.quests[payload.quest.id].startedAt = new Date().getTime();
+                    for (let hero of payload.heroes) {
+                        newState.heroes.get(hero.data).questId = payload.quest.id;
                     }
                     break;
                 }
 
             case GameModelActionTypes.END_QUEST_SUCCEED:
                 {
-                    //Modifying state by side effect
                     payload = action.payload as EndQuestWinPayload;
-                    payload.quest.completedAt = new Date().getTime();
+                    newState.quests[payload.quest.id].completedAt = new Date().getTime();
                     //Remove ended quest id from participating heroes
                     for (let hero of newState.heroes) {
                         if (hero.questId === payload.quest.id) {
@@ -178,22 +177,23 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         }
                         newState.items[drop.item.id] += drop.quantity;
                     }
-                    //Add switch
+                    //Add switch & stats
                     newState.gameSwitches[payload.quest.id] = true;
+                    if (!newState.statistics.hasOwnProperty(payload.quest.id)) {
+                        newState.statistics[payload.quest.id] = 0;
+                    }
+                    newState.statistics[payload.quest.id] += 1;
                     //Remove from active quests if non-repeatable
                     if (questData.repeat == null) {
-                        let index = newState.quests.indexOf(payload.quest);
-                        if (index > -1) {
-                            newState.quests.splice(index, 1);
-                        }
+                        delete newState.quests[payload.quest.id];
                     }
                     //Add activated quests
                     for (let questId of questData.activates) {
-                        newState.quests.push({
+                        newState.quests[questId] = {
                             id: questId,
                             completedAt: null,
                             startedAt: null
-                        });
+                        }
                     }
                     break;
                 }
@@ -202,13 +202,21 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     //Modifying state by side effect
                     payload = action.payload as EndQuestFailPayload;
-                    payload.quest.startedAt = null;
-                    payload.quest.completedAt = null;
+                    newState.quests[payload.quest.id].startedAt = null;
+                    newState.quests[payload.quest.id].completedAt = null;
                     for (let hero of newState.heroes) {
                         if (hero.questId === payload.quest.id) {
                             hero.questId = null;
                         }
                     }
+                    break;
+                }
+
+            case GameModelActionTypes.REPEAT_QUEST:
+                {
+                    payload = action.payload as RepeatQuestPayload;
+                    newState.quests[payload.quest.id].startedAt = null;
+                    newState.quests[payload.quest.id].completedAt = null;
                     break;
                 }
 
@@ -238,21 +246,21 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     if (payload.slot === 'leftHand' || payload.slot === 'rightHand') {
                         const otherHand = (payload.slot === 'leftHand') ? 'rightHand' : 'leftHand';
                         const otherHandItemId = payload.hero.equipment[otherHand];
-                        if(otherHandItemId){
+                        if (otherHandItemId) {
                             const otherHandItem = ItemDataArray.get(otherHandItemId) as Equipment;
                             if (otherHandItem.type === EquipmentType.TWO_HANDED
                                 || item.type === EquipmentType.TWO_HANDED) {
-                                    slotsToRemove.push(otherHand);
+                                slotsToRemove.push(otherHand);
                             }
                         }
                     }
                     slotsToRemove.push(payload.slot);
-                    for(let slotToRemove of slotsToRemove){
+                    for (let slotToRemove of slotsToRemove) {
                         //Remove slot method
                         const slotItemId = payload.hero.equipment[slotToRemove];
-                        if(slotItemId){
+                        if (slotItemId) {
                             newState.heroes.get(payload.hero.data).equipment[slotToRemove] = null;
-                            if(!newState.items.hasOwnProperty(slotItemId)){
+                            if (!newState.items.hasOwnProperty(slotItemId)) {
                                 newState.items[slotItemId] = 0;
                             }
                             newState.items[slotItemId] += 1;
@@ -263,16 +271,16 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     break;
                 }
 
-                case GameModelActionTypes.REMOVE_ALL_ITEMS:
+            case GameModelActionTypes.REMOVE_ALL_ITEMS:
                 {
                     payload = action.payload as RemoveAllItemsPayload;
-                    const equipmentSlots : (keyof EquipmentSet)[] = ["head", "torso", "hands", "legs", "feet", "leftHand", "rightHand"];
-                    for(let slot of equipmentSlots){
+                    const equipmentSlots: (keyof EquipmentSet)[] = ["head", "torso", "hands", "legs", "feet", "leftHand", "rightHand"];
+                    for (let slot of equipmentSlots) {
                         //Remove slot method
                         const slotItemId = payload.hero.equipment[slot];
-                        if(slotItemId){
+                        if (slotItemId) {
                             newState.heroes.get(payload.hero.data).equipment[slot] = null;
-                            if(!newState.items.hasOwnProperty(slotItemId)){
+                            if (!newState.items.hasOwnProperty(slotItemId)) {
                                 newState.items[slotItemId] = 0;
                             }
                             newState.items[slotItemId] += 1;

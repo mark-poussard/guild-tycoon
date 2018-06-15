@@ -4,22 +4,22 @@ import GameModelStore from 'store/game-model/GameModelStore';
 import ItemInfo from 'components/body/items-tab/ItemInfo';
 import { ItemData, ItemDataArray } from 'data/ItemData';
 
-interface IItemsTabState{
-    items : {[id : string] : number};
+interface IItemsTabState {
+    items: { [id: string]: number };
 }
 
 export default class ItemsTab extends React.Component<{}, IItemsTabState>{
     storeSubscribe: fbEmitter.EventSubscription;
 
-    constructor(props : {}){
+    constructor(props: {}) {
         super(props);
-        this.state = {items : Object.assign({}, GameModelStore.getState().items)};
+        this.state = { items: Object.assign({}, GameModelStore.getState().items) };
     }
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                items : Object.assign({}, GameModelStore.getState().items)
+                items: Object.assign({}, GameModelStore.getState().items)
             });
         });
     }
@@ -28,20 +28,21 @@ export default class ItemsTab extends React.Component<{}, IItemsTabState>{
         this.storeSubscribe.remove();
     }
 
-    render(){
+    render() {
         return (
-        <div>
-            {this.renderItems()}
-        </div>
+            <div style={{ width: '100%' }}>
+                <h2>Items</h2>
+                {this.renderItems()}
+            </div>
         );
     }
 
     renderItems = () => {
-        const result : JSX.Element[] = [];
-        let i=0;
-        for(let objectId in this.state.items){
-            if(this.state.items[objectId] > 0){
-                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]}/>)
+        const result: JSX.Element[] = [];
+        let i = 0;
+        for (let objectId in this.state.items) {
+            if (this.state.items[objectId] > 0) {
+                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]} />)
             }
         }
         return result;
