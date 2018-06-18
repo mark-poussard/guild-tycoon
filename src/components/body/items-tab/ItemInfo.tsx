@@ -3,10 +3,15 @@ import Item from 'model/items/Item';
 import ToolTip from 'components/generic/ToolTip';
 import './ItemInfo.css';
 import Equipment from 'model/items/Equipment';
+import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
+import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
+import Hero from 'model/Hero';
+import ItemHelper from 'business/ItemHelper';
 
 interface IItemInfoProps{
     item : Item;
     quantity : number;
+    equipHero ?: Hero;
 }
 
 export default class ItemInfo extends React.Component<IItemInfoProps> {
@@ -16,7 +21,7 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
 
     render() {
         return (
-            <div className='item-container' onDragStart={this.onItemDrag} draggable>
+            <div className='item-container' onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>
             <ToolTip toolTipContent={this.renderItemInfo()}>
             <div className='item-img-container'>
                 <img src={this.props.item.icon} />
@@ -57,6 +62,19 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
 
     onItemDrag = (event: React.DragEvent<HTMLDivElement>) => {
         event.dataTransfer.setData("itemId", this.props.item.id);
+    }
+
+    onDoubleClick = () => {
+        if(this.props.equipHero && ItemHelper.isEquipable(this.props.item)){
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.EQUIP_ITEM,
+                payload: {
+                    hero: this.props.equipHero,
+                    itemId: this.props.item.id,
+                    slot: ItemHelper.computeSlotForItem(this.props.item, this.props.equipHero)
+                }
+            })
+        }
     }
 
 }

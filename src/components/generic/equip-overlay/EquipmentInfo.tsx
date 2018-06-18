@@ -7,6 +7,9 @@ import './EquipmentInfo.css'
 import BaseHero from 'model/BaseHero';
 import { HeroDataArray } from 'data/HeroData';
 import ClassInfo from '../hero-info/ClassInfo';
+import ClassHelper from 'business/ClassHelper';
+import HeroHelper from 'business/HeroHelper';
+import RankStar from 'components/generic/hero-info/RankStar';
 
 interface IEquipmentInfoProps {
     hero: Hero;
@@ -22,7 +25,15 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
         return (
             <div>
                 <h2>{this.heroData.name}</h2>
-                <ClassInfo class={this.heroData.class} forRank={this.props.hero.rank} />
+                <div>
+                    <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
+                    </div>
+                    <div>
+                    Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />
+                </div>
+                <div>
+                    {this.renderBattleAbility()}
+                    </div>
                 <table className='equip-table center'>
                     <thead>
                     </thead>
@@ -81,5 +92,12 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
                 hero: this.props.hero
             }
         });
+    }
+
+    renderBattleAbility = () => {
+        const ba = HeroHelper.computeHeroBA(this.props.hero);
+        return (
+            <span>{`Battle Ability : ${ba}`}</span>
+        );
     }
 }

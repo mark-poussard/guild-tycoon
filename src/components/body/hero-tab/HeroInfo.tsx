@@ -10,6 +10,7 @@ import HeroHelper from 'business/HeroHelper';
 import ClassInfo from 'components/generic/hero-info/ClassInfo';
 import BaseHero from 'model/BaseHero';
 import { HeroDataArray } from 'data/HeroData';
+import ClassHelper from 'business/ClassHelper';
 
 interface IHeroInfoProps {
     hero: Hero;
@@ -40,10 +41,10 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
                     <div className="icon"><img src={this.heroData.imgUrl} /></div>
                 </div>
                 <div className="divider">
-                    <ClassInfo class={this.heroData.class} forRank={this.props.hero.rank}/>
+                    <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
                 </div>
                 <div className="divider">
-                    <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
+                Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)}/>
                 </div>
                 <div className="divider">
                     {this.renderBattleAbility()}

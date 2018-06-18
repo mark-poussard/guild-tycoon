@@ -17,7 +17,7 @@ interface IHeroTabProps {
 
 interface IHeroTabState {
     heroes: Hero[];
-    isRoomLeft: boolean;
+    guildSize : number;
     rankOrder: SortOrder;
     lvlOrder: SortOrder;
     nameOrder: SortOrder;
@@ -28,7 +28,10 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
 
     constructor(props: IHeroTabProps) {
         super(props);
-        this.state = { heroes: GameModelStore.getState().heroes.asArray(), isRoomLeft: this.computeIsRoomLeft(), rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC };
+        this.state = { 
+            heroes: GameModelStore.getState().heroes.asArray(),
+            guildSize :  GameModelStore.getState().guildSize,
+            rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC};
     }
 
     render() {
@@ -42,6 +45,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
                 </div>
                 {this.renderHeroes()}
                 {this.renderHeroRecruit()}
+                <div className='guild-occupation'>Guild occupation {this.state.heroes.length}/{this.state.guildSize}</div>
             </div>
         );
     }
@@ -50,7 +54,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
                 heroes: GameModelStore.getState().heroes.asArray(),
-                isRoomLeft: this.computeIsRoomLeft()
+                guildSize :  GameModelStore.getState().guildSize
             });
         });
     }
@@ -60,7 +64,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     computeIsRoomLeft = () => {
-        return GameModelStore.getState().guildSize > GameModelStore.getState().heroes.size();
+        return this.state.guildSize > this.state.heroes.length;
     }
 
     renderHeroes = () => {
@@ -78,7 +82,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     renderHeroRecruit = () => {
-        if (this.state.isRoomLeft) {
+        if (this.computeIsRoomLeft()) {
             return (
                 <HeroRecruitButton />
             );

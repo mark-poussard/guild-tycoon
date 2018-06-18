@@ -18,7 +18,7 @@ export default class EquipmentOverlay extends React.Component<IEquipmentOverlayP
                     <EquipmentInfo hero={this.props.hero}/>
                 </div>
                 <div style={{width:'50%', float:'left'}}>
-                    <ItemsTab />
+                    <ItemsTab equipHero={this.props.hero}/>
                 </div>
             </Overlay>
         );

@@ -3,12 +3,17 @@ import * as fbEmitter from 'fbemitter';
 import GameModelStore from 'store/game-model/GameModelStore';
 import ItemInfo from 'components/body/items-tab/ItemInfo';
 import { ItemData, ItemDataArray } from 'data/ItemData';
+import Hero from 'model/Hero';
+
+interface IItemsTabProps{
+    equipHero ?: Hero;
+}
 
 interface IItemsTabState {
     items: { [id: string]: number };
 }
 
-export default class ItemsTab extends React.Component<{}, IItemsTabState>{
+export default class ItemsTab extends React.Component<IItemsTabProps, IItemsTabState>{
     storeSubscribe: fbEmitter.EventSubscription;
 
     constructor(props: {}) {
@@ -42,7 +47,7 @@ export default class ItemsTab extends React.Component<{}, IItemsTabState>{
         let i = 0;
         for (let objectId in this.state.items) {
             if (this.state.items[objectId] > 0) {
-                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]} />)
+                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]} equipHero={this.props.equipHero} />)
             }
         }
         return result;

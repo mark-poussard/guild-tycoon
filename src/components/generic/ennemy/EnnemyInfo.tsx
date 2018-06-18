@@ -2,6 +2,7 @@ import * as React from 'react';
 import Ennemy from 'model/BattleEntity';
 import ClassInfo from 'components/generic/hero-info/ClassInfo';
 import './EnnemyInfo.css'
+import ClassHelper from 'business/ClassHelper';
 
 interface IEnnemyInfoProps {
     ennemy: Ennemy;
@@ -22,7 +23,7 @@ export default class EnnemyInfo extends React.Component<IEnnemyInfoProps>{
                     Battle Ability : {this.props.ennemy.ba}
                 </div>
                 <div>
-                    Class : <ClassInfo class={this.props.ennemy.class} />
+                    Class : <ClassInfo classList={ClassHelper.computeClassList(this.props.ennemy.class)} />
                 </div>
             </div>
         );
