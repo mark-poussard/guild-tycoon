@@ -16,7 +16,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 1,
-            fame: 0
+            crystal: 0
         },
         drop: [{ item: ItemData.WOODEN_STICK, rates: [100] }],
         activates: ['QUEST02', 'QUEST03', 'QUEST04'],
@@ -37,13 +37,14 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            fame: 0
+            crystal: 0
         },
         drop: [],
         activates: ['QUEST06'],
         repeat: null,
         classReq: []
     },
+    // Expected lvl : 2
     QUEST03: {
         id: 'QUEST03',
         title: 'The haunted graveyard',
@@ -58,7 +59,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            fame: 0
+            crystal: 0
         },
         drop: [],
         activates: ['QUEST05'],
@@ -79,13 +80,14 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            fame: 0
+            crystal: 0
         },
         drop: [],
         activates: ['QUEST08'],
         repeat: null,
         classReq: []
     },
+    // Expected lvl : 3
     QUEST05: {
         id: 'QUEST05',
         title: 'Researching the art of object animation',
@@ -95,14 +97,15 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [],
         reward: {
             gold: 5,
-            exp: 4,
-            fame: 0
+            exp: 3,
+            crystal: 0
         },
         drop: [],
         activates: ['QUEST07'],
         repeat: null,
         classReq: [ClassData.MAGE_CLASS.name]
     },
+    // Expected lvl : 2
     QUEST06: {
         id: 'QUEST06',
         title: 'Exploring the woods',
@@ -117,13 +120,14 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 1,
             exp: 1,
-            fame: 0
+            crystal: 0
         },
         drop: [{ item: ItemData.WOODEN_STICK, rates: [50, 50, 50] }],
         activates: [],
         repeat: new Duration(0, 0, 2, 0),
         classReq: []
     },
+    // Expected lvl : 4
     QUEST07: {
         id: 'QUEST07',
         title: 'The graveyard stakeout',
@@ -136,40 +140,41 @@ export const QuestData: { [key: string]: BaseQuest } = {
             ba: 20
         }],
         reward: {
-            gold: 10,
-            exp: 6,
-            fame: 0
+            gold: 8,
+            exp: 4,
+            crystal: 0
         },
         drop: [],
         activates: [],
         repeat: null,
         classReq: []
     },
+    // Expected lvl : 3
     QUEST08: {
         id: 'QUEST08',
-        title: 'A bad day for a carpenter',
-        description: 'Old farmer Mc.Pearson has a nephew, Mike, who has been attacked by bandits on his way home from work. Mike is a young talented carpenter and offers to come work for your guild in exchange of defeating those bandits.',
+        title: 'The carpenter\'s troubles',
+        description: 'Old farmer Mc.Pearson\'s nephew Mike is being threatened by a band of local thugs. Mike is a young talented carpenter and offers to come work on improvements for your guild in exchange for defeating those bandits.',
         maxPartySize: 2,
         duration: new Duration(0, 0, 0, 40),
         ennemies: [{
             class: ClassData.RASCAL_CLASS,
-            name: 'Bandit',
+            name: 'Thug',
             ba: 8
         },
         {
             class: ClassData.RASCAL_CLASS,
-            name: 'Bandit',
+            name: 'Thug',
             ba: 8
         },
         {
             class: ClassData.RASCAL_CLASS,
-            name: 'Bandit',
+            name: 'Thug',
             ba: 8
         }],
         reward: {
-            gold: 5,
-            exp: 2,
-            fame: 0
+            gold: 3,
+            exp: 3,
+            crystal: 0
         },
         drop: [],
         activates: [],

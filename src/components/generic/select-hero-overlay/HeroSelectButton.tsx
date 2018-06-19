@@ -3,6 +3,9 @@ import * as fbEmitter from 'fbemitter';
 import Hero from 'model/Hero';
 import GameModelStore from 'store/game-model/GameModelStore';
 import './HeroSelectButton.css';
+import BaseHero from 'model/BaseHero';
+import { HeroDataArray } from 'data/HeroData';
+import ClassHelper from 'business/ClassHelper';
 
 interface IHeroSelectButtonProps {
     selectedHeroes: Set<Hero>;
@@ -10,6 +13,7 @@ interface IHeroSelectButtonProps {
     doSelectHero: (hero: Hero) => void;
     doUnselectHero: (hero: Hero) => void;
     partySize: number;
+    reqClass?: string;
 }
 
 interface IHeroSelectButtonState {
@@ -18,25 +22,31 @@ interface IHeroSelectButtonState {
 
 export default class HeroSelectButton extends React.Component<IHeroSelectButtonProps, IHeroSelectButtonState>{
     storeSubscribe: fbEmitter.EventSubscription;
+    heroData: BaseHero;
     constructor(props: IHeroSelectButtonProps) {
         super(props);
         this.state = { isHeroBusy: this.isHeroBusy() };
+        this.heroData = HeroDataArray.get(this.props.hero.data);
     }
 
     render() {
+        const validClass = this.isHeroValidClass();
         return (
             <button
                 className="hero-select"
-                disabled={this.isButtonDisabled()}
+                disabled={this.isButtonDisabled(validClass)}
                 onClick={this.doButtonCall}>
-                {this.renderTxt()}
+                {this.renderTxt(validClass)}
             </button>
         );
     }
 
-    renderTxt = () => {
+    renderTxt = (validClass: boolean) => {
         if (this.state.isHeroBusy) {
             return 'Hero is busy';
+        }
+        else if (!validClass) {
+            return `Requires class ${this.props.reqClass}`
         }
         else if (this.isHeroSelected()) {
             return 'Unselect';
@@ -47,8 +57,8 @@ export default class HeroSelectButton extends React.Component<IHeroSelectButtonP
         return 'Select';
     }
 
-    isButtonDisabled = () => {
-        return this.state.isHeroBusy || (this.areAllHeroSelected() && !this.isHeroSelected());
+    isButtonDisabled = (validClass: boolean) => {
+        return this.state.isHeroBusy || !validClass || (this.areAllHeroSelected() && !this.isHeroSelected());
     }
 
     areAllHeroSelected = () => {
@@ -74,6 +84,13 @@ export default class HeroSelectButton extends React.Component<IHeroSelectButtonP
 
     isHeroSelected = () => {
         return this.props.selectedHeroes.has(this.props.hero);
+    }
+
+    isHeroValidClass = () => {
+        if (!this.props.reqClass) {
+            return true;
+        }
+        return ClassHelper.contains(this.heroData.class, this.props.hero.rank, this.props.reqClass);
     }
 
     componentDidMount() {

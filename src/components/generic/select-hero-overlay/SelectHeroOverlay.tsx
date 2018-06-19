@@ -13,6 +13,7 @@ import HeroSelectButton from 'components/generic/select-hero-overlay/HeroSelectB
 interface ISelectHeroOverlayProps {
     display: boolean;
     maxSelection: number;
+    reqClass?: string;
     doConfirmSelection: (heroes: Hero[]) => void;
     doCancelSelection: () => void;
 }
@@ -62,7 +63,8 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
                         selectedHeroes={this.state.selectedHeroes}
                         doSelectHero={this.doSelectHero}
                         doUnselectHero={this.doUnselectHero}
-                        partySize={this.props.maxSelection} />
+                        partySize={this.props.maxSelection}
+                        reqClass={this.props.reqClass} />
                 </HeroInfo>
             );
         }
