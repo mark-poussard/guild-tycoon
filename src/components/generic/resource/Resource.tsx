@@ -4,7 +4,7 @@ import './Resource.css';
 export enum ResourceType {
     GOLD = 'gold',
     EXP = 'exp',
-    FAME = 'fame',
+    CRYSTAL = 'fame',
     TIME = 'time',
 }
 
@@ -64,7 +64,7 @@ export default class Resource extends React.Component<IResourceProps, IResourceS
                 return "img/xp.png";
             case ResourceType.GOLD:
                 return "img/gold.png";
-            case ResourceType.FAME:
+            case ResourceType.CRYSTAL:
                 return "img/fame.png";
             case ResourceType.TIME:
                 return "img/clock.png";

@@ -26,7 +26,7 @@ class ItemHelper{
                         if(hero.equipment.rightHand){
                             return 'leftHand';
                         }
-                        else if(hero.equipment.leftHand){
+                        else{
                             return 'rightHand';
                         }
                     }

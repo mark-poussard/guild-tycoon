@@ -15,7 +15,7 @@ export default class AchievementsHelper {
         const questCompleted = gameState.statistics.questCompleted;
         if (questCompleted > this.questCompleteLastState && questCompleted % 5 == 0) {
             this.questCompleteLastState = questCompleted;
-            gameState.fame += 1;
+            gameState.crystals += 1;
         }
         return gameState;
     }

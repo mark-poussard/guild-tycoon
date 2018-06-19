@@ -72,7 +72,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.ADD_FAME:
                 payload = action.payload as AddResourcePayload;
-                newState.fame += payload.quantity;
+                newState.crystals += payload.quantity;
                 this.eventEmitter.emit(GameModelActionTypes.ADD_FAME, newState);
                 break;
 
@@ -226,6 +226,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     if (!newState.statistics.hasOwnProperty(payload.cfh.id)) {
                         newState.statistics[payload.cfh.id] = 0;
                     }
+                    newState.gameSwitches.firstHero = true;
                     newState.statistics[payload.cfh.id] += 1;
 
                     if (payload.hero) {

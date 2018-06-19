@@ -32,7 +32,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [{
             class: ClassData.BEAST_CLASS,
             name: 'Big Squirrel',
-            ba: 3
+            ba: 4
         }],
         reward: {
             gold: 5,
@@ -53,7 +53,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [{
             class: ClassData.MAGICAL_CLASS,
             name: 'Animated Spade',
-            ba: 3
+            ba: 4
         }],
         reward: {
             gold: 5,
@@ -74,7 +74,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [{
             class: ClassData.RASCAL_CLASS,
             name: 'Juvenile Delinquent',
-            ba: 3
+            ba: 4
         }],
         reward: {
             gold: 5,
@@ -82,7 +82,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
             fame: 0
         },
         drop: [],
-        activates: [],
+        activates: ['QUEST08'],
         repeat: null,
         classReq: []
     },
@@ -112,7 +112,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [{
             class: ClassData.BEAST_CLASS,
             name: 'Feeble Stray Wolf',
-            ba: 5
+            ba: 13
         }],
         reward: {
             gold: 1,
@@ -133,7 +133,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         ennemies: [{
             class: ClassData.RASCAL_CLASS,
             name: 'Hooded figure',
-            ba: 15
+            ba: 20
         }],
         reward: {
             gold: 10,
@@ -145,6 +145,37 @@ export const QuestData: { [key: string]: BaseQuest } = {
         repeat: null,
         classReq: []
     },
+    QUEST08: {
+        id: 'QUEST08',
+        title: 'A bad day for a carpenter',
+        description: 'Old farmer Mc.Pearson has a nephew, Mike, who has been attacked by bandits on his way home from work. Mike is a young talented carpenter and offers to come work for your guild in exchange of defeating those bandits.',
+        maxPartySize: 2,
+        duration: new Duration(0, 0, 0, 40),
+        ennemies: [{
+            class: ClassData.RASCAL_CLASS,
+            name: 'Bandit',
+            ba: 8
+        },
+        {
+            class: ClassData.RASCAL_CLASS,
+            name: 'Bandit',
+            ba: 8
+        },
+        {
+            class: ClassData.RASCAL_CLASS,
+            name: 'Bandit',
+            ba: 8
+        }],
+        reward: {
+            gold: 5,
+            exp: 2,
+            fame: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    }
 };
 
 export const QuestDataArray = new IndexedArray<string, BaseQuest>(x => x.id, ...ObjectUtils.getValues(QuestData));

@@ -12,7 +12,7 @@ interface IHeaderProps {
 interface IHeaderState {
     gold: number;
     xp: number;
-    fame: number;
+    crystals: number;
 }
 
 export default class Header extends React.Component<IHeaderProps, IHeaderState>{
@@ -24,14 +24,14 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState>{
             {
                 gold: GameModelStore.getState().gold,
                 xp: GameModelStore.getState().exp,
-                fame: GameModelStore.getState().fame
+                crystals: GameModelStore.getState().crystals
             };
     }
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             const gameState = GameModelStore.getState();
-            this.setState({ gold: gameState.gold, xp: gameState.exp, fame: gameState.fame });
+            this.setState({ gold: gameState.gold, xp: gameState.exp, crystals: gameState.crystals });
         });
     }
 
@@ -45,7 +45,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState>{
                 <div className="header-left">
                     <Resource value={this.state.gold} type={ResourceType.GOLD} inline />
                     <Resource value={this.state.xp} type={ResourceType.EXP} inline />
-                    <Resource value={this.state.fame} type={ResourceType.FAME} inline />
+                    <Resource value={this.state.crystals} type={ResourceType.CRYSTAL} inline />
                 </div>
                 <div className="header-right">
                     <Settings />

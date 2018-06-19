@@ -23,7 +23,8 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
     }
     render() {
         return (
-            <div>
+            <div className='container equip-hero-info'>
+                <div>
                 <h2>{this.heroData.name}</h2>
                 <div>
                     <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
@@ -33,6 +34,7 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
                 </div>
                 <div>
                     {this.renderBattleAbility()}
+                    </div>
                     </div>
                 <table className='equip-table center'>
                     <thead>
