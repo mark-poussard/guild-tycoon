@@ -31,6 +31,12 @@ export const MONK_CLASS : Class = {
     previous : WARRIOR_CLASS
 }
 
+export const PSIONIC_CLASS : Class = {
+    name : 'psionic',
+    onRank : 5,
+    previous : WARRIOR_CLASS
+}
+
 export const BARBARIAN_CLASS : Class = {
     name : 'barbarian',
     onRank : 3,
@@ -123,8 +129,8 @@ export const SHADOWCASTER_CLASS : Class = {
     previous : MAGE_CLASS
 }
 
-export const LIGHT_MAGE_CLASS : Class = {
-    name : 'light mage',
+export const LIGHTSWORN_CLASS : Class = {
+    name : 'lightsworn',
     onRank : 3,
     previous : MAGE_CLASS
 }
@@ -144,6 +150,11 @@ export const RASCAL_CLASS : Class = {
 
 export const MAGICAL_CLASS : Class = {
     name : 'magical',
+    onRank : 0
+}
+
+export const CULTIST_CLASS : Class = {
+    name : 'cultist',
     onRank : 0
 }
 

@@ -20,15 +20,15 @@ class HeroHelper {
         return hero.level * Math.pow(3, hero.rank - 1);
     }
 
-    computeHeroBA = (hero : Hero) => {
+    computeHeroBA = (hero: Hero) => {
         const heroData = HeroDataArray.get(hero.data);
         const dupBonus = this.computeDupBonusBA(hero);
         const bba = heroData.bbaMult * hero.level * 4 * dupBonus;
         return bba + EquipmentSetHelper.computeBA(hero.equipment);
     }
 
-    computeDupBonusBA = (hero : Hero) => {
-        return -(1/(0.5*hero.dupLevel+1))+2
+    computeDupBonusBA = (hero: Hero) => {
+        return -(1 / (0.5 * hero.dupLevel + 1)) + 2
     }
 
     //Sort by rank, then level, then name
@@ -46,6 +46,10 @@ class HeroHelper {
             const h2Data = HeroDataArray.get(h2.data);
             return h1Data.name.localeCompare(h2Data.name) * nameOrder;
         }
+    }
+
+    isMaxLevel = (hero: Hero) => {
+        return hero.level >= (hero.rank * 100);
     }
 }
 

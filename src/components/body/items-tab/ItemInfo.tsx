@@ -8,41 +8,42 @@ import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import Hero from 'model/Hero';
 import ItemHelper from 'business/ItemHelper';
 
-interface IItemInfoProps{
-    item : Item;
-    quantity : number;
-    equipHero ?: Hero;
+interface IItemInfoProps {
+    item: Item;
+    quantity: number;
+    equipHero?: Hero;
+    className?: string;
 }
 
 export default class ItemInfo extends React.Component<IItemInfoProps> {
-    constructor(props : IItemInfoProps){
+    constructor(props: IItemInfoProps) {
         super(props);
     }
 
     render() {
         return (
-            <div className='item-container' onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>
-            <ToolTip toolTipContent={this.renderItemInfo()}>
-            <div className='item-img-container'>
-                <img src={this.props.item.icon} />
-                <div className='item-quantity-txt'>{this.props.quantity}</div>
-                </div>
-            </ToolTip>
+            <div className={`item-container ${this.props.className}`} onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>
+                <ToolTip toolTipContent={this.renderItemInfo()}>
+                    <div className='item-img-container'>
+                        <img src={this.props.item.icon} />
+                        <div className='item-quantity-txt'>{this.props.quantity}</div>
+                    </div>
+                </ToolTip>
             </div>
         );
     }
 
     renderItemInfo = () => {
         let statsInfo;
-        if(this.props.item instanceof Equipment){
+        if (this.props.item instanceof Equipment) {
             const equipment = this.props.item as Equipment;
             statsInfo = (
                 <div className='item-stats'>
                     <div>
-                    Battle Ability : {equipment.ba}
+                        Battle Ability : {equipment.ba}
                     </div>
                     <div>
-                    Type : {equipment.type}
+                        Type : {equipment.type}
                     </div>
                 </div>
             );
@@ -65,7 +66,7 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
     }
 
     onDoubleClick = () => {
-        if(this.props.equipHero && ItemHelper.isEquipable(this.props.item)){
+        if (this.props.equipHero && ItemHelper.isEquipable(this.props.item)) {
             GameModelDispatcher.dispatch({
                 type: GameModelActionTypes.EQUIP_ITEM,
                 payload: {

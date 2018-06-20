@@ -16,7 +16,8 @@ import GameModelPayload, {
     EndQuestWinPayload,
     EquipItemPayload,
     RemoveAllItemsPayload,
-    RepeatQuestPayload
+    RepeatQuestPayload,
+    RemoveItemPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -29,6 +30,8 @@ import { QuestDataArray } from 'data/QuestData';
 import { ItemDataArray } from 'data/ItemData';
 import Equipment, { EquipmentType } from 'model/items/Equipment';
 import EquipmentSet from 'model/EquipmentSet';
+import { logUserAction, clearLogs } from '../log/LogActions';
+import { HeroDataArray } from 'data/HeroData';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -195,6 +198,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                             startedAt: null
                         }
                     }
+                    //Add success to log
+                    logUserAction(`Successfuly completed quest : ${questData.title}`);
                     break;
                 }
 
@@ -209,6 +214,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                             hero.questId = null;
                         }
                     }
+                    const questData = QuestDataArray.get(payload.quest.id);
+                    logUserAction(`Failed quest : ${questData.title}`);
                     break;
                 }
 
@@ -229,12 +236,15 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.gameSwitches.firstHero = true;
                     newState.statistics[payload.cfh.id] += 1;
 
+                    const heroData = HeroDataArray.get(payload.hero.data);
                     if (payload.hero) {
                         newState.heroes.add(payload.hero);
+                        logUserAction(`Congratulations ! Your call brought a new hero to the guild : ${heroData.name}`);
                     }
 
                     if (payload.dupId) {
                         newState.heroes.get(payload.dupId).dupLevel += 1;
+                        logUserAction(`Congratulations ! Your call upgraded your hero : ${heroData.name}`);
                     }
                     break;
                 }
@@ -290,8 +300,23 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     break;
                 }
 
+            case GameModelActionTypes.REMOVE_ITEM:
+                {
+                    payload = action.payload as RemoveItemPayload;
+                    const slotItemId = payload.hero.equipment[payload.slot];
+                    if (slotItemId) {
+                        newState.heroes.get(payload.hero.data).equipment[payload.slot] = null;
+                        if (!newState.items.hasOwnProperty(slotItemId)) {
+                            newState.items[slotItemId] = 0;
+                        }
+                        newState.items[slotItemId] += 1;
+                    }
+                    break;
+                }
+
             case GameModelActionTypes.CLEAR_GAME_DATA:
                 {
+                    clearLogs();
                     localStorage.removeItem(CACHE_GAME_STATE_KEY);
                     return StartingGameState();
                 }

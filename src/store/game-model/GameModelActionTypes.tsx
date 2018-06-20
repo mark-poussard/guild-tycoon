@@ -17,5 +17,6 @@ export enum GameModelActionTypes {
     REPEAT_QUEST = 'repeat_quest',
     REGISTER_CFH_RESULT = 'register_cfh_result',
     EQUIP_ITEM = 'equip_item',
-    REMOVE_ALL_ITEMS = 'remove_all_items'
+    REMOVE_ALL_ITEMS = 'remove_all_items',
+    REMOVE_ITEM = 'remove_item'
 }

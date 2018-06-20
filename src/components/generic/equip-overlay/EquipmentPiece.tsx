@@ -18,22 +18,22 @@ interface IEquipmentPieceProps {
 }
 
 interface IEquipmentPieceState {
-    pieceId : string;
-    isDropHover : boolean
+    pieceId: string;
+    isDropHover: boolean
 }
 
 export default class EquipmentPiece extends React.Component<IEquipmentPieceProps, IEquipmentPieceState>{
     storeSubscribe: fbEmitter.EventSubscription;
 
-    constructor(props : IEquipmentPieceProps){
+    constructor(props: IEquipmentPieceProps) {
         super(props);
-        this.state = {pieceId : this.getPieceId(), isDropHover:false};
+        this.state = { pieceId: this.getPieceId(), isDropHover: false };
     }
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                pieceId : this.getPieceId()
+                pieceId: this.getPieceId()
             });
         });
     }
@@ -44,7 +44,7 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
 
     render() {
         let classname = 'equipment-piece';
-        if(this.state.isDropHover){
+        if (this.state.isDropHover) {
             classname += ' drag-hover';
         }
         const piece = ItemDataArray.get(this.state.pieceId);
@@ -56,7 +56,7 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
             imgElement = <img className={classname} src={NO_ICON_PATH_SPECIFIC(this.props.type)} />
         }
         return (
-            <div onDrop={this.onDrop} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnter={this.preventDefault}>
+            <div onDrop={this.onDrop} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnter={this.preventDefault} onDoubleClick={this.onDoubleClick}>
                 {imgElement}
             </div>
         );
@@ -64,21 +64,21 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
 
     onDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        this.setState({isDropHover : false});
+        this.setState({ isDropHover: false });
         const itemId = e.dataTransfer.getData("itemId");
         if (this.checkItemValidity(itemId)) {
-                GameModelDispatcher.dispatch({
-                    type: GameModelActionTypes.EQUIP_ITEM,
-                    payload: {
-                        hero: this.props.hero,
-                        itemId: itemId,
-                        slot: this.props.type
-                    }
-                })
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.EQUIP_ITEM,
+                payload: {
+                    hero: this.props.hero,
+                    itemId: itemId,
+                    slot: this.props.type
+                }
+            })
         }
     }
 
-    checkItemValidity = (itemId : string) => {
+    checkItemValidity = (itemId: string) => {
         const item = ItemDataArray.get(itemId);
         if (item instanceof Equipment) {
             const equipment = item as Equipment;
@@ -89,24 +89,36 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
         return false;
     }
 
-    preventDefault = (e : React.DragEvent<HTMLDivElement>) => {
+    preventDefault = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
     }
 
-    onDragOver = (e : React.DragEvent<HTMLDivElement>) => {
+    onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const itemId = e.dataTransfer.getData("itemId");
-        if(this.checkItemValidity(itemId)){
-            this.setState({isDropHover : true});
+        if (this.checkItemValidity(itemId)) {
+            this.setState({ isDropHover: true });
         }
     }
 
-    onDragLeave = (e : React.DragEvent<HTMLDivElement>) => {
+    onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        this.setState({isDropHover : false});
+        this.setState({ isDropHover: false });
     }
 
     getPieceId = () => {
         return GameModelStore.getState().heroes.get(this.props.hero.data).equipment[this.props.type];
+    }
+
+    onDoubleClick = () => {
+        if (this.state.pieceId) {
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.REMOVE_ITEM,
+                payload: {
+                    user: this.props.hero,
+                    slot: this.props.type
+                }
+            });
+        }
     }
 }

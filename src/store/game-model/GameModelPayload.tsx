@@ -75,9 +75,14 @@ export interface RegisterCFHResultPayload {
 export interface EquipItemPayload {
     hero: Hero;
     itemId: string;
-    slot : keyof EquipmentSet;
+    slot: keyof EquipmentSet;
 }
 
 export interface RemoveAllItemsPayload {
     hero: Hero;
+}
+
+export interface RemoveItemPayload {
+    hero: Hero;
+    slot: keyof EquipmentSet;
 }

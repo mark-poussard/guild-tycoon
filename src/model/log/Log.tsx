@@ -6,13 +6,13 @@ export default class Log{
         this.id = ID_GEN++;
         this.level = lvl;
         this.msg = msg;
-        this.producedAt = new Date();
+        this.producedAt = new Date().getTime();
     }
 
     id: number;
     level : LogLevel;
     msg : string;
-    producedAt : Date;
+    producedAt : number;
 }
 
 // USER > HISTORY > CONSOLE

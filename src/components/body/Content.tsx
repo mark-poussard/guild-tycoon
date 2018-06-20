@@ -6,6 +6,7 @@ import { TabType } from 'store/navigation/NavigationStore';
 import CallTab from 'components/body/call-tab/CallTab';
 import QuestTab from 'components/body/quest-tab/QuestTab';
 import ItemsTab from 'components/body/items-tab/ItemsTab';
+import LogTab from 'components/body/log-tab/LogTab';
 
 interface IContentProps {
     currentTab: TabType;
@@ -39,6 +40,8 @@ export default class Content extends React.Component<IContentProps, IContentStat
                 return <ImprovementsTab />
             case TabType.ITEMS:
                 return <ItemsTab />
+            case TabType.LOG:
+                return <LogTab />
             default:
                 return null;
         }

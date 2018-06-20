@@ -1,0 +1,7 @@
+.upgrade-items-enough {
+    color: green;
+}
+
+.upgrade-items-not-enough {
+    color: red;
+}

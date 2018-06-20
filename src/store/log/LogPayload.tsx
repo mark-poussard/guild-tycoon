@@ -1,4 +1,4 @@
-import { LogActionTypes } from "./LogActionTypes";
+import { LogActionTypes } from "./LogActions";
 import Log from "model/log/Log";
 
 export default interface LogPayload {

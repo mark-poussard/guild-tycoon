@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-interface ILogMessageProps{
-    msg : string;
+interface ILogMessageProps {
+    msg: string;
 }
 
 export default class LogMessage extends React.Component<ILogMessageProps>{
-    render(){
+    render() {
         return (
             <div className='container'>
                 {this.props.msg}
