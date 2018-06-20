@@ -4,6 +4,7 @@ import GuildVisu from 'components/guild-visu/GuildVisu';
 import Menu from 'components/menu/Menu';
 import Content from 'components/body/Content';
 import NavigationHandler, {TabType} from 'store/navigation/NavigationStore';
+import LogDisplayer from 'components/log/LogDisplayer';
 
 interface IAppState {
     tabType: TabType;
@@ -23,6 +24,7 @@ export default class App extends React.Component<{}, IAppState>{
                 <GuildVisu />
                 <Menu />
                 <Content currentTab={this.state.tabType} />
+                <LogDisplayer />
             </div>
         );
     }

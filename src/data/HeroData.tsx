@@ -106,7 +106,7 @@ export const HeroData = {
         imgUrl: 'img/char/julie.png',
         bbaMult: 1.0,
         class: ClassData.ARCHER_CLASS,
-        description: 'Daughter of a wealthy family of merchants, her arcane education started at a young age and she studied under some of the most talented sorcerers of our time. She left her family on a disagrement as they were seeking to use her arcane abilities to expand the family business whereas she knew she was meant to serve a higher purpose.',
+        description: '.',
         modAbilityList: [] as ModifierAbility[]
     }
 }

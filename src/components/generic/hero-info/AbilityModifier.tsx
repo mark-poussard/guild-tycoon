@@ -1,5 +1,6 @@
 import * as React from 'react';
 import ModifierAbility from 'model/ModifierAbility';
+import './AbilityModifier.css'
 
 interface IAbilityModifierProps {
     modifier: number;
@@ -14,12 +15,12 @@ export default class AbilityModifier extends React.Component<IAbilityModifierPro
         return (
             <div>
                 <span className={modifierClassname}>
-                    {`${modifierSign}${this.props.modifier}`}
+                    {`${modifierSign}${this.props.modifier}% BA`}
                 </span>
                 <span>
                     {' against '}
                 </span>
-                <span>
+                <span className={modifierClassname}>
                     {this.props.klass}
                 </span>
             </div>

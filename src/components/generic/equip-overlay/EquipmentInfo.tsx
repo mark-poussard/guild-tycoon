@@ -101,7 +101,10 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
     renderBattleAbility = () => {
         const ba = HeroHelper.computeHeroBA(this.props.hero);
         return (
-            <span>{`Battle Ability : ${ba}`}</span>
+            <>
+            <span>{`Battle Ability : `}</span>
+            <span style={{color:'green'}}>{ba}</span>
+            </>
         );
     }
 }
