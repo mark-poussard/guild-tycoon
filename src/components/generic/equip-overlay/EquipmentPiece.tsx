@@ -115,7 +115,7 @@ export default class EquipmentPiece extends React.Component<IEquipmentPieceProps
             GameModelDispatcher.dispatch({
                 type: GameModelActionTypes.REMOVE_ITEM,
                 payload: {
-                    user: this.props.hero,
+                    hero: this.props.hero,
                     slot: this.props.type
                 }
             });

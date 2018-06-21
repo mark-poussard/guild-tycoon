@@ -1,11 +1,10 @@
 .progress-bar-container{
-    width:80%;
+    width:25%;
     border-style: solid;
     border-width: 1px;
     border-color: #A64E00;
     background:#FFB573;
     margin-top: 5px;
-    float: left;
 }
 
 .progress-bar{

@@ -52,10 +52,27 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
             <div className='container'>
                 <h3>{questData.title}</h3>
                 <p>{questData.description}</p>
+                {this.renderClassReq()}
                 {this.renderQuestDetails()}
                 {this.renderQuestAction()}
             </div>
         );
+    }
+
+    renderClassReq = () => {
+        if(this.questData.classReq && this.questData.classReq.length > 0){
+            const classReqList :JSX.Element[] = [];
+            for(const cls of this.questData.classReq){
+                classReqList.push(<span>{`${cls} `}</span>)
+            }
+            return (
+                <p>
+                    {`Required class : `}
+                    {classReqList}
+                </p>
+            )
+        }
+        return null;
     }
 
     renderQuestDetails = () => {

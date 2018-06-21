@@ -13,7 +13,7 @@ import HeroSelectButton from 'components/generic/select-hero-overlay/HeroSelectB
 interface ISelectHeroOverlayProps {
     display: boolean;
     maxSelection: number;
-    reqClass?: string;
+    reqClass?: string[];
     doConfirmSelection: (heroes: Hero[]) => void;
     doCancelSelection: () => void;
 }

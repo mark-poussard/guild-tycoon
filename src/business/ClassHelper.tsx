@@ -16,9 +16,14 @@ class ClassHelper {
         return result;
     }
 
-    contains = (cls: Class, rank: number, klass: string) => {
+    contains = (cls: Class, rank: number, klassList: string[]) => {
         const classList = this.computeClassList(cls, rank);
-        return classList.indexOf(klass) > -1;
+        for(const klass of klassList){
+            if(classList.indexOf(klass) > -1){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

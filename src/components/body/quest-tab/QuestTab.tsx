@@ -96,7 +96,8 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
                     display={!!this.state.questSelect}
                     maxSelection={questData.maxPartySize}
                     doCancelSelection={() => this.setState({ questSelect: null })}
-                    doConfirmSelection={(heroes: Hero[]) => this.startQuest(this.state.questSelect, heroes)}>
+                    doConfirmSelection={(heroes: Hero[]) => this.startQuest(this.state.questSelect, heroes)}
+                    reqClass={questData.classReq}>
                     <h3>{questData.title}</h3>
                     <h2>Select heroes to go on this quest.</h2>
                 </SelectHeroOverlay>

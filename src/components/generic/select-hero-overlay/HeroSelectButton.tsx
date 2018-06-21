@@ -13,7 +13,7 @@ interface IHeroSelectButtonProps {
     doSelectHero: (hero: Hero) => void;
     doUnselectHero: (hero: Hero) => void;
     partySize: number;
-    reqClass?: string;
+    reqClass?: string[];
 }
 
 interface IHeroSelectButtonState {
@@ -87,7 +87,7 @@ export default class HeroSelectButton extends React.Component<IHeroSelectButtonP
     }
 
     isHeroValidClass = () => {
-        if (!this.props.reqClass) {
+        if (!this.props.reqClass || this.props.reqClass.length === 0) {
             return true;
         }
         return ClassHelper.contains(this.heroData.class, this.props.hero.rank, this.props.reqClass);
