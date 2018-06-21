@@ -2,6 +2,7 @@ import Hero from "model/Hero";
 import EquipmentSetHelper from "business/EquipmentSetHelper";
 import { SortOrder } from "model/Sorting";
 import { HeroDataArray } from "data/HeroData";
+import { rarityMaxRank } from "model/Rarity";
 
 class HeroHelper {
     getPower = (hero: Hero) => {
@@ -50,6 +51,18 @@ class HeroHelper {
 
     isMaxLevel = (hero: Hero) => {
         return hero.level >= (hero.rank * 100);
+    }
+
+    isMaxRank = (hero: Hero) => {
+        const heroData = HeroDataArray.get(hero.data);
+        let maxRank;
+        if (heroData.maxRank) {
+            maxRank = heroData.maxRank;
+        }
+        else {
+            maxRank = rarityMaxRank[heroData.rarity];
+        }
+        return hero.rank >= maxRank;
     }
 }
 

@@ -1,9 +1,17 @@
-export enum Rarity{
-    T = 'tavern-hero',
-    R = 'renowned-hero',
-    EX = 'extraordinary-hero',
-    EL = 'elite-hero',
-    LE = 'legendary-hero',
+export enum Rarity {
+    T = 't',
+    R = 'r',
+    EX = 'ex',
+    EL = 'el',
+    LE = 'le',
 
-    SP = 'special',
+    SP = 'sp',
+}
+
+export const rarityMaxRank: { [rarity in Rarity]?: number } = {
+    t: 3,
+    r: 5,
+    ex: 8,
+    el: 10,
+    le: 15
 }

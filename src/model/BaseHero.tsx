@@ -13,4 +13,5 @@ export default class BaseHero {
     description: string;
     modAbilityList: ModifierAbility[];
     upgradeRequirements: UpgradeRequirements;
+    maxRank ?: number;
 }

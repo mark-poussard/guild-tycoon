@@ -11,7 +11,7 @@ import QuestMap from 'model/serializable/QuestMap';
 export default interface GameModelState {
     gold: number,
     exp: number,
-    crystals: number,
+    shards: number,
     heroes: IndexedArray<string, Hero>,
     guildSize: number,
     statistics: Statistics;
@@ -25,7 +25,7 @@ export default interface GameModelState {
 export const StartingGameState = (): GameModelState => {
     return {
         gold: 0,
-        crystals: 0,
+        shards: 0,
         exp: 0,
         heroes: new IndexedArray<string, Hero>(x => x.data),
         guildSize: 10,

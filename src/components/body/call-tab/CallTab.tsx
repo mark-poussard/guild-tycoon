@@ -57,6 +57,12 @@ export default class CallTab extends React.Component<{}, ICallTabState>{
                 </div>
             );
         }
-        return null;
+        const callsList : JSX.Element[] = [];
+        callsList.push(<CallInfo key={`CFH_CFH4`} cfh={CFHData.CFH4} />)
+        return (
+            <div>
+                {callsList}
+            </div>
+        );
     }
 }

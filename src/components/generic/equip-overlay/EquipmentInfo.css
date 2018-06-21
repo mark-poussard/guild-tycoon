@@ -1,7 +1,9 @@
-.equip-table{
+.equip-table {
     background-color: #FF9A40;
 }
 
-.equip-hero-info{
-    text-align:center;
+.equip-hero-info {
+    text-align: center;
+    float: left;
+    width: 50%;
 }

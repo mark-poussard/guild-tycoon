@@ -11,21 +11,17 @@ import ClassInfo from 'components/generic/hero-info/ClassInfo';
 import BaseHero from 'model/BaseHero';
 import { HeroDataArray } from 'data/HeroData';
 import ClassHelper from 'business/ClassHelper';
+import Level from 'components/body/hero-tab/Level';
 
 interface IHeroInfoProps {
     hero: Hero;
 }
 
-interface IHeroInfoState {
-    exp: number;
-}
-
-export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoState>{
+export default class HeroInfo extends React.Component<IHeroInfoProps>{
     storeSubscribe: fbEmitter.EventSubscription;
-    heroData : BaseHero;
+    heroData: BaseHero;
     constructor(props: IHeroInfoProps) {
         super(props);
-        this.state = { exp: GameModelStore.getState().exp };
         this.heroData = HeroDataArray.get(this.props.hero.data);
     }
 
@@ -34,17 +30,14 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
             <div className="container hero-info-container">
                 <div className="divider">
                     {this.renderHeroName()}
-                    <div className="lvl">
-                        <span className="txt">{`lvl: ${this.props.hero.level}`}</span>
-                        {this.renderLevelUp()}
-                    </div>
+                    <Level className="lvl" hero={this.props.hero} />
                     <div className="icon"><img src={this.heroData.imgUrl} /></div>
                 </div>
                 <div className="divider">
                     <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
                 </div>
                 <div className="divider">
-                Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)}/>
+                    Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />
                 </div>
                 <div className="divider">
                     {this.renderBattleAbility()}
@@ -56,40 +49,12 @@ export default class HeroInfo extends React.Component<IHeroInfoProps, IHeroInfoS
         );
     }
 
-    componentDidMount() {
-        this.storeSubscribe = GameModelStore.addListener(() => {
-            this.setState({ exp: GameModelStore.getState().exp });
-        })
-    }
-
-    componentWillUnmount() {
-        this.storeSubscribe.remove();
-    }
-
     renderHeroName = () => {
         let txtSize = '';
         if (this.heroData.name.length > 6) {
             txtSize = 'small';
         }
         return <span className={`txt ${txtSize}`}>{this.heroData.name}</span>
-    }
-
-    renderLevelUp = () => {
-        const hero = this.props.hero
-        const requiredExp = HeroHelper.expRequiredToLevel(hero);
-        if (this.state.exp >= requiredExp && !HeroHelper.isMaxLevel(hero)) {
-            return (
-                <input className="level-up" type="image" src="img/plus.png" onClick={this.heroLevelUp} />
-            );
-        }
-        return null;
-    }
-
-    heroLevelUp = () => {
-        GameModelDispatcher.dispatch({
-            type: GameModelActionTypes.HERO_LVL_UP,
-            payload: { heroId: this.props.hero.data }
-        });
     }
 
     renderBattleAbility = () => {

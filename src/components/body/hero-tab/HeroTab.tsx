@@ -10,6 +10,7 @@ import SortButton from 'components/generic/hero-info/SortButton';
 import './HeroTab.css'
 import HeroHelper from 'business/HeroHelper';
 import EquipmentButton from 'components/body/hero-tab/EquipmentButton';
+import UpgradeButton from 'components/body/hero-tab/upgrade-overlay/UpgradeButton';
 
 interface IHeroTabProps {
 
@@ -75,6 +76,7 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
             result.push(
                 <HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} >
                     <EquipmentButton hero={heroesArray[i]}/>
+                    <UpgradeButton hero={heroesArray[i]} />
                 </HeroInfo>
             );
         }

@@ -5,6 +5,7 @@ import Hero from "model/Hero";
 import EquipmentSet from "model/EquipmentSet";
 import GameModelDispatcher from "store/game-model/GameModelDispatcher";
 import { GameModelActionTypes } from "store/game-model/GameModelActionTypes";
+import { Rarity } from "model/Rarity";
 
 class CFHHelper{
     doCFH = (cfh : CallForHero) => {
@@ -49,7 +50,7 @@ class CFHHelper{
         return null;
     }
 
-    computeHeroPull = (rarity : string, pool : Pool) => {
+    computeHeroPull = (rarity : Rarity, pool : Pool) => {
         const roll = Math.floor(Math.random() * pool.content[rarity].length);
         return pool.content[rarity][roll];
     }

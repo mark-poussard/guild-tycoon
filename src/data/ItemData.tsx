@@ -7,7 +7,16 @@ import ObjectUtils from "business/utils/ObjectUtils";
 
 export const NO_ICON_PATH = "img/items/none.png";
 
+/*
+    Item identification organisation :
+    0-1000 : Weapons
+    1000-6000 : Equipment
+    6000-7000 : Orbs - rank up material
+    7000-10000 : Craft materials
+ */
+
 export const ItemData = {
+    // ---------------------------------- 0-1000 Weapons -------------------------------------
     WOODEN_STICK: new Equipment({
         id: "ITEM1",
         name: 'Wooden Stick',
@@ -53,8 +62,9 @@ export const ItemData = {
         classRestriction: [],
         type : EquipmentType.TWO_HANDED
     }),
+    // ---------------------------------- 1000-6000 Equipment -------------------------------------
     LEATHER_TUNIQUE: new Equipment({
-        id: "ITEM6",
+        id: "ITEM1000",
         name: 'Leather Tunique',
         description : '',
         icon: '',
@@ -63,7 +73,7 @@ export const ItemData = {
         type : EquipmentType.TORSO
     }),
     LEATHER_GLOVES: new Equipment({
-        id: "ITEM7",
+        id: "ITEM1001",
         name: 'Leather Gloves',
         description : '',
         icon: '',
@@ -72,7 +82,7 @@ export const ItemData = {
         type : EquipmentType.HANDS
     }),
     LEATHER_BREACHES: new Equipment({
-        id: "ITEM8",
+        id: "ITEM1002",
         name: 'Leather Breaches',
         description : '',
         icon: '',
@@ -81,7 +91,7 @@ export const ItemData = {
         type : EquipmentType.LEGS
     }),
     LEATHER_BOOTS: new Equipment({
-        id: "ITEM9",
+        id: "ITEM1003",
         name: 'Leather BOOTS',
         description : '',
         icon: '',
@@ -89,6 +99,25 @@ export const ItemData = {
         classRestriction: [],
         type : EquipmentType.FEET
     }),
+    // ---------------------------------- 6000-7000 Orbs / Rank up materials -------------------------------------
+    COURAGE_ORB:{
+        id: "ITEM6000",
+        name: 'Orb of courage',
+        description : 'There is power brewing inside this glass sphere. Keep it preciously.',
+        icon: 'img/items/courage_orb.png'
+    },
+    SPIRIT_ORB:{
+        id: "ITEM6001",
+        name: 'Orb of spirit',
+        description : 'There is power brewing inside this glass sphere. Keep it preciously.',
+        icon: 'img/items/spirit_orb.png'
+    },
+    SENSES_ORB:{
+        id: "ITEM6002",
+        name: 'Orb of senses',
+        description : 'There is power brewing inside this glass sphere. Keep it preciously.',
+        icon: 'img/items/senses_orb.png'
+    },
 };
 
 export const ItemDataArray = new IndexedArray<string, Item>(x => x.id, ...ObjectUtils.getValues(ItemData));

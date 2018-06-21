@@ -13,6 +13,7 @@ export const HeroData: { [name: string]: BaseHero } = {
         rarity: Rarity.SP,
         imgUrl: 'img/char/squire.png',
         bbaMult: 1.0,
+        maxRank: 5,
         class: ClassData.SWORDSMAN_CLASS,
         description: '',
         modAbilityList: [
@@ -35,6 +36,7 @@ export const HeroData: { [name: string]: BaseHero } = {
         rarity: Rarity.SP,
         imgUrl: 'img/char/battle_monk.png',
         bbaMult: 1.0,
+        maxRank: 5,
         class: ClassData.ELEMENTALIST_CLASS,
         description: '',
         modAbilityList: [
@@ -57,6 +59,7 @@ export const HeroData: { [name: string]: BaseHero } = {
         rarity: Rarity.SP,
         imgUrl: 'img/char/julie.png',
         bbaMult: 1.0,
+        maxRank: 5,
         class: ClassData.ARCHER_CLASS,
         description: '',
         modAbilityList: [

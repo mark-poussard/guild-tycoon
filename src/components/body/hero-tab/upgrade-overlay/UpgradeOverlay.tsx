@@ -11,7 +11,7 @@ import './UpgradeOverlay.css'
 
 interface IUpgradeOverlayProps {
     display: boolean;
-    doCancelSelection: () => void;
+    doCancel: () => void;
     hero: Hero;
 }
 
@@ -42,19 +42,22 @@ export default class UpgradeOverlay extends React.Component<IUpgradeOverlayProps
     }
 
     render() {
-        const requireItems: JSX.Element[] = [];
         const requirements = this.heroData.upgradeRequirements[this.props.hero.rank];
-        for (const wrapper of requirements) {
-            const hasEnough = this.state.items[wrapper.item.id] >= wrapper.quantity;
-            const classname = (hasEnough) ? 'upgrade-items-enough' : 'upgrade-items-not-enough';
-            requireItems.push(<ItemInfo key={`REQ_ITEM_${wrapper.item.id}`} className={classname} item={wrapper.item} quantity={wrapper.quantity} />);
+        if (requirements) {
+            const requireItems: JSX.Element[] = [];
+            for (const wrapper of requirements) {
+                const hasEnough = this.state.items[wrapper.item.id] >= wrapper.quantity;
+                const classname = (hasEnough) ? 'upgrade-items-enough' : 'upgrade-items-not-enough';
+                requireItems.push(<ItemInfo key={`REQ_ITEM_${wrapper.item.id}`} className={classname} item={wrapper.item} quantity={wrapper.quantity} />);
+            }
+            return (
+                <Overlay display={this.props.display} closeOverlayCallback={this.props.doCancel} width={30} height={30}>
+                    {requireItems}
+                    <button disabled={!this.canUpgrade()}>Rank up</button>
+                </Overlay>
+            );
         }
-        return (
-            <Overlay display={this.props.display} closeOverlayCallback={this.props.doCancelSelection} width={30} height={30}>
-                {requireItems}
-                <button disabled={!this.canUpgrade()}>Rank up</button>
-            </Overlay>
-        );
+        return null;
     }
 
     canUpgrade = () => {

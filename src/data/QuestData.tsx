@@ -16,7 +16,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 1,
-            crystal: 0
+            shard: 0
         },
         drop: [{ item: ItemData.WOODEN_STICK, rates: [100] }],
         activates: ['QUEST02', 'QUEST03', 'QUEST04'],
@@ -37,7 +37,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: ['QUEST06'],
@@ -59,7 +59,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: ['QUEST05'],
@@ -80,7 +80,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: ['QUEST08'],
@@ -98,7 +98,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 3,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: ['QUEST07'],
@@ -120,7 +120,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 1,
             exp: 1,
-            crystal: 0
+            shard: 0
         },
         drop: [{ item: ItemData.WOODEN_STICK, rates: [50, 50, 50] }],
         activates: [],
@@ -142,7 +142,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 8,
             exp: 4,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: [],
@@ -174,7 +174,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 3,
             exp: 3,
-            crystal: 0
+            shard: 0
         },
         drop: [],
         activates: [],

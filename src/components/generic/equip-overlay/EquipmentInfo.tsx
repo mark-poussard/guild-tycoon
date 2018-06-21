@@ -11,6 +11,7 @@ import ClassHelper from 'business/ClassHelper';
 import HeroHelper from 'business/HeroHelper';
 import RankStar from 'components/generic/hero-info/RankStar';
 import AbilityModifierList from '../hero-info/AbilityModifierList';
+import Level from 'components/body/hero-tab/Level';
 
 interface IEquipmentInfoProps {
     hero: Hero;
@@ -24,12 +25,13 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
     }
     render() {
         return (
-            <div className='container equip-hero-info'>
-                <div>
+            <div className='container'>
+                <div className='equip-hero-info'>
                     <h2>{this.heroData.name}</h2>
                     <div>
                         <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
                     </div>
+                    <Level hero={this.props.hero} />
                     <div>
                         Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />
                     </div>
@@ -102,8 +104,8 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
         const ba = HeroHelper.computeHeroBA(this.props.hero);
         return (
             <>
-            <span>{`Battle Ability : `}</span>
-            <span style={{color:'green'}}>{ba}</span>
+                <span>{`Battle Ability : `}</span>
+                <span style={{ color: 'green' }}>{ba}</span>
             </>
         );
     }
