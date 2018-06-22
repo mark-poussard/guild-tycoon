@@ -72,11 +72,11 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         const result: JSX.Element[] = [];
         const heroesArray = this.state.heroes;
         heroesArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
-        for (let i = 0; i < heroesArray.length; i++) {
+        for (const hero of heroesArray) {
             result.push(
-                <HeroInfo key={`HEROINFO_${i}`} hero={heroesArray[i]} >
-                    <EquipmentButton hero={heroesArray[i]}/>
-                    <UpgradeButton hero={heroesArray[i]} />
+                <HeroInfo key={`HEROINFO_${hero.data}`} hero={hero} >
+                    <EquipmentButton className={'hero-tab-hero-info-buttons'} hero={hero}/>
+                    <UpgradeButton className={'hero-tab-hero-info-buttons'} hero={hero} />
                 </HeroInfo>
             );
         }

@@ -25,8 +25,8 @@ export default interface GameModelState {
 export const StartingGameState = (): GameModelState => {
     return {
         gold: 0,
-        shards: 0,
-        exp: 0,
+        shards: 500,
+        exp: 10000,
         heroes: new IndexedArray<string, Hero>(x => x.data),
         guildSize: 10,
         statistics: {

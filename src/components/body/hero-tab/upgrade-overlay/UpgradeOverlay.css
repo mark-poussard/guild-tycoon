@@ -1,7 +1,9 @@
-.upgrade-items-enough {
-    color: green;
-}
-
-.upgrade-items-not-enough {
-    color: red;
+.upgrade-overlay-button{
+    position : absolute;
+    bottom : 10px;
+    right: 0px;
+    left: 0px;
+    margin-left:auto;
+    margin-right:auto;
+    width:100px;
 }

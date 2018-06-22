@@ -25,7 +25,7 @@ class HeroHelper {
         const heroData = HeroDataArray.get(hero.data);
         const dupBonus = this.computeDupBonusBA(hero);
         const bba = heroData.bbaMult * hero.level * 4 * dupBonus;
-        return bba + EquipmentSetHelper.computeBA(hero.equipment);
+        return Math.floor(bba + EquipmentSetHelper.computeBA(hero.equipment));
     }
 
     computeDupBonusBA = (hero: Hero) => {

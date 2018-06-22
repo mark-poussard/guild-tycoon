@@ -18,5 +18,6 @@ export enum GameModelActionTypes {
     REGISTER_CFH_RESULT = 'register_cfh_result',
     EQUIP_ITEM = 'equip_item',
     REMOVE_ALL_ITEMS = 'remove_all_items',
-    REMOVE_ITEM = 'remove_item'
+    REMOVE_ITEM = 'remove_item',
+    HERO_RANK_UP = 'hero_rank_up'
 }

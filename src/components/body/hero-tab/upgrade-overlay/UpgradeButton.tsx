@@ -5,6 +5,7 @@ import UpgradeOverlay from './UpgradeOverlay';
 
 interface IUpgradeButtonProps {
     hero: Hero;
+    className?:string;
 }
 
 interface IUpgradeButtonState {
@@ -18,10 +19,10 @@ export default class UpgradeButton extends React.Component<IUpgradeButtonProps, 
     }
 
     render() {
-        if (!this.isMaxRank) {
+        if (!this.isMaxRank()) {
             return (
                 <>
-                    <button className={`input-center`} disabled={!this.canRankUp()} onClick={this.displayOverlay}>Rank up</button>
+                    <button className={`${this.props.className}`} disabled={!this.canRankUp()} onClick={this.displayOverlay}>Rank up</button>
                     <UpgradeOverlay hero={this.props.hero} doCancel={this.hideOverlay} display={this.state.overlayDisplayed} />
                 </>
             );

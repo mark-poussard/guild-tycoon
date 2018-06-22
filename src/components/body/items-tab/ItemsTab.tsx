@@ -47,7 +47,7 @@ export default class ItemsTab extends React.Component<IItemsTabProps, IItemsTabS
         let i = 0;
         for (let objectId in this.state.items) {
             if (this.state.items[objectId] > 0) {
-                result.push(<ItemInfo key={`ITEM_${i++}`} item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]} equipHero={this.props.equipHero} />)
+                result.push(<ItemInfo key={`ITEM_${i++}`} inline item={ItemDataArray.get(objectId)} quantity={this.state.items[objectId]} equipHero={this.props.equipHero} />)
             }
         }
         return result;

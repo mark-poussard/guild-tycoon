@@ -17,7 +17,8 @@ import GameModelPayload, {
     EquipItemPayload,
     RemoveAllItemsPayload,
     RepeatQuestPayload,
-    RemoveItemPayload
+    RemoveItemPayload,
+    HeroRankUpPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -239,7 +240,8 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.gameSwitches.firstHero = true;
                     newState.statistics[payload.cfh.id] += 1;
 
-                    const heroData = HeroDataArray.get(payload.hero.data);
+                    const heroId = (payload.hero) ? payload.hero.data : payload.dupId;
+                    const heroData = HeroDataArray.get(heroId);
                     if (payload.hero) {
                         newState.heroes.add(payload.hero);
                         logUserAction(`Congratulations ! Your call brought a new hero to the guild : ${heroData.name}`);
@@ -316,6 +318,19 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     }
                     break;
                 }
+
+                case GameModelActionTypes.HERO_RANK_UP:
+                    {
+                        payload = action.payload as HeroRankUpPayload;
+                        const heroData = HeroDataArray.get(payload.hero.data);
+                        const rankUpRequirements = heroData.upgradeRequirements[payload.hero.rank];
+                        for(const req of rankUpRequirements){
+                            newState.items[req.item.id] -= req.quantity;
+                        }
+                        newState.heroes.get(payload.hero.data).rank += 1;
+                        logUserAction(`You ranked up your hero : ${heroData.name}`);
+                        break;
+                    }
 
             case GameModelActionTypes.CLEAR_GAME_DATA:
                 {

@@ -86,3 +86,7 @@ export interface RemoveItemPayload {
     hero: Hero;
     slot: keyof EquipmentSet;
 }
+
+export interface HeroRankUpPayload {
+    hero: Hero;
+}

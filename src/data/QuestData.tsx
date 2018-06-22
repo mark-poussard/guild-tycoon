@@ -122,7 +122,12 @@ export const QuestData: { [key: string]: BaseQuest } = {
             exp: 1,
             shard: 0
         },
-        drop: [{ item: ItemData.WOODEN_STICK, rates: [50, 50, 50] }],
+        drop: [
+            { item: ItemData.WOODEN_STICK, rates: [50, 50, 50] },
+                {item : ItemData.COURAGE_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
+                {item : ItemData.SENSES_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
+                {item : ItemData.SPIRIT_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
+            ],
         activates: [],
         repeat: new Duration(0, 0, 2, 0),
         classReq: []

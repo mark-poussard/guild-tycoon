@@ -8,6 +8,8 @@ import ItemCollection from 'model/serializable/ItemCollection';
 import ItemInfo from 'components/body/items-tab/ItemInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import './UpgradeOverlay.css'
+import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
+import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 
 interface IUpgradeOverlayProps {
     display: boolean;
@@ -47,13 +49,17 @@ export default class UpgradeOverlay extends React.Component<IUpgradeOverlayProps
             const requireItems: JSX.Element[] = [];
             for (const wrapper of requirements) {
                 const hasEnough = this.state.items[wrapper.item.id] >= wrapper.quantity;
-                const classname = (hasEnough) ? 'upgrade-items-enough' : 'upgrade-items-not-enough';
-                requireItems.push(<ItemInfo key={`REQ_ITEM_${wrapper.item.id}`} className={classname} item={wrapper.item} quantity={wrapper.quantity} />);
+                const txtColor = (hasEnough) ? 'lightgreen' : 'lightred';
+                requireItems.push(<ItemInfo key={`REQ_ITEM_${wrapper.item.id}`} txtColor={txtColor} item={wrapper.item} quantity={wrapper.quantity} />);
             }
             return (
                 <Overlay display={this.props.display} closeOverlayCallback={this.props.doCancel} width={30} height={30}>
+                <h2>Rank Up</h2>
+                    <h3>
+                        Required :
+                    </h3>
                     {requireItems}
-                    <button disabled={!this.canUpgrade()}>Rank up</button>
+                    <button className={`input-center upgrade-overlay-button`} disabled={!this.canUpgrade()} onClick={this.rankUp}>Rank up</button>
                 </Overlay>
             );
         }
@@ -69,5 +75,14 @@ export default class UpgradeOverlay extends React.Component<IUpgradeOverlayProps
             }
         }
         return true;
+    }
+
+    rankUp = () => {
+        GameModelDispatcher.dispatch({
+            type : GameModelActionTypes.HERO_RANK_UP,
+            payload : {
+                hero: this.props.hero
+            }
+        })
     }
 }

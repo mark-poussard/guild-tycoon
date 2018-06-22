@@ -1,6 +1,6 @@
 .hero-info-container{
     width:180px;
-    height:140px;
+    height:120px;
     float: left;
 }
 
@@ -21,7 +21,13 @@
 .hero-info-container .lvl{
     position: absolute;
     right: 40px;
-    top: 3px;
+    top: -2px;
+}
+
+.hero-info-container .rarity{
+    position: absolute;
+    right: 40px;
+    top: -4px;
 }
 
 .hero-info-container .level-up{
@@ -31,4 +37,8 @@
 
 .hero-info-container .divider{
     margin-bottom: 5px;
+}
+
+.absolute-reference{
+    position: relative;
 }

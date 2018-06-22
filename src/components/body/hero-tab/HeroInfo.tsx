@@ -12,6 +12,7 @@ import BaseHero from 'model/BaseHero';
 import { HeroDataArray } from 'data/HeroData';
 import ClassHelper from 'business/ClassHelper';
 import Level from 'components/body/hero-tab/Level';
+import Rarity from 'components/body/hero-tab/Rarity';
 
 interface IHeroInfoProps {
     hero: Hero;
@@ -30,11 +31,12 @@ export default class HeroInfo extends React.Component<IHeroInfoProps>{
             <div className="container hero-info-container">
                 <div className="divider">
                     {this.renderHeroName()}
-                    <Level className="lvl" hero={this.props.hero} />
+                    <Rarity className="rarity" hero={this.props.hero} />
                     <div className="icon"><img src={this.heroData.imgUrl} /></div>
                 </div>
-                <div className="divider">
+                <div className="divider absolute-reference">
                     <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
+                    <Level className="lvl" hero={this.props.hero} />
                 </div>
                 <div className="divider">
                     Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />

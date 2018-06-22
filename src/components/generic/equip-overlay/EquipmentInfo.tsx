@@ -12,6 +12,7 @@ import HeroHelper from 'business/HeroHelper';
 import RankStar from 'components/generic/hero-info/RankStar';
 import AbilityModifierList from '../hero-info/AbilityModifierList';
 import Level from 'components/body/hero-tab/Level';
+import DupLevel from 'components/generic/hero-info/DupLevel';
 
 interface IEquipmentInfoProps {
     hero: Hero;
@@ -27,7 +28,10 @@ export default class EquipmentInfo extends React.Component<IEquipmentInfoProps>{
         return (
             <div className='container'>
                 <div className='equip-hero-info'>
-                    <h2>{this.heroData.name}</h2>
+                    <div>
+                        <h2 style={{display:'inline'}}>{this.heroData.name}</h2>
+                        <DupLevel hero={this.props.hero}/>
+                    </div>
                     <div>
                         <span className="rank">{RankStar.generateRank(this.props.hero.rank)}</span>
                     </div>

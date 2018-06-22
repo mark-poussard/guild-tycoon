@@ -4,6 +4,7 @@ import EquipmentOverlay from 'components/generic/equip-overlay/EquipmentOverlay'
 
 interface IEquipmentButtonProps{
     hero : Hero;
+    className?:string;
 }
 
 interface IEquipmentButtonState{
@@ -20,7 +21,7 @@ export default class EquipmentButton extends React.Component<IEquipmentButtonPro
     render(){
         return (
             <>
-                <button className='input-center' onClick={this.showOverlay}>Equipment</button>
+                <button className={`${this.props.className}`} onClick={this.showOverlay}>Equipment</button>
                 <EquipmentOverlay display={this.state.display} doCancelSelection={() => this.setState({display : false})} hero={this.props.hero}/>
             </>
         )

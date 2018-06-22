@@ -126,7 +126,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
         const result: JSX.Element[] = [];
         let i = 0;
         for (let drop of drops) {
-            result.push(<ItemInfo key={`ITEM_${i++}`} item={drop.item} quantity={drop.quantity} />)
+            result.push(<ItemInfo key={`ITEM_${i++}`} inline item={drop.item} quantity={drop.quantity} />)
         }
         return result;
     }

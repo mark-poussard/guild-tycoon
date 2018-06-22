@@ -13,6 +13,8 @@ interface IItemInfoProps {
     quantity: number;
     equipHero?: Hero;
     className?: string;
+    txtColor ?: string;
+    inline ?: boolean;
 }
 
 export default class ItemInfo extends React.Component<IItemInfoProps> {
@@ -21,12 +23,14 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
     }
 
     render() {
+        const containerStyle : React.CSSProperties = (this.props.inline)?{float:'left'}:{};
+        const txtStyle = (this.props.txtColor)?{color:this.props.txtColor}:{};
         return (
-            <div className={`item-container ${this.props.className}`} onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>
+            <div className={`item-container ${this.props.className}`} style={containerStyle} onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>
                 <ToolTip toolTipContent={this.renderItemInfo()}>
                     <div className='item-img-container'>
                         <img src={this.props.item.icon} />
-                        <div className='item-quantity-txt'>{this.props.quantity}</div>
+                        <div className='item-quantity-txt' style={txtStyle}>{this.props.quantity}</div>
                     </div>
                 </ToolTip>
             </div>

@@ -55,11 +55,11 @@ export default class SelectHeroOverlay extends React.Component<ISelectHeroOverla
         const heroArray = this.state.heroes;
         heroArray.sort(HeroHelper.createHeroSort(this.state.rankOrder, this.state.lvlOrder, this.state.nameOrder));
         const result: JSX.Element[] = [];
-        for (let i = 0; i < heroArray.length; i++) {
+        for (const hero of heroArray) {
             result.push(
-                <HeroInfo key={`HEROINFO_${i}`} hero={heroArray[i]} >
+                <HeroInfo key={`HEROINFO_${hero.data}`} hero={hero} >
                     <HeroSelectButton
-                        hero={heroArray[i]}
+                        hero={hero}
                         selectedHeroes={this.state.selectedHeroes}
                         doSelectHero={this.doSelectHero}
                         doUnselectHero={this.doUnselectHero}
