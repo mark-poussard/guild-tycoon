@@ -23,7 +23,7 @@ export default class CallInfo extends React.Component<ICallInfoProps, ICallInfoS
     render() {
         return (
             <div className='container'>
-                <h2>{this.props.cfh.title}</h2>
+                <h3>{this.props.cfh.title}</h3>
                 <p>{this.props.cfh.description}</p>
                 <button onClick={this.doCall} disabled={!this.hasEnoughShards()}>Call</button>
             </div>

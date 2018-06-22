@@ -1,3 +1,8 @@
 .ennemy-info-name{
     color : red;
 }
+
+.ennemy-info{
+    display: inline-block;
+    margin: 5px 10px 5px 10px;
+}

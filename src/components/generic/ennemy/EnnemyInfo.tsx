@@ -15,7 +15,7 @@ export default class EnnemyInfo extends React.Component<IEnnemyInfoProps>{
 
     render() {
         return (
-            <div>
+            <div className='ennemy-info'>
                 <div className='ennemy-info-name'>
                     {this.props.ennemy.name}
                 </div>

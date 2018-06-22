@@ -4,7 +4,8 @@ export enum TabType {
     CFH = 'cfh',
     QUESTS = 'quests',
     ITEMS = 'items',
-    LOG = 'log'
+    LOG = 'log',
+    DUNGEONS = 'dungeons'
 }
 
 type Listener = (tab: TabType) => void;

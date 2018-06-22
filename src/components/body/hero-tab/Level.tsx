@@ -8,7 +8,7 @@ import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 
 interface ILevelProps {
     hero: Hero;
-    className ?: string;
+    className?: string;
 }
 
 interface ILevelState {
@@ -53,10 +53,18 @@ export default class Level extends React.Component<ILevelProps, ILevelState>{
         return null;
     }
 
-    heroLevelUp = () => {
-        GameModelDispatcher.dispatch({
-            type: GameModelActionTypes.HERO_LVL_UP,
-            payload: { heroId: this.props.hero.data }
-        });
+    heroLevelUp = (e: React.MouseEvent<HTMLInputElement>) => {
+        if (e.ctrlKey) {
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.HERO_BULK_LVL_UP,
+                payload: { heroId: this.props.hero.data }
+            });
+        }
+        else {
+            GameModelDispatcher.dispatch({
+                type: GameModelActionTypes.HERO_LVL_UP,
+                payload: { heroId: this.props.hero.data }
+            });
+        }
     }
 }

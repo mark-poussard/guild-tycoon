@@ -23,7 +23,7 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
     }
 
     render() {
-        const containerStyle : React.CSSProperties = (this.props.inline)?{float:'left'}:{};
+        const containerStyle : React.CSSProperties = (this.props.inline)?{display:'inline-block'}:{};
         const txtStyle = (this.props.txtColor)?{color:this.props.txtColor}:{};
         return (
             <div className={`item-container ${this.props.className}`} style={containerStyle} onDragStart={this.onItemDrag} onDoubleClick={this.onDoubleClick} draggable>

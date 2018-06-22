@@ -1,10 +1,7 @@
 import { GameModelActionTypes } from './GameModelActionTypes';
 import Quest from 'model/Quest';
-import QuestWrapper from 'model/QuestWrapper';
 import Hero from 'model/Hero';
-import Item from 'model/items/Item';
 import CallForHero from 'model/CallForHero';
-import BaseHero from 'model/BaseHero';
 import QuestDrop from 'model/QuestDrop';
 import EquipmentSet from 'model/EquipmentSet';
 
@@ -17,29 +14,15 @@ export interface AddResourcePayload {
     quantity: number;
 }
 
-export interface AssignQuestPayload {
-    heroId: string;
-    quest: QuestWrapper;
-}
-
-export interface CompleteQuestPayload {
-    quest: QuestWrapper;
-}
-
-export interface CompleteDungeonPayload {
-    dungeonId: string;
-}
-
 export interface RecruitHeroPayload {
     hero: Hero;
 }
 
-export interface SetAutoQuestPayload {
+export interface HeroLevelUpPayload {
     heroId: string;
-    autoQuest: boolean;
 }
 
-export interface HeroLevelUpPayload {
+export interface HeroBulkLevelUpPayload {
     heroId: string;
 }
 

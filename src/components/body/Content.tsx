@@ -7,6 +7,7 @@ import CallTab from 'components/body/call-tab/CallTab';
 import QuestTab from 'components/body/quest-tab/QuestTab';
 import ItemsTab from 'components/body/items-tab/ItemsTab';
 import LogTab from 'components/body/log-tab/LogTab';
+import DungeonTab from './dungeon-tab/DungeonTab';
 
 interface IContentProps {
     currentTab: TabType;
@@ -36,6 +37,8 @@ export default class Content extends React.Component<IContentProps, IContentStat
                 return <CallTab />
             case TabType.QUESTS:
                 return <QuestTab />
+            case TabType.DUNGEONS:
+                return <DungeonTab />
             case TabType.IMPROVEMENTS:
                 return <ImprovementsTab />
             case TabType.ITEMS:

@@ -49,7 +49,7 @@ export default class UpgradeOverlay extends React.Component<IUpgradeOverlayProps
             const requireItems: JSX.Element[] = [];
             for (const wrapper of requirements) {
                 const hasEnough = this.state.items[wrapper.item.id] >= wrapper.quantity;
-                const txtColor = (hasEnough) ? 'lightgreen' : 'lightred';
+                const txtColor = (hasEnough) ? 'lightgreen' : 'indianred';
                 requireItems.push(<ItemInfo key={`REQ_ITEM_${wrapper.item.id}`} txtColor={txtColor} item={wrapper.item} quantity={wrapper.quantity} />);
             }
             return (

@@ -55,6 +55,9 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
         if (this.state.gameSwitches.firstHero) {
             menuContent.push(<MenuButton key='QUESTS_BUTTON' txt="Quests" onClick={this.onMenuClick(TabType.QUESTS)} />);
         }
+        if (this.state.gameSwitches.QUEST02) {
+            menuContent.push(<MenuButton key='DUNGEON_BUTTON' txt="Dungeons" onClick={this.onMenuClick(TabType.DUNGEONS)} />);
+        }
         if (this.state.gameSwitches.QUEST01) {
             menuContent.push(<MenuButton key='ITEMS_BUTTON' txt="Items" onClick={this.onMenuClick(TabType.ITEMS)} />);
         }

@@ -3,39 +3,41 @@ import './ToolTip.css';
 
 interface IToolTipProps {
     toolTipContent: React.ReactNode;
-    position ?: ToolTipPosition;
-    width ?: number;
+    position?: ToolTipPosition;
+    width?: number;
 }
 
-interface IToolTipState{
-    displayed : boolean;
+interface IToolTipState {
+    displayed: boolean;
 }
 
 export default class ToolTip extends React.Component<IToolTipProps, IToolTipState>{
-    position : ToolTipPosition;
+    position: ToolTipPosition;
 
     constructor(props: IToolTipProps) {
         super(props);
         this.position = this.props.position || ToolTipPosition.RIGHT;
-        this.state = {displayed : false};
+        this.state = { displayed: false };
     }
 
     render() {
         let classname;
-        if(this.state.displayed){
+        if (this.state.displayed) {
             classname = 'tooltip-displayed';
         }
-        else{
+        else {
             classname = 'tooltip-hidden';
         }
         let width = 300;
-        if(this.props.width){
+        if (this.props.width) {
             width = this.props.width;
         }
         return (
-            <div className="tooltip" onMouseEnter={this.onHover} onMouseLeave={this.onLeave}>
-                {this.props.children}
-                <div className={`tooltip-content ${classname}`} style={{width:`${width}px`}}>
+            <div className="tooltip">
+                <div onMouseEnter={this.onHover} onMouseLeave={this.onLeave}>
+                    {this.props.children}
+                </div>
+                <div className={`tooltip-content ${classname}`} style={{ width: `${width}px` }}>
                     {this.props.toolTipContent}
                 </div>
             </div>
@@ -43,14 +45,14 @@ export default class ToolTip extends React.Component<IToolTipProps, IToolTipStat
     }
 
     onHover = (event: React.MouseEvent<HTMLDivElement>) => {
-        this.setState({displayed : true});
+        this.setState({ displayed: true });
     }
 
     onLeave = (event: React.MouseEvent<HTMLDivElement>) => {
-        this.setState({displayed : false});
+        this.setState({ displayed: false });
     }
 }
 
-export enum ToolTipPosition{
-    TOP = ('top'), BOTTOM=('bottom'), LEFT=('left'), RIGHT=('right')
+export enum ToolTipPosition {
+    TOP = ('top'), BOTTOM = ('bottom'), LEFT = ('left'), RIGHT = ('right')
 }

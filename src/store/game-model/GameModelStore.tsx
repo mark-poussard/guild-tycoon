@@ -3,12 +3,8 @@ import { ReduceStore } from 'flux/utils';
 import GameModelState, { StartingGameState, GameStateSerializer, GameStateDeserializer } from './GameModelState';
 import GameModelPayload, {
     AddResourcePayload,
-    AssignQuestPayload,
     RecruitHeroPayload,
-    SetAutoQuestPayload,
     HeroLevelUpPayload,
-    CompleteQuestPayload,
-    CompleteDungeonPayload,
     SetImprovementPayload,
     StartQuestPayload,
     EndQuestFailPayload,
@@ -80,45 +76,12 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 this.eventEmitter.emit(GameModelActionTypes.ADD_FAME, newState);
                 break;
 
-            case GameModelActionTypes.ASSIGN_QUEST:
-                payload = action.payload as AssignQuestPayload;
-                if (newState.heroes.contains(payload.heroId)) {
-                    //newState.heroes.get(payload.heroId).quest = payload.quest;
-                }
-                this.eventEmitter.emit(GameModelActionTypes.ASSIGN_QUEST, newState);
-                break;
-
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
                 if (newState.heroes.size() < newState.guildSize) {
                     newState.heroes.add(payload.hero);
                 }
                 this.eventEmitter.emit(GameModelActionTypes.RECRUIT_HERO, newState);
-                break;
-
-            case GameModelActionTypes.SET_AUTO_QUEST:
-                {
-                    payload = action.payload as SetAutoQuestPayload;
-                    const hero = newState.heroes.get(payload.heroId)
-                    if (payload.autoQuest /*&& hero.quest && (hero.quest.quest.power > 0 || hero.quest.heroes.length > 1)*/) {
-                        //Don't allow setting autoquest during quest with multiple participants or that wasn't auto-generated (dungeon quests)
-                        return newState;
-                    }
-                    //hero.autoQuest = payload.autoQuest;
-                    this.eventEmitter.emit(GameModelActionTypes.SET_AUTO_QUEST, newState);
-                    break;
-                }
-
-            case GameModelActionTypes.COMPLETE_QUEST:
-                payload = action.payload as CompleteQuestPayload;
-                newState.statistics.questCompleted += 1;
-                //this.achievementsHelper.computeQuestStat(newState);
-                this.eventEmitter.emit(GameModelActionTypes.COMPLETE_QUEST, newState);
-                break;
-
-            case GameModelActionTypes.COMPLETE_DUNGEON:
-                payload = action.payload as CompleteDungeonPayload;
-                newState.completedDungeons.add(payload.dungeonId);
                 break;
 
             case GameModelActionTypes.HERO_LVL_UP:
@@ -130,6 +93,21 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         newState.exp -= requiredExp;
                         hero.level += 1;
                         this.eventEmitter.emit(GameModelActionTypes.HERO_LVL_UP, newState);
+                    }
+                    break;
+                }
+
+            case GameModelActionTypes.HERO_BULK_LVL_UP:
+                {
+                    payload = action.payload as HeroLevelUpPayload;
+                    const hero = newState.heroes.get(payload.heroId);
+                    let requiredExp = HeroHelper.expRequiredToLevel(hero);
+                    
+                    while (newState.exp >= requiredExp && !HeroHelper.isMaxLevel(hero)) {
+                        newState.exp -= requiredExp;
+                        hero.level += 1;
+
+                        requiredExp = HeroHelper.expRequiredToLevel(hero);
                     }
                     break;
                 }
@@ -319,18 +297,18 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     break;
                 }
 
-                case GameModelActionTypes.HERO_RANK_UP:
-                    {
-                        payload = action.payload as HeroRankUpPayload;
-                        const heroData = HeroDataArray.get(payload.hero.data);
-                        const rankUpRequirements = heroData.upgradeRequirements[payload.hero.rank];
-                        for(const req of rankUpRequirements){
-                            newState.items[req.item.id] -= req.quantity;
-                        }
-                        newState.heroes.get(payload.hero.data).rank += 1;
-                        logUserAction(`You ranked up your hero : ${heroData.name}`);
-                        break;
+            case GameModelActionTypes.HERO_RANK_UP:
+                {
+                    payload = action.payload as HeroRankUpPayload;
+                    const heroData = HeroDataArray.get(payload.hero.data);
+                    const rankUpRequirements = heroData.upgradeRequirements[payload.hero.rank];
+                    for (const req of rankUpRequirements) {
+                        newState.items[req.item.id] -= req.quantity;
                     }
+                    newState.heroes.get(payload.hero.data).rank += 1;
+                    logUserAction(`You ranked up your hero : ${heroData.name}`);
+                    break;
+                }
 
             case GameModelActionTypes.CLEAR_GAME_DATA:
                 {
