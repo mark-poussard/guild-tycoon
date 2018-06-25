@@ -6,27 +6,27 @@ import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
 import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import Timer from 'components/generic/Timer';
 
-interface IQuestActionProps{
-    quest : Quest;
-    questData : BaseQuest;
-    startTxt : string;
-    endTxt : string;
-    end : () => void;
-    start : () => void;
+interface IQuestActionProps {
+    quest: Quest;
+    questData: BaseQuest;
+    startTxt: string;
+    endTxt: string;
+    end: () => void;
+    start: () => void;
 }
 
-interface IQuestActionState{
-    questEnded : boolean;
+interface IQuestActionState {
+    questEnded: boolean;
 }
 
 export default class QuestAction extends React.Component<IQuestActionProps, IQuestActionState>{
 
-    constructor(props : IQuestActionProps){
+    constructor(props: IQuestActionProps) {
         super(props);
-        this.state = {questEnded : false};
+        this.state = { questEnded: false };
     }
 
-    render(){
+    render() {
         if (!this.props.quest || !this.props.quest.startedAt) {
             return (
                 <button onClick={this.startQuest}>{this.props.startTxt}</button>
@@ -34,7 +34,7 @@ export default class QuestAction extends React.Component<IQuestActionProps, IQue
         }
         else if (!this.props.quest.completedAt && !this.state.questEnded) {
             return (
-                <QuestProgressBar quest={this.props.quest} doQuestOver={() => this.setState({ questEnded: true })} />
+                <QuestProgressBar questData={this.props.questData} quest={this.props.quest} doQuestOver={() => this.setState({ questEnded: true })} widthPrct={25} />
             );
         }
         else if (!this.props.quest.completedAt && this.state.questEnded) {

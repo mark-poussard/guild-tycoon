@@ -124,12 +124,12 @@ export const QuestData: { [key: string]: BaseQuest } = {
         },
         drop: [
             { item: ItemData.WOODEN_STICK, rates: [50, 50, 50] },
-                {item : ItemData.COURAGE_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
-                {item : ItemData.SENSES_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
-                {item : ItemData.SPIRIT_ORB, rates: [100,100,100,100,100,100,100,100,100,100,100,100,100]},
-            ],
+            { item: ItemData.COURAGE_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+            { item: ItemData.SENSES_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+            { item: ItemData.SPIRIT_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+        ],
         activates: [],
-        repeat: new Duration(0, 0, 2, 0),
+        repeat: null,
         classReq: []
     },
     // Expected lvl : 4
@@ -185,6 +185,243 @@ export const QuestData: { [key: string]: BaseQuest } = {
         activates: [],
         repeat: null,
         classReq: []
+    },
+    // Expected lvl : 20-30
+    QUEST09: {
+        id: 'QUEST09',
+        title: 'Jake the beast hunter',
+        description: 'A savage looking man comes knocking at your guild door. He claims to a famous beast hunter named \'Jake\' looking for help in his next hunt through the wilds. Although you have never heard of this man before he seems competent enough and -most importantly- willing to pay for your services.',
+        maxPartySize: 2,
+        duration: new Duration(0, 0, 10, 0),
+        ennemies: [{
+            class: ClassData.BEAST_CLASS,
+            name: 'Grizzly Bear',
+            ba: 80
+        },
+        {
+            class: ClassData.BEAST_CLASS,
+            name: 'Enraged Boar',
+            ba: 120
+        }],
+        reward: {
+            gold: 5,
+            exp: 10,
+            shard: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 35
+    QUEST10: {
+        id: 'QUEST10',
+        title: 'What\'s a Harkling ?',
+        description: 'You\'ve received a letter from Jake (the hunter). He\'s asking for help tracking down a scourge of Harklings down in the fire lands. He also mentions a hefty donation to the guild if it accepts to help.',
+        maxPartySize: 2,
+        duration: new Duration(0, 0, 15, 0),
+        ennemies: [{
+            class: ClassData.HARKLING_CLASS,
+            name: 'Baby Harkling',
+            ba: 10
+        },
+        {
+            class: ClassData.HARKLING_CLASS,
+            name: 'Baby Harkling',
+            ba: 10
+        },
+        {
+            class: ClassData.HARKLING_CLASS,
+            name: 'Baby Harkling',
+            ba: 10
+        },
+        {
+            class: ClassData.HARKLING_CLASS,
+            name: 'Mother Harkling',
+            ba: 160
+        }],
+        reward: {
+            gold: 10,
+            exp: 30,
+            shard: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 40
+    QUEST11: {
+        id: 'QUEST11',
+        title: 'The Tomjaker tooth',
+        description: 'It\'s Jake again, this time he is rambling about a... tooth ? He claims it has great value especially if sold to the Ja\'raki tribe who live deep in the western jungles. He promises that if the guild helps, he\'ll share the spoils of the tooth fairly. If he makes it back alive.',
+        maxPartySize: 1,
+        duration: new Duration(0, 0, 20, 0),
+        ennemies: [
+            {
+                class: ClassData.TOMJAKER_CLASS,
+                name: 'Imposant Tomjaker',
+                ba: 200
+            }],
+        reward: {
+            gold: 10,
+            exp: 45,
+            shard: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 50
+    QUEST12: {
+        id: 'QUEST12',
+        title: 'Hunting Frostbears',
+        description: 'Jake is back, and this time he wants to go on an epic hunt for Frostbears. You\'ve already heard tales of those magnificent creatures, and from what you remember of them they have a ferocious temper and will maul or eat anything that comes close to their den. Jake seems very excited at the prospect.',
+        maxPartySize: 4,
+        duration: new Duration(0, 0, 30, 0),
+        ennemies: [
+            {
+                class: ClassData.FROSTBEAR_CLASS,
+                name: 'Frostbear',
+                ba: 250
+            },
+            {
+                class: ClassData.FROSTBEAR_CLASS,
+                name: 'Frostbear',
+                ba: 250
+            },
+            {
+                class: ClassData.FROSTBEAR_CLASS,
+                name: 'Frostbear',
+                ba: 250
+            }],
+        reward: {
+            gold: 20,
+            exp: 60,
+            shard: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 70
+    QUEST13: {
+        id: 'QUEST13',
+        title: 'A Beewiz infestation',
+        description: 'You\'ve receive a letter from Jake. He is currently helping out a small northern village that is suffering from a terrifying Beewiz colony. These flying creatures are known to be a nuisance when encountered alone, when they form a colony it becomes urgent to evacuate neighbouring villages before a tragedy happens.',
+        maxPartySize: 2,
+        duration: new Duration(0, 0, 30, 0),
+        ennemies: [
+            {
+                class: ClassData.BEEWIZ_CLASS,
+                name: 'Beewiz',
+                ba: 300
+            },
+            {
+                class: ClassData.BEEWIZ_CLASS,
+                name: 'Beewiz',
+                ba: 300
+            },
+            {
+                class: ClassData.BEEWIZ_CLASS,
+                name: 'Beewiz Queen',
+                ba: 330
+            }],
+        reward: {
+            gold: 30,
+            exp: 90,
+            shard: 0
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 90
+    QUEST14: {
+        id: 'QUEST14',
+        title: 'A beast among beasts',
+        description: 'Jake is back, and this time he is offering to go on a quest like no other. He is going to track the mightiest beast there is to slay and enter the legends. He has taken a liking to the guild and wants to share the glory and spoils with it. For the moment he has no clue where to start looking for his beast.',
+        maxPartySize: 3,
+        duration: new Duration(0, 0, 40, 0),
+        ennemies: [
+            {
+                class: ClassData.HARKLING_CLASS,
+                name: 'Harkling Alpha',
+                ba: 400
+            },
+            {
+                class: ClassData.TOMJAKER_CLASS,
+                name: 'Ancient Tomjaker',
+                ba: 400
+            },
+            {
+                class: ClassData.FROSTBEAR_CLASS,
+                name: 'Deranged Frostbear',
+                ba: 400
+            }],
+        reward: {
+            gold: 60,
+            exp: 200,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 120
+    QUEST15: {
+        id: 'QUEST15',
+        title: 'On the trace of the Jabberwocky',
+        description: 'During the latest hunt, you rested the night in an isolated village high up in the mountains, where you heard about the tale of the Jabberwocky. A formidable beast made of scale, fang, claw and wing, capable of crushing a man with the power of it\'s stare. This tale got Jake visibly excited and he is determined to track down the fabled creature.',
+        maxPartySize: 1,
+        duration: new Duration(0, 0, 30, 0),
+        ennemies: [
+            {
+                class: ClassData.RASCAL_CLASS,
+                name: 'Bandit',
+                ba: 550
+            }],
+        reward: {
+            gold: 40,
+            exp: 100,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: [ClassData.MINSTREL_CLASS.name]
+    },
+    // Expected lvl : 150
+    QUEST16: {
+        id: 'QUEST16',
+        title: 'The vaporous swamp',
+        description: 'After going through countless villages in the region, Jake finally finds an old man that talks about the great Jabberwocky hunt the people here took part in back when he was young. He says that the last he heard, all that was left of the beasts kind could only be found deep in the vaporous swamps, a local swamp named so because of jets of hot steam coming out of cracks in the ground. After asking for directions and a few days travel you make it to a valley covered in low hanging clouds. The swamps seem to be at the bottom.',
+        maxPartySize: 3,
+        duration: new Duration(0, 0, 40, 0),
+        ennemies: [
+            {
+                class: ClassData.VORPAL_CLASS,
+                name: 'Vorpal Tainted Wolf',
+                ba: 800
+            },
+            {
+                class: ClassData.VORPAL_CLASS,
+                name: 'Vorpal Tainted Bear',
+                ba: 850
+            },],
+        reward: {
+            gold: 40,
+            exp: 100,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: [ClassData.MINSTREL_CLASS.name]
     }
 };
 

@@ -9,6 +9,8 @@ import Timer from '../Timer';
 interface IQuestProgressBarProps {
     quest: Quest;
     doQuestOver: () => void;
+    questData?: BaseQuest;
+    widthPrct: number;
 }
 
 interface IQuestProgressBarState {
@@ -21,21 +23,23 @@ export default class QuestProgressBar extends React.Component<IQuestProgressBarP
 
     constructor(props: IQuestProgressBarProps) {
         super(props);
-        this.questData = QuestDataArray.get(this.props.quest.id);
+        this.questData = this.props.questData || QuestDataArray.get(this.props.quest.id);
         this.state = { progress: this.computeProgress(this.props.quest) };
         this.intervalId = null;
     }
 
     componentDidMount() {
         this.intervalId = window.setInterval(() => {
-            let progress = this.computeProgress(this.props.quest);
-            if (progress >= 100) {
-                window.clearInterval(this.intervalId);
-                this.intervalId = null;
-                this.props.doQuestOver();
-                progress = 100;
+            if (this.intervalId !== null) {
+                let progress = this.computeProgress(this.props.quest);
+                if (progress >= 100) {
+                    window.clearInterval(this.intervalId);
+                    this.intervalId = null;
+                    this.props.doQuestOver();
+                    progress = 100;
+                }
+                this.setState({ progress: progress });
             }
-            this.setState({ progress: progress });
         },
             200);
     }
@@ -43,13 +47,14 @@ export default class QuestProgressBar extends React.Component<IQuestProgressBarP
     componentWillUnmount() {
         if (this.intervalId !== null) {
             window.clearInterval(this.intervalId);
+            this.intervalId = null;
         }
     }
 
     render() {
         return (
             <ToolTip toolTipContent={<Timer until={new Date(this.props.quest.startedAt + this.questData.duration.toMs())} />} position={ToolTipPosition.TOP}>
-                <ProgressBar progress={this.state.progress} />
+                <ProgressBar progress={this.state.progress} style={{ width: `${this.props.widthPrct}%` }} />
             </ToolTip>
         )
     }

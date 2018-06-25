@@ -162,3 +162,33 @@ export const BEAST_CLASS : Class = {
     name : 'beast',
     onRank : 0
 }
+
+export const HARKLING_CLASS : Class = {
+    name : 'harkling',
+    onRank : 0,
+    previous : BEAST_CLASS
+}
+
+export const TOMJAKER_CLASS : Class = {
+    name : 'tomjaker',
+    onRank : 0,
+    previous : BEAST_CLASS
+}
+
+export const FROSTBEAR_CLASS : Class = {
+    name : 'frostbear',
+    onRank : 0,
+    previous : BEAST_CLASS
+}
+
+export const BEEWIZ_CLASS : Class = {
+    name : 'beewiz',
+    onRank : 0,
+    previous : BEAST_CLASS
+}
+
+export const VORPAL_CLASS : Class = {
+    name : 'vorpal',
+    onRank : 0,
+    previous : BEAST_CLASS
+}

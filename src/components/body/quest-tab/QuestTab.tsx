@@ -4,14 +4,10 @@ import { QuestDataArray } from 'data/QuestData';
 import Quest from 'model/Quest';
 import QuestInfo from 'components/body/quest-tab/QuestInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
-import Overlay from 'components/generic/Overlay';
-import Resource, { ResourceType } from 'components/generic/resource/Resource';
 import QuestHelper from 'business/QuestHelper';
 import Hero from 'model/Hero';
 import SelectHeroOverlay from 'components/generic/select-hero-overlay/SelectHeroOverlay';
-import QuestDrop from 'model/QuestDrop';
 import EndQuestResult from 'business/EndQuestResult';
-import ItemInfo from 'components/body/items-tab/ItemInfo';
 import ObjectUtils from 'business/utils/ObjectUtils';
 import QuestResultOverlay from 'components/body/quest-tab/QuestResultOverlay';
 
@@ -70,7 +66,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
 
     shouldRenderQuest = (quest: Quest) => {
         const questData = QuestDataArray.get(quest.id);
-        return quest.completedAt == null || questData.repeat != null;
+        return questData && (quest.completedAt == null || questData.repeat != null);
     }
 
     renderQuestEndOverlay = () => {

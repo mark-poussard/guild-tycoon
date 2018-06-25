@@ -11,6 +11,8 @@ import './HeroTab.css'
 import HeroHelper from 'business/HeroHelper';
 import EquipmentButton from 'components/body/hero-tab/EquipmentButton';
 import UpgradeButton from 'components/body/hero-tab/upgrade-overlay/UpgradeButton';
+import QuestProgressBar from '../../generic/quest/QuestProgressBar';
+import HeroQuestProgress from './HeroQuestProgress';
 
 interface IHeroTabProps {
 
@@ -28,9 +30,10 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
 
     constructor(props: IHeroTabProps) {
         super(props);
-        this.state = { 
+        this.state = {
             heroes: GameModelStore.getState().heroes.asArray(),
-            rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC};
+            rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC
+        };
     }
 
     render() {
@@ -66,7 +69,8 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         for (const hero of heroesArray) {
             result.push(
                 <HeroInfo key={`HEROINFO_${hero.data}`} hero={hero} >
-                    <EquipmentButton className={'hero-tab-hero-info-buttons'} hero={hero}/>
+                    <HeroQuestProgress hero={hero} />
+                    <EquipmentButton className={'hero-tab-hero-info-buttons'} hero={hero} />
                     <UpgradeButton className={'hero-tab-hero-info-buttons'} hero={hero} />
                 </HeroInfo>
             );
@@ -75,9 +79,9 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     renderHeroRecruit = () => {
-            return (
-                <HeroRecruitButton />
-            );
+        return (
+            <HeroRecruitButton />
+        );
     }
 
     renderSortButton = (order: SortOrder, txt: string, toggle: () => void) => {

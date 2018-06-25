@@ -2,15 +2,12 @@ import * as React from 'react';
 import * as fbEmitter from 'fbemitter';
 import Quest from 'model/Quest';
 import Resource, { ResourceType } from 'components/generic/resource/Resource';
-import GameModelDispatcher from 'store/game-model/GameModelDispatcher';
-import { GameModelActionTypes } from 'store/game-model/GameModelActionTypes';
 import { QuestDataArray } from 'data/QuestData';
 import BaseQuest from 'model/BaseQuest';
-import Timer from 'components/generic/Timer';
-import QuestProgressBar from 'components/generic/quest/QuestProgressBar';
 import EnnemyInfo from 'components/generic/ennemy/EnnemyInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
 import QuestAction from 'components/body/quest-tab/QuestAction';
+import QuestHelper from 'business/QuestHelper';
 
 interface IQuestInfoProps {
     quest: Quest;
@@ -60,9 +57,9 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderClassReq = () => {
-        if(this.questData.classReq && this.questData.classReq.length > 0){
-            const classReqList :JSX.Element[] = [];
-            for(const cls of this.questData.classReq){
+        if (this.questData.classReq && this.questData.classReq.length > 0) {
+            const classReqList: JSX.Element[] = [];
+            for (const cls of this.questData.classReq) {
                 classReqList.push(<span>{`${cls} `}</span>)
             }
             return (
@@ -85,9 +82,9 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
                         <td>
                             <Resource type={ResourceType.GOLD} value={this.questData.reward.gold} modifier />
                             <Resource type={ResourceType.EXP} value={this.questData.reward.exp} modifier />
-                            {this.questData.reward.shard !== 0 && 
+                            {this.questData.reward.shard !== 0 &&
                                 <Resource type={ResourceType.SHARD} value={this.questData.reward.shard} modifier />}
-                            <Resource type={ResourceType.TIME} value={this.questData.duration.toString()} />
+                            <Resource type={ResourceType.TIME} value={QuestHelper.durationToString(this.questData.duration.toMs())} />
                         </td>
                         {this.renderEnnemyCells()}
                     </tr>
@@ -113,11 +110,11 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
 
     renderQuestAction = () => {
         return (
-            <QuestAction 
-            quest={this.state.quest} 
-            questData={this.questData} 
-            startTxt={`Start`} start={this.startQuest}
-            endTxt={`Finish quest`} end={this.endQuest} />
+            <QuestAction
+                quest={this.state.quest}
+                questData={this.questData}
+                startTxt={`Start`} start={this.startQuest}
+                endTxt={`Finish quest`} end={this.endQuest} />
         )
     }
 
