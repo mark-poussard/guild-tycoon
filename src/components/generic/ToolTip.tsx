@@ -22,6 +22,7 @@ export default class ToolTip extends React.Component<IToolTipProps, IToolTipStat
 
     render() {
         let classname;
+        const positionClass = this.computePositionClass();
         if (this.state.displayed) {
             classname = 'tooltip-displayed';
         }
@@ -37,7 +38,7 @@ export default class ToolTip extends React.Component<IToolTipProps, IToolTipStat
                 <div onMouseEnter={this.onHover} onMouseLeave={this.onLeave}>
                     {this.props.children}
                 </div>
-                <div className={`tooltip-content ${classname}`} style={{ width: `${width}px` }}>
+                <div className={`tooltip-content ${classname} ${positionClass}`} style={{ width: `${width}px` }}>
                     {this.props.toolTipContent}
                 </div>
             </div>
@@ -50,6 +51,19 @@ export default class ToolTip extends React.Component<IToolTipProps, IToolTipStat
 
     onLeave = (event: React.MouseEvent<HTMLDivElement>) => {
         this.setState({ displayed: false });
+    }
+
+    computePositionClass = () => {
+        switch(this.position){
+            case ToolTipPosition.TOP:
+            return 'tooltip-position-top';
+            case ToolTipPosition.BOTTOM:
+            return '';
+            case ToolTipPosition.LEFT:
+            return '';
+            case ToolTipPosition.RIGHT:
+            return 'tooltip-position-right';
+        }
     }
 }
 

@@ -10,7 +10,7 @@ export const DungeonData: DungeonBase[] = [
         requireSwitches: ['QUEST02'],
         repeatIn: new Duration(0, 0, 10, 0),
         modes: {
-            easy: {
+            EASY: {
                 ennemies: [
                     {
                         class: ClassData.BEAST_CLASS,
@@ -19,6 +19,7 @@ export const DungeonData: DungeonBase[] = [
                     }
                 ],
                 duration: new Duration(0, 0, 5, 0),
+                maxPartySize : 1,
                 reward: {
                     gold: 10,
                     exp: 15,
@@ -29,7 +30,7 @@ export const DungeonData: DungeonBase[] = [
                     { item: ItemData.SENSES_ORB, rates: [1] }
                 ]
             },
-            normal: {
+            NORMAL: {
                 ennemies: [
                     {
                         class: ClassData.BEAST_CLASS,
@@ -38,6 +39,7 @@ export const DungeonData: DungeonBase[] = [
                     }
                 ],
                 duration: new Duration(0, 0, 5, 0),
+                maxPartySize : 1,
                 reward: {
                     gold: 20,
                     exp: 30,
@@ -48,7 +50,7 @@ export const DungeonData: DungeonBase[] = [
                     { item: ItemData.SENSES_ORB, rates: [5] }
                 ]
             },
-            hard: {
+            HARD: {
                 ennemies: [
                     {
                         class: ClassData.BEAST_CLASS,
@@ -72,6 +74,7 @@ export const DungeonData: DungeonBase[] = [
                     }
                 ],
                 duration: new Duration(0, 0, 5, 0),
+                maxPartySize : 2,
                 reward: {
                     gold: 40,
                     exp: 60,

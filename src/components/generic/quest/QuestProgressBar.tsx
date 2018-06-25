@@ -3,7 +3,7 @@ import Quest from 'model/Quest';
 import { QuestDataArray } from 'data/QuestData';
 import BaseQuest from 'model/BaseQuest';
 import { ProgressBar } from 'components/generic/quest/ProgressBar';
-import ToolTip from '../ToolTip';
+import ToolTip, { ToolTipPosition } from '../ToolTip';
 import Timer from '../Timer';
 
 interface IQuestProgressBarProps {
@@ -48,7 +48,7 @@ export default class QuestProgressBar extends React.Component<IQuestProgressBarP
 
     render() {
         return (
-            <ToolTip toolTipContent={<Timer until={new Date(this.props.quest.startedAt + this.questData.duration.toMs())} />}>
+            <ToolTip toolTipContent={<Timer until={new Date(this.props.quest.startedAt + this.questData.duration.toMs())} />} position={ToolTipPosition.TOP}>
                 <ProgressBar progress={this.state.progress} />
             </ToolTip>
         )

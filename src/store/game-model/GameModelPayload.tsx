@@ -4,6 +4,7 @@ import Hero from 'model/Hero';
 import CallForHero from 'model/CallForHero';
 import QuestDrop from 'model/QuestDrop';
 import EquipmentSet from 'model/EquipmentSet';
+import BaseQuest from 'model/BaseQuest';
 
 export default interface GameModelPayload {
     type: GameModelActionTypes;
@@ -38,10 +39,12 @@ export interface StartQuestPayload {
 
 export interface EndQuestFailPayload {
     quest: Quest;
+    questData ?: BaseQuest;
 }
 
 export interface EndQuestWinPayload {
     quest: Quest;
+    questData ?: BaseQuest;
     drops: QuestDrop[];
 }
 

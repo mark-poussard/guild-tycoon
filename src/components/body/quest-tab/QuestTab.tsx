@@ -13,6 +13,7 @@ import QuestDrop from 'model/QuestDrop';
 import EndQuestResult from 'business/EndQuestResult';
 import ItemInfo from 'components/body/items-tab/ItemInfo';
 import ObjectUtils from 'business/utils/ObjectUtils';
+import QuestResultOverlay from 'components/body/quest-tab/QuestResultOverlay';
 
 interface IQuestTabState {
     quests: Quest[];
@@ -73,19 +74,7 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
     }
 
     renderQuestEndOverlay = () => {
-        const quest = this.state.questResult;
-        if (quest) {
-            return (
-                <Overlay display={!!quest} closeOverlayCallback={() => this.setState({ questResult: null })} width={30} height={50}>
-                    {this.state.questResult.result &&
-                        this.renderQuestWin(quest)}
-                    {!this.state.questResult.result &&
-                        this.renderQuestLose(quest)}
-                    <button className="input-center" onClick={() => this.setState({ questResult: null })}>Acknowledge</button>
-                </Overlay>
-            );
-        }
-        return null;
+        return <QuestResultOverlay questResult={this.state.questResult} closeOverlay={() => this.setState({ questResult: null })} />
     }
 
     renderQuestStartOverlay = () => {
@@ -104,42 +93,6 @@ export default class QuestTab extends React.Component<{}, IQuestTabState>{
             );
         }
         return null;
-    }
-
-    renderQuestWin = (questResult: EndQuestResult) => {
-        const quest = questResult.quest;
-        const questData = QuestDataArray.get(quest.id);
-        return (
-            <div>
-                <h3>{questData.title}</h3>
-                <h2>WIN !</h2>
-                <Resource type={ResourceType.GOLD} value={questData.reward.gold} modifier />
-                <Resource type={ResourceType.EXP} value={questData.reward.exp} modifier />
-                <div>
-                    {this.renderDropInfo(questResult.drops)}
-                </div>
-            </div>
-        );
-    }
-
-    renderDropInfo = (drops: QuestDrop[]) => {
-        const result: JSX.Element[] = [];
-        let i = 0;
-        for (let drop of drops) {
-            result.push(<ItemInfo key={`ITEM_${i++}`} inline item={drop.item} quantity={drop.quantity} />)
-        }
-        return result;
-    }
-
-    renderQuestLose = (questResult: EndQuestResult) => {
-        const quest = questResult.quest;
-        const questData = QuestDataArray.get(quest.id);
-        return (
-            <div>
-                <h3>{questData.title}</h3>
-                <h2>LOSE !</h2>
-            </div>
-        );
     }
 
     endQuest = (quest: Quest) => {

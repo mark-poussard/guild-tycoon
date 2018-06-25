@@ -13,7 +13,6 @@ export default interface GameModelState {
     exp: number,
     shards: number,
     heroes: IndexedArray<string, Hero>,
-    guildSize: number,
     statistics: Statistics;
     completedDungeons: Set<string>;
     improvements: Improvements;
@@ -25,10 +24,9 @@ export default interface GameModelState {
 export const StartingGameState = (): GameModelState => {
     return {
         gold: 0,
-        shards: 500,
-        exp: 10000,
+        shards: 0,
+        exp: 0,
         heroes: new IndexedArray<string, Hero>(x => x.data),
-        guildSize: 10,
         statistics: {
             questCompleted: 0,
             trainClicks: 0,

@@ -4,6 +4,8 @@ import GameModelStore from 'store/game-model/GameModelStore';
 import DungeonBase from 'model/DungeonBase';
 import { DungeonData } from 'data/DungeonData';
 import DungeonInfo from './DungeonInfo';
+import Quest from 'model/Quest';
+import QuestMap from 'model/serializable/QuestMap';
 
 interface IDungeonTabProps {
 
@@ -11,6 +13,7 @@ interface IDungeonTabProps {
 
 interface IDungeonTabState {
     dungeons: DungeonBase[];
+    activeQuests : QuestMap;
 }
 
 export default class DungeonTab extends React.Component<IDungeonTabProps, IDungeonTabState>{
@@ -18,13 +21,13 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
 
     constructor(props: IDungeonTabProps) {
         super(props);
-        this.state = { dungeons: this.computeActiveDungeons() };
+        this.state = { dungeons: this.computeActiveDungeons(), activeQuests : this.copyActiveQuests() };
     }
 
     render() {
         const dungeonComponents: JSX.Element[] = [];
         for (const dungeon of this.state.dungeons) {
-            dungeonComponents.push(<DungeonInfo key={`DUNGEON_${dungeon.id}`} dungeon={dungeon} />);
+            dungeonComponents.push(<DungeonInfo key={`DUNGEON_${dungeon.id}`} dungeon={dungeon} activeQuests={this.state.activeQuests} />);
         }
         return (
             <div>
@@ -37,7 +40,8 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                dungeons: this.computeActiveDungeons()
+                dungeons: this.computeActiveDungeons(),
+                activeQuests : this.copyActiveQuests()
             });
         });
     }
@@ -55,5 +59,9 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
             }
             return true;
         })
+    }
+
+    copyActiveQuests = () => {
+        return Object.assign({},GameModelStore.getState().quests);
     }
 }

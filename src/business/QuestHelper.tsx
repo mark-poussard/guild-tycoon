@@ -17,10 +17,10 @@ class QuestHelper {
         return (5 * heroPower) / (2 * questPower) - 2;
     }
 
-    endQuest = (quest: Quest) => {
+    endQuest = (quest: Quest, data ?: BaseQuest) => {
         const questResult = new EndQuestResult();
         questResult.quest = quest;
-        const questData = QuestDataArray.get(quest.id);
+        const questData = data || QuestDataArray.get(quest.id);
         const questHeroes = this.getQuestHeroes(quest);
         const isWin = (questData.ennemies) ? BattleEngine.computeBattleResult(questHeroes, questData.ennemies) : true;
         questResult.result = isWin;
@@ -31,7 +31,8 @@ class QuestHelper {
                 type: GameModelActionTypes.END_QUEST_SUCCEED,
                 payload: {
                     quest: quest,
-                    drops : drops
+                    drops : drops,
+                    questData : data
                 }
             });
         }
@@ -39,7 +40,8 @@ class QuestHelper {
             GameModelDispatcher.dispatch({
                 type: GameModelActionTypes.END_QUEST_FAIL,
                 payload: {
-                    quest: quest
+                    quest: quest,
+                    questData : data
                 }
             });
         }
@@ -87,9 +89,9 @@ class QuestHelper {
     }
 
     durationToString(duration: number) {
-        const hours = Math.floor(duration / (60000 * 60000));
-        const minutes = Math.floor((duration - hours * (60000 * 60000)) / 60000);
-        const seconds = Math.floor((duration - hours * (60000 * 60000) - minutes * 60000) / 1000)
+        const hours = Math.floor(duration / (60 * 60000));
+        const minutes = Math.floor((duration - hours * (60 * 60000)) / 60000);
+        const seconds = Math.floor((duration - hours * (60 * 60000) - minutes * 60000) / 1000)
 
         let hourStr = hours.toString();
         if (hourStr.length < 2) {

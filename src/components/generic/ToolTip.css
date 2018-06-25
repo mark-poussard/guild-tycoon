@@ -1,6 +1,7 @@
 .tooltip {
     position: relative;
     display: inline-block;
+    width:100%;
 }
 
 .tooltip-displayed{
@@ -17,9 +18,15 @@
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    
+}
+
+.tooltip-position-right{
     top: -5px;
     left: 105%; 
+    z-index:999;
+}
+.tooltip-position-top{
+    top: -20px;
     z-index:999;
 }
 

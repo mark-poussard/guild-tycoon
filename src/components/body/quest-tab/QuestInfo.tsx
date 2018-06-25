@@ -10,6 +10,7 @@ import Timer from 'components/generic/Timer';
 import QuestProgressBar from 'components/generic/quest/QuestProgressBar';
 import EnnemyInfo from 'components/generic/ennemy/EnnemyInfo';
 import GameModelStore from 'store/game-model/GameModelStore';
+import QuestAction from 'components/body/quest-tab/QuestAction';
 
 interface IQuestInfoProps {
     quest: Quest;
@@ -19,7 +20,6 @@ interface IQuestInfoProps {
 
 interface IQuestInfoState {
     quest: Quest;
-    questEnded: boolean;
 }
 
 export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestInfoState>{
@@ -29,7 +29,7 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     constructor(props: IQuestInfoProps) {
         super(props);
         this.questData = QuestDataArray.get(this.props.quest.id);
-        this.state = { quest: this.props.quest, questEnded: false };
+        this.state = { quest: this.props.quest };
     }
 
     componentWillMount() {
@@ -85,6 +85,8 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
                         <td>
                             <Resource type={ResourceType.GOLD} value={this.questData.reward.gold} modifier />
                             <Resource type={ResourceType.EXP} value={this.questData.reward.exp} modifier />
+                            {this.questData.reward.shard !== 0 && 
+                                <Resource type={ResourceType.SHARD} value={this.questData.reward.shard} modifier />}
                             <Resource type={ResourceType.TIME} value={this.questData.duration.toString()} />
                         </td>
                         {this.renderEnnemyCells()}
@@ -110,37 +112,16 @@ export default class QuestInfo extends React.Component<IQuestInfoProps, IQuestIn
     }
 
     renderQuestAction = () => {
-        if (!this.state.quest.startedAt) {
-            return (
-                <button onClick={this.startQuest}>Start</button>
-            );
-        }
-        else if (!this.state.quest.completedAt && !this.state.questEnded) {
-            return (
-                <QuestProgressBar quest={this.state.quest} doQuestOver={() => this.setState({ questEnded: true })} />
-            );
-        }
-        else if (!this.state.quest.completedAt && this.state.questEnded) {
-            return (
-                <button onClick={this.endQuest}>Finish quest</button>
-            );
-        }
-        else if (this.questData.repeat != null) {
-            return <Timer until={new Date(this.state.quest.completedAt + this.questData.repeat.toMs())} doEnd={this.repeatQuest} />
-        }
-    }
-
-    repeatQuest = () => {
-        GameModelDispatcher.dispatch({
-            type: GameModelActionTypes.REPEAT_QUEST,
-            payload: {
-                quest: this.state.quest
-            }
-        })
+        return (
+            <QuestAction 
+            quest={this.state.quest} 
+            questData={this.questData} 
+            startTxt={`Start`} start={this.startQuest}
+            endTxt={`Finish quest`} end={this.endQuest} />
+        )
     }
 
     endQuest = () => {
-        this.setState({ questEnded: false });
         this.props.doEndQuest(this.state.quest);
     }
 

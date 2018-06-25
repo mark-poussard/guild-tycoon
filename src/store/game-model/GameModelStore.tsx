@@ -29,6 +29,7 @@ import Equipment, { EquipmentType } from 'model/items/Equipment';
 import EquipmentSet from 'model/EquipmentSet';
 import { logUserAction, clearLogs } from '../log/LogActions';
 import { HeroDataArray } from 'data/HeroData';
+import Quest from 'model/Quest';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -78,9 +79,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
-                if (newState.heroes.size() < newState.guildSize) {
                     newState.heroes.add(payload.hero);
-                }
                 this.eventEmitter.emit(GameModelActionTypes.RECRUIT_HERO, newState);
                 break;
 
@@ -131,6 +130,10 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             case GameModelActionTypes.START_QUEST:
                 {
                     payload = action.payload as StartQuestPayload;
+                    if(!newState.quests.hasOwnProperty(payload.quest.id)){
+                        newState.quests[payload.quest.id] = new Quest();
+                        newState.quests[payload.quest.id].id = payload.quest.id;
+                    }
                     newState.quests[payload.quest.id].startedAt = new Date().getTime();
                     for (let hero of payload.heroes) {
                         newState.heroes.get(hero.data).questId = payload.quest.id;
@@ -149,7 +152,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                         }
                     }
                     //Add rewards
-                    const questData = QuestDataArray.get(payload.quest.id);
+                    const questData = payload.questData || QuestDataArray.get(payload.quest.id);
                     newState.gold += questData.reward.gold;
                     newState.exp += questData.reward.exp;
                     //Add drops
@@ -193,7 +196,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                             hero.questId = null;
                         }
                     }
-                    const questData = QuestDataArray.get(payload.quest.id);
+                    const questData = payload.questData || QuestDataArray.get(payload.quest.id);
                     logUserAction(`Failed quest : ${questData.title}`);
                     break;
                 }

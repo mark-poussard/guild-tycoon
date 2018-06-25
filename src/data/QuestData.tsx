@@ -16,7 +16,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 1,
-            shard: 0
+            shard: 2
         },
         drop: [{ item: ItemData.WOODEN_STICK, rates: [100] }],
         activates: ['QUEST02', 'QUEST03', 'QUEST04'],
@@ -37,7 +37,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            shard: 0
+            shard: 1
         },
         drop: [],
         activates: ['QUEST06'],
@@ -59,7 +59,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            shard: 0
+            shard: 1
         },
         drop: [],
         activates: ['QUEST05'],
@@ -80,7 +80,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 5,
             exp: 2,
-            shard: 0
+            shard: 1
         },
         drop: [],
         activates: ['QUEST08'],

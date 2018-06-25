@@ -3,6 +3,7 @@ import * as fbEmitter from 'fbemitter';
 import CallForHero from 'model/CallForHero';
 import CFHHelper from 'business/CFHHelper';
 import GameModelStore from 'store/game-model/GameModelStore';
+import Resource, { ResourceType } from 'components/generic/resource/Resource';
 
 interface ICallInfoProps {
     cfh: CallForHero;
@@ -25,6 +26,8 @@ export default class CallInfo extends React.Component<ICallInfoProps, ICallInfoS
             <div className='container'>
                 <h3>{this.props.cfh.title}</h3>
                 <p>{this.props.cfh.description}</p>
+                {this.props.cfh.price !== 0 && 
+                    <Resource type={ResourceType.SHARD} value={this.props.cfh.price} modifier remove />}
                 <button onClick={this.doCall} disabled={!this.hasEnoughShards()}>Call</button>
             </div>
         );

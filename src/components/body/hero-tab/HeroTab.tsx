@@ -18,7 +18,6 @@ interface IHeroTabProps {
 
 interface IHeroTabState {
     heroes: Hero[];
-    guildSize : number;
     rankOrder: SortOrder;
     lvlOrder: SortOrder;
     nameOrder: SortOrder;
@@ -31,7 +30,6 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
         super(props);
         this.state = { 
             heroes: GameModelStore.getState().heroes.asArray(),
-            guildSize :  GameModelStore.getState().guildSize,
             rankOrder: SortOrder.DESC, lvlOrder: SortOrder.DESC, nameOrder: SortOrder.ASC};
     }
 
@@ -45,8 +43,6 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
                     <SortButton order={this.state.nameOrder} txt={'name'} toggle={() => { this.setState({ nameOrder: -this.state.nameOrder }) }} />
                 </div>
                 {this.renderHeroes()}
-                {this.renderHeroRecruit()}
-                <div className='guild-occupation'>Guild occupation {this.state.heroes.length}/{this.state.guildSize}</div>
             </div>
         );
     }
@@ -54,18 +50,13 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                heroes: GameModelStore.getState().heroes.asArray(),
-                guildSize :  GameModelStore.getState().guildSize
+                heroes: GameModelStore.getState().heroes.asArray()
             });
         });
     }
 
     componentWillUnmount() {
         this.storeSubscribe.remove();
-    }
-
-    computeIsRoomLeft = () => {
-        return this.state.guildSize > this.state.heroes.length;
     }
 
     renderHeroes = () => {
@@ -84,12 +75,9 @@ export default class HeroTab extends React.Component<IHeroTabProps, IHeroTabStat
     }
 
     renderHeroRecruit = () => {
-        if (this.computeIsRoomLeft()) {
             return (
                 <HeroRecruitButton />
             );
-        }
-        return null;
     }
 
     renderSortButton = (order: SortOrder, txt: string, toggle: () => void) => {
