@@ -15,7 +15,7 @@ export const NO_ICON_PATH = "img/items/none.png";
     7000-10000 : Craft materials
  */
 
-export const ItemData = {
+export const ItemData : {[itemId : string] : Item} = {
     // ---------------------------------- 0-1000 Weapons -------------------------------------
     WOODEN_STICK: new Equipment({
         id: "ITEM1",
@@ -24,25 +24,28 @@ export const ItemData = {
         icon: 'img/items/stick.png',
         ba: 1,
         classRestriction: [],
-        type : EquipmentType.ONE_HANDED
+        type : EquipmentType.ONE_HANDED,
+        price : 0
     }),
     STONE_SLING: new Equipment({
         id: "ITEM2",
         name: 'Stone Sling',
         description : 'A rudimentary sling to throw stones at your ennemies.',
         icon: '',
-        ba: 5,
+        ba: 8,
         classRestriction: [ClassData.MINSTREL_CLASS.name],
-        type : EquipmentType.TWO_HANDED
+        type : EquipmentType.TWO_HANDED,
+        price : 2
     }),
     WOODEN_SWORD: new Equipment({
         id: "ITEM3",
         name: 'Wooden Sword',
-        description : '',
+        description : 'Careful with that, you might actually manage to hurt someone.',
         icon: '',
-        ba: 3,
+        ba: 5,
         classRestriction: [ClassData.WARRIOR_CLASS.name],
-        type : EquipmentType.ONE_HANDED
+        type : EquipmentType.ONE_HANDED,
+        price : 2
     }),
     OLD_OAK_TWIG: new Equipment({
         id: "ITEM4",
@@ -51,7 +54,8 @@ export const ItemData = {
         icon: 'img/items/stick.png',
         ba: 4,
         classRestriction: [ClassData.MAGE_CLASS.name],
-        type : EquipmentType.ONE_HANDED
+        type : EquipmentType.ONE_HANDED,
+        price : 5
     }),
     BIG_ROCK: new Equipment({
         id: "ITEM5",
@@ -60,63 +64,71 @@ export const ItemData = {
         icon: '',
         ba: 2,
         classRestriction: [],
-        type : EquipmentType.TWO_HANDED
+        type : EquipmentType.TWO_HANDED,
+        price : 0
     }),
     // ---------------------------------- 1000-6000 Equipment -------------------------------------
-    LEATHER_TUNIQUE: new Equipment({
+    RAGGED_SHIRT: new Equipment({
         id: "ITEM1000",
-        name: 'Leather Tunique',
-        description : '',
+        name: 'Ragged Shirt',
+        description : 'A piece of cloth that passes for a shirt.',
         icon: '',
-        ba: 1,
+        ba: 3,
         classRestriction: [],
-        type : EquipmentType.TORSO
+        type : EquipmentType.TORSO,
+        price : 1
     }),
-    LEATHER_GLOVES: new Equipment({
+    RAGGED_GLOVES: new Equipment({
         id: "ITEM1001",
-        name: 'Leather Gloves',
-        description : '',
+        name: 'Ragged Gloves',
+        description : 'Looks like an old sock in which someone would had pocked holes.',
         icon: '',
         ba: 1,
         classRestriction: [],
-        type : EquipmentType.HANDS
+        type : EquipmentType.HANDS,
+        price : 1
     }),
-    LEATHER_BREACHES: new Equipment({
+    RAGGED_BREACHES: new Equipment({
         id: "ITEM1002",
-        name: 'Leather Breaches',
-        description : '',
+        name: 'Ragged Breaches',
+        description : 'Barely covers up your underwear.',
         icon: '',
-        ba: 1,
+        ba: 2,
         classRestriction: [],
-        type : EquipmentType.LEGS
+        type : EquipmentType.LEGS,
+        price : 1
     }),
-    LEATHER_BOOTS: new Equipment({
+    RAGGED_BOOTS: new Equipment({
         id: "ITEM1003",
-        name: 'Leather BOOTS',
-        description : '',
+        name: 'Ragged Boots',
+        description : 'Somehow manages to protect the sole of your feet.',
         icon: '',
         ba: 1,
         classRestriction: [],
-        type : EquipmentType.FEET
+        type : EquipmentType.FEET,
+        price : 1
     }),
     // ---------------------------------- 6000-7000 Orbs / Rank up materials -------------------------------------
     COURAGE_ORB:{
         id: "ITEM6000",
         name: 'Orb of courage',
         description : 'There is power brewing inside this glass sphere. Keep it preciously.',
-        icon: 'img/items/courage_orb.png'
+        icon: 'img/items/courage_orb.png',
+        price : 5
     },
     SPIRIT_ORB:{
         id: "ITEM6001",
         name: 'Orb of spirit',
         description : 'There is power brewing inside this glass sphere. Keep it preciously.',
-        icon: 'img/items/spirit_orb.png'
+        icon: 'img/items/spirit_orb.png',
+        price : 5
     },
     SENSES_ORB:{
         id: "ITEM6002",
         name: 'Orb of senses',
         description : 'There is power brewing inside this glass sphere. Keep it preciously.',
-        icon: 'img/items/senses_orb.png'
+        icon: 'img/items/senses_orb.png',
+        price : 5
     },
 };
 

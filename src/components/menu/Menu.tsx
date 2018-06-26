@@ -7,6 +7,7 @@ import NavigationHandler, { TabType } from 'store/navigation/NavigationStore';
 import GameModelStore from 'store/game-model/GameModelStore';
 import GameSwitches from 'model/GameSwitches';
 import LogStore from 'store/log/LogStore';
+import Improvement from 'model/Improvements';
 
 interface IMenuProps {
 
@@ -14,6 +15,7 @@ interface IMenuProps {
 
 interface IMenuState {
     gameSwitches: GameSwitches;
+    improvements: Improvement;
     hasLogs: boolean;
 }
 
@@ -25,14 +27,16 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
         super(props);
         this.state = {
             gameSwitches: Object.assign({}, GameModelStore.getState().gameSwitches),
-            hasLogs: LogStore.getState().logArchive.length > 0
+            hasLogs: LogStore.getState().logArchive.length > 0,
+            improvements: Object.assign({}, GameModelStore.getState().improvements)
         };
     }
 
     componentDidMount() {
         this.storeSubscribe = GameModelStore.addListener(() => {
             this.setState({
-                gameSwitches: Object.assign({}, GameModelStore.getState().gameSwitches)
+                gameSwitches: Object.assign({}, GameModelStore.getState().gameSwitches),
+                improvements: Object.assign({}, GameModelStore.getState().improvements)
             });
         });
         this.logSubscribe = LogStore.addListener(() => {
@@ -60,6 +64,9 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
         }
         if (this.state.gameSwitches.QUEST01) {
             menuContent.push(<MenuButton key='ITEMS_BUTTON' txt="Items" onClick={this.onMenuClick(TabType.ITEMS)} />);
+        }
+        if (this.state.improvements.shop1) {
+            menuContent.push(<MenuButton key='SHOP_BUTTON' txt="Market" onClick={this.onMenuClick(TabType.SHOP)} />);
         }
         if (this.state.gameSwitches.QUEST08) {
             menuContent.push(<MenuButton key='IMPROVEMENTS_BUTTON' txt="Improvements" onClick={this.onMenuClick(TabType.IMPROVEMENTS)} />);

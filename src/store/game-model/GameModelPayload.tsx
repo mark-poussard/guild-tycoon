@@ -39,12 +39,12 @@ export interface StartQuestPayload {
 
 export interface EndQuestFailPayload {
     quest: Quest;
-    questData ?: BaseQuest;
+    questData?: BaseQuest;
 }
 
 export interface EndQuestWinPayload {
     quest: Quest;
-    questData ?: BaseQuest;
+    questData?: BaseQuest;
     drops: QuestDrop[];
 }
 
@@ -75,4 +75,9 @@ export interface RemoveItemPayload {
 
 export interface HeroRankUpPayload {
     hero: Hero;
+}
+
+export interface BuyItemPayload {
+    itemId: string;
+    price: number;
 }

@@ -11,7 +11,6 @@ import './HeroTab.css'
 import HeroHelper from 'business/HeroHelper';
 import EquipmentButton from 'components/body/hero-tab/EquipmentButton';
 import UpgradeButton from 'components/body/hero-tab/upgrade-overlay/UpgradeButton';
-import QuestProgressBar from '../../generic/quest/QuestProgressBar';
 import HeroQuestProgress from './HeroQuestProgress';
 
 interface IHeroTabProps {

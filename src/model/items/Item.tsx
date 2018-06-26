@@ -3,4 +3,5 @@ export default class Item {
     name : string;
     icon : string;
     description : string;
+    price : number;
 }

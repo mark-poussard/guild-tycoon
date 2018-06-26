@@ -8,6 +8,7 @@ import QuestTab from 'components/body/quest-tab/QuestTab';
 import ItemsTab from 'components/body/items-tab/ItemsTab';
 import LogTab from 'components/body/log-tab/LogTab';
 import DungeonTab from './dungeon-tab/DungeonTab';
+import ShopTab from './shop-tab/ShopTab';
 
 interface IContentProps {
     currentTab: TabType;
@@ -39,10 +40,12 @@ export default class Content extends React.Component<IContentProps, IContentStat
                 return <QuestTab />
             case TabType.DUNGEONS:
                 return <DungeonTab />
-            case TabType.IMPROVEMENTS:
-                return <ImprovementsTab />
             case TabType.ITEMS:
                 return <ItemsTab />
+            case TabType.SHOP:
+                return <ShopTab />
+            case TabType.IMPROVEMENTS:
+                return <ImprovementsTab />
             case TabType.LOG:
                 return <LogTab />
             default:

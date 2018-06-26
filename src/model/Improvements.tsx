@@ -6,6 +6,7 @@ export default class Improvement {
     train2: boolean;
     train3: boolean;
     trainClickNo1: boolean;
+    shop1 : boolean;
 }
 
 export class ImprovementInfo {

@@ -2,6 +2,13 @@ import { ImprovementInfo } from "model/Improvements";
 
 export const improvementsData: ImprovementInfo[] = [
     {
+        key: 'shop1',
+        title: 'Guild Market',
+        desc: 'Build a guild market where your heroes can buy brand new pieces of equipment and sell objects they find on their quests.',
+        cost: 10,
+        requireKeys: [],
+    },
+    {
         key: 'train1',
         title: 'Training grounds',
         desc: 'A training grounds where heroes can train and gain experience before leaving on quests.',

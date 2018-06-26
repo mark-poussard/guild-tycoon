@@ -14,7 +14,8 @@ import GameModelPayload, {
     RemoveAllItemsPayload,
     RepeatQuestPayload,
     RemoveItemPayload,
-    HeroRankUpPayload
+    HeroRankUpPayload,
+    BuyItemPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -79,7 +80,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
 
             case GameModelActionTypes.RECRUIT_HERO:
                 payload = action.payload as RecruitHeroPayload;
-                    newState.heroes.add(payload.hero);
+                newState.heroes.add(payload.hero);
                 this.eventEmitter.emit(GameModelActionTypes.RECRUIT_HERO, newState);
                 break;
 
@@ -101,7 +102,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     payload = action.payload as HeroLevelUpPayload;
                     const hero = newState.heroes.get(payload.heroId);
                     let requiredExp = HeroHelper.expRequiredToLevel(hero);
-                    
+
                     while (newState.exp >= requiredExp && !HeroHelper.isMaxLevel(hero)) {
                         newState.exp -= requiredExp;
                         hero.level += 1;
@@ -130,7 +131,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
             case GameModelActionTypes.START_QUEST:
                 {
                     payload = action.payload as StartQuestPayload;
-                    if(!newState.quests.hasOwnProperty(payload.quest.id)){
+                    if (!newState.quests.hasOwnProperty(payload.quest.id)) {
                         newState.quests[payload.quest.id] = new Quest();
                         newState.quests[payload.quest.id].id = payload.quest.id;
                     }
@@ -310,6 +311,19 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     }
                     newState.heroes.get(payload.hero.data).rank += 1;
                     logUserAction(`You ranked up your hero : ${heroData.name}`);
+                    break;
+                }
+
+            case GameModelActionTypes.BUY_ITEM:
+                {
+                    payload = action.payload as BuyItemPayload;
+                    const itemData = ItemDataArray.get(payload.itemId);
+                    if (!newState.items.hasOwnProperty(payload.itemId)) {
+                        newState.items[payload.itemId] = 0;
+                    }
+                    newState.items[payload.itemId] += 1;
+                    newState.gold -= payload.price;
+                    logUserAction(`Baught ${itemData.name} for ${payload.price} gold.`);
                     break;
                 }
 
