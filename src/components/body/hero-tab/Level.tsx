@@ -45,7 +45,7 @@ export default class Level extends React.Component<ILevelProps, ILevelState>{
     renderLevelUp = () => {
         const hero = this.props.hero
         const requiredExp = HeroHelper.expRequiredToLevel(hero);
-        if (this.state.exp >= requiredExp && !HeroHelper.isMaxLevel(hero)) {
+        if (this.state.exp >= requiredExp && !HeroHelper.isMaxLevel(hero) && this.props.hero.questId == null) {
             return (
                 <input className="level-up" type="image" src="img/plus.png" onClick={this.heroLevelUp} />
             );

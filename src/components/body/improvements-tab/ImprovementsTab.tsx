@@ -3,6 +3,7 @@ import * as fbEmitter from 'fbemitter';
 import GameModelStore from 'store/game-model/GameModelStore';
 import ImprovementDetails from 'components/body/improvements-tab/ImprovementDetails';
 import Improvements, { ImprovementInfo } from 'model/Improvements';
+import { improvementsData } from 'data/ImprovementsData';
 
 interface ImprovementsTabProps {
 
@@ -40,8 +41,8 @@ export default class ImprovementsTab extends React.Component<ImprovementsTabProp
 
     renderImprovements = () => {
         const result: JSX.Element[] = [];
-        for (let i = 0; i < improvements.length; i++) {
-            const improvement = improvements[i];
+        for (let i = 0; i < improvementsData.length; i++) {
+            const improvement = improvementsData[i];
             let requirements = true;
             for(let i=0; i< improvement.requireKeys.length; i++){
                 const requireKey = improvement.requireKeys[i];
@@ -55,47 +56,3 @@ export default class ImprovementsTab extends React.Component<ImprovementsTabProp
     }
 }
 
-const improvements: ImprovementInfo[] = [
-    {
-        key: 'autoQuest',
-        title: 'Guild administration',
-        desc: 'An administration system upgrade to automatically assign new quests to heroes returning to the guild.',
-        cost: 10,
-        requireKeys: [],
-    },
-    {
-        key: 'stables',
-        title: 'Stables',
-        desc: 'Stables allow heroes to use horses and complete their quests faster.',
-        cost: 100,
-        requireKeys: [],
-    },
-    {
-        key: 'train1',
-        title: 'Training grounds',
-        desc: 'Hero training will be more effective in this open field.',
-        cost: 50,
-        requireKeys: [],
-    },
-    {
-        key: 'train2',
-        title: 'Training equipment',
-        desc: 'Heroes will be able to train more effectively with proper training equipment.',
-        cost: 200,
-        requireKeys: ['train1'],
-    },
-    {
-        key: 'train3',
-        title: 'Training master',
-        desc: 'Hires a retired mercenary to train your heroes in the ways of battle.',
-        cost: 500,
-        requireKeys: ['train2'],
-    },
-    {
-        key: 'trainClickNo1',
-        title: 'Training ground refreshments',
-        desc: 'Have some water and food stands available on the training grounds so that heroes train more efficiently.',
-        cost: 200,
-        requireKeys: ['train1'],
-    }
-];

@@ -124,9 +124,9 @@ export const QuestData: { [key: string]: BaseQuest } = {
         },
         drop: [
             { item: ItemData.WOODEN_STICK, rates: [50, 50, 50] },
-            { item: ItemData.COURAGE_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+            /*{ item: ItemData.COURAGE_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
             { item: ItemData.SENSES_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
-            { item: ItemData.SPIRIT_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+            { item: ItemData.SPIRIT_ORB, rates: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },*/
         ],
         activates: [],
         repeat: null,
@@ -388,7 +388,7 @@ export const QuestData: { [key: string]: BaseQuest } = {
         reward: {
             gold: 40,
             exp: 100,
-            shard: 1
+            shard: 0
         },
         drop: [],
         activates: [],
@@ -401,27 +401,121 @@ export const QuestData: { [key: string]: BaseQuest } = {
         title: 'The vaporous swamp',
         description: 'After going through countless villages in the region, Jake finally finds an old man that talks about the great Jabberwocky hunt the people here took part in back when he was young. He says that the last he heard, all that was left of the beasts kind could only be found deep in the vaporous swamps, a local swamp named so because of jets of hot steam coming out of cracks in the ground. After asking for directions and a few days travel you make it to a valley covered in low hanging clouds. The swamps seem to be at the bottom.',
         maxPartySize: 3,
-        duration: new Duration(0, 0, 40, 0),
+        duration: new Duration(0, 0, 30, 0),
         ennemies: [
             {
                 class: ClassData.VORPAL_CLASS,
-                name: 'Vorpal Tainted Wolf',
+                name: 'Vorpal Wolf',
                 ba: 800
             },
             {
                 class: ClassData.VORPAL_CLASS,
-                name: 'Vorpal Tainted Bear',
+                name: 'Vorpal Bear',
                 ba: 850
-            },],
+            }],
         reward: {
-            gold: 40,
-            exp: 100,
+            gold: 80,
+            exp: 200,
             shard: 1
         },
         drop: [],
         activates: [],
         repeat: null,
-        classReq: [ClassData.MINSTREL_CLASS.name]
+        classReq: []
+    },
+    // Expected lvl : 180
+    QUEST17: {
+        id: 'QUEST17',
+        title: 'Finding the beast',
+        description: 'You soon discover that the swamps are infused with a magical substance that seems to be tainting the wildlife. The animals here have a strange glow to their eyes and are particularly ferocious. Jake calls it Vorpal and says it has strange and fantastic properties. You continue your search through the endless fog when a scream resonnates through the swamp and makes everyone halt. Jake starts grinning wildly, the Jabberwocky is close.',
+        maxPartySize: 3,
+        duration: new Duration(0, 0, 40, 0),
+        ennemies: [
+            {
+                class: ClassData.JABBERWOCKY_CLASS,
+                name: 'Jabberwocky',
+                ba: 1000
+            }],
+        reward: {
+            gold: 80,
+            exp: 200,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 210
+    QUEST18: {
+        id: 'QUEST18',
+        title: 'The track',
+        description: 'Things did not go as planned. When the guild stumbled on the Jabberwocky it took off and fought from the other side of the mist, lunging at the party members one by one. Jake got wounded pretty bad during one of those lunges, just as he managed to pin down the terrible beast. With the beast down the fight got less one-sided and finally progressed. Unfortunately the beast ended up lashing out at Jake before fleeing back into the fog for good. Jake got hit by the deadly claw and the guild did everything to bring him back to safety and to get him to a healer in time. Unfortunately he didn\'t make it. Now the guild is out for the blood of the beast.',
+        maxPartySize: 3,
+        duration: new Duration(0, 0, 30, 0),
+        ennemies: [{
+                class: ClassData.VORPAL_CLASS,
+                name: 'Vorpal Bear',
+                ba: 1200
+            }],
+        reward: {
+            gold: 100,
+            exp: 300,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 250
+    QUEST19: {
+        id: 'QUEST19',
+        title: 'The deep swamp',
+        description: 'The guild has found a way through the fog deep inside the swamp. The light doesn\'t seem to filter through correclty here, and you can hear bizarre screams in the distance. These screams will guid you through the thick of these deep swamps.',
+        maxPartySize: 3,
+        duration: new Duration(0, 0, 30, 0),
+        ennemies: [{
+                class: ClassData.VORPAL_CLASS,
+                name: 'Vorpal Abomination',
+                ba: 1450
+            }],
+        reward: {
+            gold: 120,
+            exp: 400,
+            shard: 1
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
+    },
+    // Expected lvl : 300
+    QUEST20: {
+        id: 'QUEST20',
+        title: 'Jabberwocky layer',
+        description: 'Inside the deepest part of the vaporous swamp you stumble upon the layer of the beast. None of it\'s kind has come out to attack yet. The guild plans how it will conduct the attack.',
+        maxPartySize: 5,
+        duration: new Duration(0, 1, 0, 0),
+        ennemies: [{
+                class: ClassData.JABBERWOCKY_CLASS,
+                name: 'Jabberwocky',
+                ba: 1600
+            },
+            {
+                class: ClassData.JABBERWOCKY_CLASS,
+                name: 'Jabberwocky Prime',
+                ba: 1800
+            }],
+        reward: {
+            gold: 150,
+            exp: 500,
+            shard: 3
+        },
+        drop: [],
+        activates: [],
+        repeat: null,
+        classReq: []
     }
 };
 

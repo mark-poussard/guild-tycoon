@@ -192,3 +192,9 @@ export const VORPAL_CLASS : Class = {
     onRank : 0,
     previous : BEAST_CLASS
 }
+
+export const JABBERWOCKY_CLASS : Class = {
+    name : 'jabberwocky',
+    onRank : 0,
+    previous : VORPAL_CLASS
+}

@@ -4,6 +4,7 @@ import GameModelStore from 'store/game-model/GameModelStore';
 import TrainProgress from './TrainProgress';
 import TrainButton from './TrainButton';
 import './TrainInfo.css'
+import Improvements from 'model/Improvements';
 
 interface ITrainInfoProps{
 
@@ -12,6 +13,7 @@ interface ITrainInfoProps{
 interface ITrainInfoState{
     nbHeroes : number;
     totalTrainClicks : number;
+    improvements : Improvements;
 }
 
 export default class TrainInfo extends React.Component<ITrainInfoProps, ITrainInfoState>{
@@ -21,11 +23,12 @@ export default class TrainInfo extends React.Component<ITrainInfoProps, ITrainIn
         super(props);
         const nbHeroes = GameModelStore.getState().heroes.size();
         const totalTrainClicks = GameModelStore.getState().statistics.trainClicks;
-        this.state = {nbHeroes:nbHeroes, totalTrainClicks:totalTrainClicks};
+        const improvements = Object.assign({}, GameModelStore.getState().improvements);
+        this.state = {nbHeroes, totalTrainClicks, improvements};
     }
 
     render(){
-        if(this.state.nbHeroes > 0){
+        if(this.state.nbHeroes > 0 && this.state.improvements.train1){
             return (
                 <div className="train-container container">
                     <TrainProgress totalClicks={this.state.totalTrainClicks}/>
@@ -40,7 +43,8 @@ export default class TrainInfo extends React.Component<ITrainInfoProps, ITrainIn
         this.storeSubscribe = GameModelStore.addListener(() => {
             const nbHeroes = GameModelStore.getState().heroes.size();
             const totalTrainClicks = GameModelStore.getState().statistics.trainClicks;
-            this.setState({nbHeroes:nbHeroes, totalTrainClicks:totalTrainClicks});
+            const improvements = Object.assign({}, GameModelStore.getState().improvements);
+            this.setState({nbHeroes, totalTrainClicks, improvements});
         });
     }
 
