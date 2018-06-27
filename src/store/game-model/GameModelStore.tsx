@@ -31,6 +31,7 @@ import EquipmentSet from 'model/EquipmentSet';
 import { logUserAction, clearLogs } from '../log/LogActions';
 import { HeroDataArray } from 'data/HeroData';
 import Quest from 'model/Quest';
+import NavigationStore, { TabType } from 'store/navigation/NavigationStore';
 
 export const CACHE_GAME_STATE_KEY = "game-state";
 
@@ -156,6 +157,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     const questData = payload.questData || QuestDataArray.get(payload.quest.id);
                     newState.gold += questData.reward.gold;
                     newState.exp += questData.reward.exp;
+                    newState.shards += questData.reward.shard;
                     //Add drops
                     for (let drop of payload.drops) {
                         if (!newState.items.hasOwnProperty(drop.item.id)) {
@@ -331,6 +333,7 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                 {
                     clearLogs();
                     localStorage.removeItem(CACHE_GAME_STATE_KEY);
+                    NavigationStore.navigateTo(TabType.HEROES);
                     return StartingGameState();
                 }
         }

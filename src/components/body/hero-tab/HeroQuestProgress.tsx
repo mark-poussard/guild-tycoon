@@ -3,6 +3,7 @@ import QuestProgressBar from 'components/generic/quest/QuestProgressBar';
 import Hero from 'model/Hero';
 import Quest from 'model/Quest';
 import GameModelStore from 'store/game-model/GameModelStore';
+import NavigationStore, { TabType } from 'store/navigation/NavigationStore';
 
 interface IHeroQuestProgressProps {
     hero: Hero;
@@ -23,9 +24,7 @@ export default class HeroQuestProgress extends React.Component<IHeroQuestProgres
     render() {
         if (this.state.questFinished) {
             return (
-                <>
-                    Quest is over.
-                </>
+                <button onClick={this.goToQuests}>Quest is finished</button>
             )
         }
         else if (this.state.quest) {
@@ -46,5 +45,9 @@ export default class HeroQuestProgress extends React.Component<IHeroQuestProgres
             return GameModelStore.getState().quests[props.hero.questId];
         }
         return null;
+    }
+
+    goToQuests = () => {
+        NavigationStore.navigateTo(TabType.QUESTS);
     }
 }

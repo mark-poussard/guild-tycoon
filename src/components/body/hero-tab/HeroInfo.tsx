@@ -39,7 +39,7 @@ export default class HeroInfo extends React.Component<IHeroInfoProps>{
                     <Level className="lvl" hero={this.props.hero} />
                 </div>
                 <div className="divider">
-                    Class : <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />
+                    <ClassInfo classList={ClassHelper.computeClassList(this.heroData.class, this.props.hero.rank)} />
                 </div>
                 <div className="divider">
                     {this.renderBattleAbility()}

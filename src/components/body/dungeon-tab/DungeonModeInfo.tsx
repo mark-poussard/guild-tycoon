@@ -18,6 +18,7 @@ import GameModelStore from 'store/game-model/GameModelStore';
 interface IDungeonModeInfoProps {
     dungeon: DungeonBase;
     mode: DungeonMode;
+    setTabFixed : (fixed : boolean) => void;
 }
 
 interface IDungeonModeInfoState {

@@ -1,7 +1,6 @@
-import QuestReward from 'model/QuestReward';
+import Quest from 'model/Quest';
+import { DungeonMode } from 'model/DungeonBase';
 
-export default class Dungeon {
-    id: string;
-    startedAt: number;
-    completedAt: number;
+export default class Dungeon extends Quest {
+    mode : DungeonMode;
 }

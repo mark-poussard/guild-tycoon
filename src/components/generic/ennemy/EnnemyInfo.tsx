@@ -20,10 +20,10 @@ export default class EnnemyInfo extends React.Component<IEnnemyInfoProps>{
                     {this.props.ennemy.name}
                 </div>
                 <div>
-                    Battle Ability : {this.props.ennemy.ba}
+                    <ClassInfo classList={ClassHelper.computeClassList(this.props.ennemy.class)} />
                 </div>
                 <div>
-                    Class : <ClassInfo classList={ClassHelper.computeClassList(this.props.ennemy.class)} />
+                    Battle Ability : {this.props.ennemy.ba}
                 </div>
             </div>
         );

@@ -13,7 +13,7 @@ export default class LogTab extends React.Component<{}, ILogTabState> {
 
     constructor(props: {}) {
         super(props);
-        this.state = { logArchives: LogStore.getState().logArchive.slice() };
+        this.state = { logArchives: LogStore.getState().logArchive.slice().reverse() };
     }
 
     render() {
@@ -30,7 +30,7 @@ export default class LogTab extends React.Component<{}, ILogTabState> {
 
     componentDidMount() {
         this.logSubscription = LogStore.addListener(() => {
-            this.setState({ logArchives: LogStore.getState().logArchive.slice() })
+            this.setState({ logArchives: LogStore.getState().logArchive.slice().reverse() })
         });
     }
 

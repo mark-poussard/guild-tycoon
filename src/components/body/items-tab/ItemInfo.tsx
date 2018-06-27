@@ -30,7 +30,8 @@ export default class ItemInfo extends React.Component<IItemInfoProps> {
                 <ToolTip toolTipContent={this.renderItemInfo()}>
                     <div className='item-img-container'>
                         <img src={this.props.item.icon} />
-                        <div className='item-quantity-txt' style={txtStyle}>{this.props.quantity}</div>
+                        {this.props.quantity > 1 && 
+                        <div className='item-quantity-txt' style={txtStyle}>{this.props.quantity}</div>}
                     </div>
                 </ToolTip>
             </div>

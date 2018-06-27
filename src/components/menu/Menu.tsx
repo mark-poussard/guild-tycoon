@@ -52,31 +52,35 @@ export default class Menu extends React.Component<IMenuProps, IMenuState>{
     }
 
     render() {
-        const menuContent: JSX.Element[] = [];
+        const menuLeftContent: JSX.Element[] = [];
+        const menuRightContent: JSX.Element[] = [];
 
-        menuContent.push(<MenuButton key='HEROES_BUTTON' txt="Heroes" onClick={this.onMenuClick(TabType.HEROES)} />);
-        menuContent.push(<MenuButton key='CFH_BUTTON' txt="Call For Heroes" onClick={this.onMenuClick(TabType.CFH)} />);
+        menuLeftContent.push(<MenuButton key='HEROES_BUTTON' txt="Heroes" onClick={this.onMenuClick(TabType.HEROES)} />);
+        menuLeftContent.push(<MenuButton key='CFH_BUTTON' txt="Call For Heroes" onClick={this.onMenuClick(TabType.CFH)} />);
         if (this.state.gameSwitches.firstHero) {
-            menuContent.push(<MenuButton key='QUESTS_BUTTON' txt="Quests" onClick={this.onMenuClick(TabType.QUESTS)} />);
+            menuLeftContent.push(<MenuButton key='QUESTS_BUTTON' txt="Quests" onClick={this.onMenuClick(TabType.QUESTS)} />);
         }
         if (this.state.gameSwitches.QUEST02) {
-            menuContent.push(<MenuButton key='DUNGEON_BUTTON' txt="Dungeons" onClick={this.onMenuClick(TabType.DUNGEONS)} />);
+            menuLeftContent.push(<MenuButton key='DUNGEON_BUTTON' txt="Dungeons" onClick={this.onMenuClick(TabType.DUNGEONS)} />);
         }
         if (this.state.gameSwitches.QUEST01) {
-            menuContent.push(<MenuButton key='ITEMS_BUTTON' txt="Items" onClick={this.onMenuClick(TabType.ITEMS)} />);
+            menuLeftContent.push(<MenuButton key='ITEMS_BUTTON' txt="Items" onClick={this.onMenuClick(TabType.ITEMS)} />);
         }
         if (this.state.improvements.shop1) {
-            menuContent.push(<MenuButton key='SHOP_BUTTON' txt="Market" onClick={this.onMenuClick(TabType.SHOP)} />);
+            menuLeftContent.push(<MenuButton key='SHOP_BUTTON' txt="Market" onClick={this.onMenuClick(TabType.SHOP)} />);
         }
         if (this.state.gameSwitches.QUEST08) {
-            menuContent.push(<MenuButton key='IMPROVEMENTS_BUTTON' txt="Improvements" onClick={this.onMenuClick(TabType.IMPROVEMENTS)} />);
+            menuLeftContent.push(<MenuButton key='IMPROVEMENTS_BUTTON' txt="Improvements" onClick={this.onMenuClick(TabType.IMPROVEMENTS)} />);
         }
         if (this.state.hasLogs) {
-            menuContent.push(<MenuButton key='LOG_BUTTON' txt="Logs" onClick={this.onMenuClick(TabType.LOG)} />);
+            menuRightContent.push(<MenuButton key='LOG_BUTTON' txt="Logs" onClick={this.onMenuClick(TabType.LOG)} />);
         }
         return (
             <div className="menu-container">
-                {menuContent}
+                {menuLeftContent}
+                <span style={{float:'right'}}>
+                    {menuRightContent}
+                </span>
             </div>
         );
     }
