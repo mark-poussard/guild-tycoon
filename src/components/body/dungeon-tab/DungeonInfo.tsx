@@ -4,9 +4,11 @@ import Tabs from 'components/generic/tabs/Tabs';
 import Tab from 'components/generic/tabs/Tab';
 import QuestMap from 'model/serializable/QuestMap';
 import DungeonModeInfo from 'components/body/dungeon-tab/DungeonModeInfo';
+import Dungeon from 'model/Dungeon';
 
 interface IDungeonInfoProps {
     dungeon: DungeonBase;
+    dungeonState : Dungeon;
 }
 
 interface IDungeonInfoState {
@@ -25,14 +27,18 @@ export default class DungeonInfo extends React.Component<IDungeonInfoProps, IDun
         for (const mode in this.props.dungeon.modes) {
             difficultyTabs.push(
                 <Tab key={`TAB_${mode}_${tabIdGenerator++}`} name={mode}>
-                    <DungeonModeInfo dungeon={this.props.dungeon} mode={mode as DungeonMode} />
+                    <DungeonModeInfo dungeon={this.props.dungeon} mode={mode as DungeonMode} dungeonState={this.props.dungeonState}/>
                 </Tab>
             );
+        }
+        let defaultTab;
+        if(this.props.dungeonState){
+            defaultTab = this.props.dungeonState.mode;
         }
         return (
             <div className='container'>
                 <h3>{this.props.dungeon.name}</h3>
-                <Tabs>
+                <Tabs defaultTab={defaultTab}>
                     {difficultyTabs}
                 </Tabs>
             </div>

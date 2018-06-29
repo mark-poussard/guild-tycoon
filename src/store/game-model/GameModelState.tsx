@@ -7,6 +7,8 @@ import Quest from 'model/Quest';
 import { QuestDataArray, QuestData } from 'data/QuestData';
 import ItemCollection from 'model/serializable/ItemCollection';
 import QuestMap from 'model/serializable/QuestMap';
+import SerializableMap from 'model/serializable/SerializableMap';
+import Dungeon from 'model/Dungeon';
 
 export default interface GameModelState {
     gold: number,
@@ -16,7 +18,8 @@ export default interface GameModelState {
     statistics: Statistics;
     completedDungeons: Set<string>;
     improvements: Improvements;
-    quests: QuestMap;
+    quests: SerializableMap<Quest>;
+    dungeons: SerializableMap<Dungeon>;
     gameSwitches: GameSwitches;
     items: ItemCollection;
 }
@@ -41,6 +44,7 @@ export const StartingGameState = (): GameModelState => {
                 completedAt: null
             }
         },
+        dungeons : {},
         items: {}
     } as GameModelState;
 }

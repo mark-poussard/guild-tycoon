@@ -4,6 +4,8 @@ import Hero from 'model/Hero';
 import Quest from 'model/Quest';
 import GameModelStore from 'store/game-model/GameModelStore';
 import NavigationStore, { TabType } from 'store/navigation/NavigationStore';
+import { dungeonToQuestData } from 'model/DungeonBase';
+import { DungeonData, DungeonDataArray } from 'data/DungeonData';
 
 interface IHeroQuestProgressProps {
     hero: Hero;
@@ -11,6 +13,7 @@ interface IHeroQuestProgressProps {
 
 interface IHeroQuestProgressState {
     quest: Quest;
+    isDungeon : boolean;
     questFinished: boolean;
 }
 
@@ -18,7 +21,7 @@ export default class HeroQuestProgress extends React.Component<IHeroQuestProgres
 
     constructor(props: IHeroQuestProgressProps) {
         super(props);
-        this.state = { quest: this.getHeroQuest(), questFinished: false };
+        this.state = { quest: this.getHeroQuest(), questFinished: false, isDungeon : this.isDungeon() };
     }
 
     render() {
@@ -28,15 +31,19 @@ export default class HeroQuestProgress extends React.Component<IHeroQuestProgres
             )
         }
         else if (this.state.quest) {
+            let questData;
+            if(this.state.isDungeon){
+                questData = dungeonToQuestData(DungeonDataArray.get(this.props.hero.questId), GameModelStore.getState().dungeons[this.props.hero.questId].mode)
+            }
             return (
-                <QuestProgressBar quest={this.state.quest} doQuestOver={() => this.setState({ questFinished : true })} widthPrct={100} />
+                <QuestProgressBar quest={this.state.quest} questData={questData} doQuestOver={() => this.setState({ questFinished : true })} widthPrct={100} />
             );
         }
         return null;
     }
 
     componentWillReceiveProps(nextProps: IHeroQuestProgressProps) {
-        this.setState({ quest: this.getHeroQuest(nextProps), questFinished: false });
+        this.setState({ quest: this.getHeroQuest(nextProps), questFinished: false, isDungeon : this.isDungeon(nextProps) });
     }
 
     getHeroQuest = (nxtProps?: IHeroQuestProgressProps) => {
@@ -47,7 +54,20 @@ export default class HeroQuestProgress extends React.Component<IHeroQuestProgres
         return null;
     }
 
+    isDungeon = (nxtProps?: IHeroQuestProgressProps) => {
+        const props = nxtProps || this.props;
+        if(props.hero.questId != null){
+            return GameModelStore.getState().dungeons.hasOwnProperty(props.hero.questId);
+        }
+        return false;
+    }
+
     goToQuests = () => {
-        NavigationStore.navigateTo(TabType.QUESTS);
+        if(this.state.isDungeon){
+            NavigationStore.navigateTo(TabType.DUNGEONS);
+        }
+        else{
+            NavigationStore.navigateTo(TabType.QUESTS);
+        }
     }
 }

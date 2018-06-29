@@ -34,7 +34,9 @@ export default class Timer extends React.Component<ITimerProps, ITimerState>{
                 window.clearInterval(this.intervalId);
                 this.intervalId = null;
                 timeLeft = 0;
-                this.props.doEnd();
+                if(this.props.doEnd){
+                    this.props.doEnd();
+                }
             }
             this.setState({ timeLeft: timeLeft })
         },

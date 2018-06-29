@@ -5,6 +5,7 @@ import CallForHero from 'model/CallForHero';
 import QuestDrop from 'model/QuestDrop';
 import EquipmentSet from 'model/EquipmentSet';
 import BaseQuest from 'model/BaseQuest';
+import { DungeonMode } from 'model/DungeonBase';
 
 export default interface GameModelPayload {
     type: GameModelActionTypes;
@@ -50,6 +51,15 @@ export interface EndQuestWinPayload {
 
 export interface RepeatQuestPayload {
     quest: Quest;
+}
+
+export interface SubmitDungeonPayload {
+    questId : string;
+    mode : DungeonMode;
+}
+
+export interface ClearDungeonPayload {
+    questId : string;
 }
 
 export interface RegisterCFHResultPayload {

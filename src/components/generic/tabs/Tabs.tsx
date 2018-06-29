@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tab, { ITabProps } from './Tab';
 
 interface ITabsProps {
-
+    defaultTab ?: string;
 }
 
 interface ITabsState {
@@ -26,7 +26,12 @@ export default class Tabs extends React.Component<ITabsProps, ITabsState>{
         });
         const childTabKeys = Object.keys(this.childTabs)
         if (childTabKeys.length > 0) {
-            this.setState({ currentTab: childTabKeys[0] });
+            if(this.props.defaultTab){
+                this.setState({ currentTab: this.props.defaultTab });
+            }
+            else{
+                this.setState({ currentTab: childTabKeys[0] });
+            }
         }
     }
 

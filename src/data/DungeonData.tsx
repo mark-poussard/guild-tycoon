@@ -2,6 +2,8 @@ import DungeonBase from "model/DungeonBase";
 import Duration from "model/Duration";
 import { ItemData } from "./ItemData";
 import * as ClassData from 'data/ClassData';
+import IndexedArray from "business/collection/IndexedArray";
+import ObjectUtils from "business/utils/ObjectUtils";
 
 export const DungeonData: DungeonBase[] = [
     {
@@ -217,3 +219,5 @@ export const DungeonData: DungeonBase[] = [
         }
     }
 ];
+
+export const DungeonDataArray = new IndexedArray<string, DungeonBase>(x => x.id, ...ObjectUtils.getValues(DungeonData));

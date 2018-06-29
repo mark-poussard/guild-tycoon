@@ -11,6 +11,8 @@ export enum GameModelActionTypes {
     TRAIN_CLICK = 'train_click',
     CLEAR_GAME_DATA = 'clear_game_data',
     START_QUEST = 'start_quest',
+    SUBMIT_DUNGEON = 'submit_dungeon',
+    CLEAR_DUNGEON = 'clear_dungeon',
     END_QUEST_SUCCEED = 'end_quest_succeed',
     END_QUEST_FAIL = 'end_quest_fail',
     REPEAT_QUEST = 'repeat_quest',

@@ -14,11 +14,13 @@ import QuestResultOverlay from 'components/body/quest-tab/QuestResultOverlay';
 import EndQuestResult from 'business/EndQuestResult';
 import QuestMap from 'model/serializable/QuestMap';
 import GameModelStore from 'store/game-model/GameModelStore';
+import Dungeon from 'model/Dungeon';
+import DungeonHelper from 'business/DungeonHelper';
 
 interface IDungeonModeInfoProps {
     dungeon: DungeonBase;
+    dungeonState : Dungeon;
     mode: DungeonMode;
-    setTabFixed : (fixed : boolean) => void;
 }
 
 interface IDungeonModeInfoState {
@@ -92,18 +94,25 @@ export default class DungeonModeInfo extends React.Component<IDungeonModeInfoPro
 
     confirmHeroes = (quest: Quest) => {
         return (heroes: Hero[]) => {
-            QuestHelper.startQuest(quest, heroes);
+            DungeonHelper.startDungeon(quest, heroes, this.props.mode);
             this.closeHeroSelect();
         }
     }
 
     renderStatusButton = (quest: Quest, questData: BaseQuest) => {
-        return (
-            <QuestAction quest={quest}
-                questData={questData}
-                start={this.openHeroSelect} startTxt={`Challenge`}
-                end={this.end(quest, questData)} endTxt={`Complete`} />
-        )
+        if(!this.props.dungeonState || (this.props.dungeonState && this.props.dungeonState.mode === this.props.mode)){
+            return (
+                <QuestAction quest={quest}
+                    questData={questData}
+                    start={this.openHeroSelect} startTxt={`Challenge`}
+                    end={this.end(quest, questData)} endTxt={`Complete`} />
+            )
+        }
+        else{
+            return (
+                <span>{`${this.props.dungeonState.mode} dungeon mode in progress...`}</span>
+            );
+        }
     }
 
     getQuest = () => {
@@ -121,6 +130,7 @@ export default class DungeonModeInfo extends React.Component<IDungeonModeInfoPro
 
     end = (quest: Quest, questData: BaseQuest) => {
         return () => {
+            DungeonHelper.endDungeon(quest);
             this.setState({ questResult: QuestHelper.endQuest(quest, questData) });
         }
     }

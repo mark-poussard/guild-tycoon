@@ -15,7 +15,9 @@ import GameModelPayload, {
     RepeatQuestPayload,
     RemoveItemPayload,
     HeroRankUpPayload,
-    BuyItemPayload
+    BuyItemPayload,
+    SubmitDungeonPayload,
+    ClearDungeonPayload
 } from './GameModelPayload';
 import GameModelDispatcher from './GameModelDispatcher';
 import { GameModelActionTypes } from './GameModelActionTypes';
@@ -211,6 +213,22 @@ class GameModelStore extends ReduceStore<GameModelState, GameModelPayload> {
                     newState.quests[payload.quest.id].completedAt = null;
                     break;
                 }
+
+                case GameModelActionTypes.SUBMIT_DUNGEON:
+                    {
+                        payload = action.payload as SubmitDungeonPayload;
+                        newState.dungeons[payload.questId] = {id : payload.questId, mode : payload.mode};
+                        break;
+                    }
+
+                    case GameModelActionTypes.CLEAR_DUNGEON:
+                        {
+                            payload = action.payload as ClearDungeonPayload;
+                            if(newState.dungeons.hasOwnProperty(payload.questId)){
+                                delete newState.dungeons[payload.questId];
+                            }
+                            break;
+                        }
 
             case GameModelActionTypes.REGISTER_CFH_RESULT:
                 {
