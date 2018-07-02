@@ -21,11 +21,11 @@ interface IDungeonModeInfoProps {
     dungeon: DungeonBase;
     dungeonState : Dungeon;
     mode: DungeonMode;
+    doEndQuest : (quest : Quest, questData: BaseQuest) => void;
 }
 
 interface IDungeonModeInfoState {
     overlayDisplayed: boolean;
-    questResult: EndQuestResult;
     activeQuests: QuestMap;
 }
 
@@ -34,7 +34,7 @@ export default class DungeonModeInfo extends React.Component<IDungeonModeInfoPro
 
     constructor(props: IDungeonModeInfoProps) {
         super(props);
-        this.state = { overlayDisplayed: false, questResult: null, activeQuests: this.copyActiveQuests() };
+        this.state = { overlayDisplayed: false, activeQuests: this.copyActiveQuests() };
     }
 
     componentDidMount() {
@@ -66,7 +66,6 @@ export default class DungeonModeInfo extends React.Component<IDungeonModeInfoPro
                     maxSelection={this.props.dungeon.modes[this.props.mode].maxPartySize}
                     doCancelSelection={this.closeHeroSelect}
                     doConfirmSelection={this.confirmHeroes(quest)} />
-                <QuestResultOverlay questResult={this.state.questResult} questData={questData} closeOverlay={() => this.setState({ questResult: null })} />
             </div>
         );
     }
@@ -129,10 +128,7 @@ export default class DungeonModeInfo extends React.Component<IDungeonModeInfoPro
     }
 
     end = (quest: Quest, questData: BaseQuest) => {
-        return () => {
-            DungeonHelper.endDungeon(quest);
-            this.setState({ questResult: QuestHelper.endQuest(quest, questData) });
-        }
+        return () => this.props.doEndQuest(quest, questData);
     }
 
     copyActiveQuests = () => {

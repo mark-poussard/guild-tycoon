@@ -20,7 +20,7 @@ export const DungeonData: DungeonBase[] = [
                         ba: 50
                     }
                 ],
-                duration: new Duration(0, 0, 5, 0),
+                duration: new Duration(0, 0, 0, 10),
                 maxPartySize : 1,
                 reward: {
                     gold: 10,

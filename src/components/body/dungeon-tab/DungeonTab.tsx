@@ -6,6 +6,12 @@ import { DungeonData } from 'data/DungeonData';
 import DungeonInfo from './DungeonInfo';
 import SerializableMap from 'model/serializable/SerializableMap';
 import Dungeon from 'model/Dungeon';
+import Quest from 'model/Quest';
+import BaseQuest from 'model/BaseQuest';
+import DungeonHelper from 'business/DungeonHelper';
+import QuestHelper from 'business/QuestHelper';
+import EndQuestResult from 'business/EndQuestResult';
+import QuestResultOverlay from 'components/body/quest-tab/QuestResultOverlay';
 
 interface IDungeonTabProps {
 
@@ -14,6 +20,8 @@ interface IDungeonTabProps {
 interface IDungeonTabState {
     dungeons: DungeonBase[];
     dungeonStates : SerializableMap<Dungeon>;
+    questResult: EndQuestResult;
+    questResultData : BaseQuest;
 }
 
 export default class DungeonTab extends React.Component<IDungeonTabProps, IDungeonTabState>{
@@ -21,7 +29,7 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
 
     constructor(props: IDungeonTabProps) {
         super(props);
-        this.state = { dungeons: this.computeAvailableDungeons(), dungeonStates : this.getDungeonStates() };
+        this.state = { dungeons: this.computeAvailableDungeons(), dungeonStates : this.getDungeonStates(), questResult : null, questResultData : null };
     }
 
     render() {
@@ -33,12 +41,13 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
                 dungeonState = this.state.dungeonStates[dungeon.id];
                 dungeonStateMode = dungeonState.mode;
             }
-            dungeonComponents.push(<DungeonInfo key={`DUNGEON_${dungeon.id}_${dungeonStateMode}`} dungeon={dungeon} dungeonState={dungeonState} />);
+            dungeonComponents.push(<DungeonInfo key={`DUNGEON_${dungeon.id}_${dungeonStateMode}`} dungeon={dungeon} dungeonState={dungeonState} doEndQuest={this.endQuest} />);
         }
         return (
             <div>
                 <h2>Dungeons</h2>
                 {dungeonComponents}
+                <QuestResultOverlay questResult={this.state.questResult} questData={this.state.questResultData} closeOverlay={() => this.setState({ questResult: null, questResultData : null })} />
             </div>
         );
     }
@@ -69,5 +78,10 @@ export default class DungeonTab extends React.Component<IDungeonTabProps, IDunge
 
     getDungeonStates = () => {
         return Object.assign({}, GameModelStore.getState().dungeons);
+    }
+
+    endQuest = (quest: Quest, questData: BaseQuest) => {
+        DungeonHelper.endDungeon(quest);
+        this.setState({ questResult: QuestHelper.endQuest(quest, questData), questResultData: questData });
     }
 }
